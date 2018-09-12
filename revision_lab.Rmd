@@ -86,7 +86,7 @@ df_mean_ineq_nothing_lab <- df_l %>% dplyr::select(treatment, inequality, zero_t
   summarize(mean_y = mean(y, na.rm=TRUE), se_y = sd(y, na.rm=TRUE)/sqrt(n())) %>%
   mutate(outcome = fct_recode(outcome, 
                               "Inequality" = "inequality",
-                              "Nothing to worst off" = "zero_to_worst_off"))
+                              "Nothing to worse off" = "zero_to_worst_off"))
 df_mean_ineq_nothing_lab %>%
 ggplot(aes(x=treatment, y=mean_y)) + geom_bar(stat="identity", width=0.7) +
   geom_errorbar(aes(ymax=mean_y+se_y, ymin=mean_y - se_y), width=0.2) + 
