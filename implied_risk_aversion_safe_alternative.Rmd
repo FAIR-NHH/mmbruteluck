@@ -1,0 +1,81 @@
+---
+title: "Implied risk aversion of safe alternative"
+author: "Erik"
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("rootSolve")
+```
+
+Since we implemented the forced choice with a small safe amount as alternative,
+participants with sufficient risk aversion might have opted out for this reason.
+To quantify the risk aversion needed, consider a CARA utility function,
+$$ u(c) = 1 - e^{-\gamma c},$$
+where $\gamma$ is the coefficient of absoloute risk aversion.  This
+function has the advantage that choices between a set of lotteries is
+independent of current wealth, and since wealth is unobserved in the
+experiment, this is an advantage. However, the risk aversion is
+dependent on the scale of outcomes, so a translation to a common
+monetary scale is necessary.
+
+In the online experiment, the main Forced Choice was between 0.25 USD
+(safe) and a $\{0,8\}$ uniform lottery in 2017 USD and at US prices
+(for the AMT prticipants). The indifference condition between the safe alternative
+and the lottery is
+$$ 1 - e^{-\gamma 0.25\ } = \frac{1}{2}\left(1 - e^{-\gamma 8.00} \right).$$
+```{r}
+fun1 <- function(gamma) {
+  1 - exp(-gamma * 0.25 ) - (0.5*(1-exp(-gamma* 8.0)))
+}
+(root1 <- uniroot(fun1, c(1,3)))
+```
+So this equation has a solution at $\gamma=$ `r root1$root`.
+
+In the lab experiment, the Forced Choice was between 25 NOK (safe) and
+a $\{0,800\}$ NOK lottery, in 2012 NOK and Norwegian prices. To
+convert into the same reference scale as the online lottery, we take
+into account that the 2012 NOK/USD exchange rate was
+5.281,[^1] 
+  the WDI purchasing power adjustment for Norwegian vs US price level
+  puts the Norwegian price level at 1.553 that of the
+  US,[^2] 
+and the 2012 to 2017 US inflation rate was 1.0714.[^3] 
+Taking this into account, the indifference equation is
+$$ 1 - e^{-\gamma \frac{25\cdot 1.0714}{5.281\cdot 1.553}} =
+\frac{1}{2}\left(1 - e^{-\gamma \frac{800\cdot 1.0714}{5.281\cdot
+      1.553}} \right).
+$$
+
+```{r}
+fun2 <- function(gamma) {
+  1 - exp(-gamma * 25*1.0714/(5.281*1.553) ) - (0.5*(1-exp(-gamma * 800*1.0714/(5.281*1.553))))
+}
+(root2 <- uniroot(fun2, c(0.1,0.3)))
+```    
+So this equation has a solution at $\gamma=$ `r root2$root`.
+
+
+In order to evaluate if these are large or small risk aversions, we consider
+the paper of Choi et al (2007).[^4] They estimate a distribution of CARA parameters
+for a lab population. They report the 95th percentile for the ARA coefficient
+to be 0.159.[^5] 
+ Considering US inflation factor from 2007 to 2017 of 1.1997,[^6]
+we find a 2017 referenced 95th percentile at $\gamma=0.159/1.1997=0.13$. We conclude
+that both the critical values we find for the Forced Choice in our experiments
+are well above the 95th percentile of estimated absolute risk aversion
+in Choi et al (2007).
+
+
+[^1]: https://www.norges-bank.no/Statistikk/Valutakurser/
+[^2]: Using the 2012 number from the **PP.NUS.PPC.RF** series 
+  from https://data.worldbank.org/products/wdi
+[^3]: January 2012 to January 2017, https://www.bls.gov/data/inflation_calculator.htm
+[^4]: Choi, S.; Fisman, R.; Gale, D. & Kariv, S. 
+    Consistency and Heterogeneity of Individual Behavior under Uncertainty American Economic Review, 
+    2007, 97, 1921-1938
+[^5]: In the lower panel of their Table 3.
+[^6]: January 2007 to January 2017, https://www.bls.gov/data/inflation_calculator.htm
+
