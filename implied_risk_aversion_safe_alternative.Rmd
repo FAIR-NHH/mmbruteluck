@@ -2,7 +2,7 @@
 title: "Implied risk aversion of safe alternative"
 author: "Erik"
 date: '`r format(Sys.time(), "%d %B, %Y")`'
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}

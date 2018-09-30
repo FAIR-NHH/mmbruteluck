@@ -2,7 +2,7 @@
 title: "Revision part II (kantar)"
 author: "Erik"
 date: '`r format(Sys.time(), "%d %B, %Y")`'
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
