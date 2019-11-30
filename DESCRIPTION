@@ -1,11 +1,16 @@
 Package: mmbruteluck
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Replication Package for "mmbruteluck" Paper
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: person("Erik Ø.", "Sørensen", email="erik.sorensen@nhh.no",
+  role=c("aut","cre"))
+Description: Replication package for the paper "Choice and personal 
+    responsibility: What is a morally relevant choice?", by Alexander W. Cappelen,
+    Sebastian Fest, Erik Ø. Sørensen and Bertil Tungodden.
+License: MIT
 Encoding: UTF-8
 LazyData: true
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

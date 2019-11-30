@@ -1,0 +1,556 @@
+---
+title: "Lab experiment"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{lab-experiment}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mmbruteluck)
+library("tidyverse")
+library("forcats")
+library("stargazer")
+library("ggplot2")
+library("multcomp")
+library("multiwayvcov")
+```
+
+# Reading in data
+```{r}
+df_l <- bldata %>%
+  mutate(choice = (T %in% c(2,3)),
+         inequality = abs(800 - 2*transfer)/800,
+         zero_to_worst_off = (transfer %in% c(0,800)),
+         female = (sex==2),
+         crt_h = (cr %in% c(2,3)),
+         age_h = (age >= median(age)),
+         treatmentorg = fct_recode(as_factor(T),
+                                   "Base" = "1:No choice",
+                                   "Forced Choice" = "3:Forced choice",
+                                   "Nominal Choice" = "2:Nominal choice"),
+         treatment = fct_relevel(treatmentorg, c("Base", "Forced Choice", "Nominal Choice")),
+         leftp = !(polparty %in% c(6,7)))
+```
+
+# Descriptive graphs
+
+## Histograms by treatment
+```{r}
+df_l %>% ggplot(aes(x=transfer, y=1* (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  geom_histogram() + facet_wrap(~treatment) + theme_bw() + ylab("Fraction") + 
+  xlab("Transfer from Lucky to Unlucky")
+ggsave("graphs/histograms_lab.pdf")
+```
+
+### Counting different aspects
+Counting the proportions that equalize:
+```{r}
+dfl_equal <- df_l %>% group_by(treatment) %>% mutate(equal= (transfer==400)) 
+dfl_equal %>% summarize(mean_equal=mean(equal))
+ce_l <- dfl_equal %>%
+  group_by(treatment) %>% summarize( yc= sum(transfer==400), n=n())
+prop.test(ce_l$yc[ce_l$treatment %in% c("Base", "Nominal Choice") ], 
+          ce_l$n[ce_l$treatment %in% c("Base", "Nominal Choice") ])
+prop.test(ce_l$yc[ce_l$treatment %in% c("Base", "Forced Choice") ], 
+          ce_l$n[ce_l$treatment %in% c("Base", "Forced Choice") ])
+```
+
+Counting the proportions that give nothing to the unlucky participant
+```{r}
+dfl_nothing <- df_l %>% group_by(treatment) %>% mutate(nothing= (transfer==0)) 
+dfl_nothing %>% summarize(mean_nothing=mean(nothing))
+ce_n <- dfl_nothing %>%
+  group_by(treatment) %>% summarize( yc= sum(transfer==0), n=n())
+prop.test(ce_n$yc[ce_n$treatment %in% c("Base", "Nominal Choice") ], 
+          ce_n$n[ce_n$treatment %in% c("Base", "Nominal Choice") ])
+prop.test(ce_n$yc[ce_n$treatment %in% c("Base", "Forced Choice") ], 
+          ce_n$n[ce_n$treatment %in% c("Base", "Forced Choice") ])
+```
+
+
+## mean inequality and nothing to worst off by treatment (with SEM). 
+```{r}
+df_mean_ineq_nothing_lab <- df_l %>% dplyr::select(treatment, inequality, zero_to_worst_off) %>%
+  gather(inequality, zero_to_worst_off, key="outcome", value="y") %>%
+  group_by(treatment, outcome) %>%
+  summarize(mean_y = mean(y, na.rm=TRUE), se_y = sd(y, na.rm=TRUE)/sqrt(n())) %>%
+  mutate(outcome = fct_recode(outcome, 
+                              "Inequality" = "inequality",
+                              "Nothing to worse off" = "zero_to_worst_off"))
+df_mean_ineq_nothing_lab %>%
+ggplot(aes(x=treatment, y=mean_y)) + geom_bar(stat="identity", width=0.7) +
+  geom_errorbar(aes(ymax=mean_y+se_y, ymin=mean_y - se_y), width=0.2) + 
+  facet_wrap(~ outcome, scales="free") + ylab("Mean +/- s.e.m.") +
+  theme_bw() + xlab("")
+ggsave("graphs/mean_ineq_nothing_lab.pdf")
+```
+
+### Counting different aspects
+```{r}
+df_mean_ineq_nothing_lab %>% knitr::kable()
+df_l_outcomes <- df_l %>% dplyr::select(treatment, inequality, zero_to_worst_off) %>%
+  gather(inequality, zero_to_worst_off, key="outcome", value="y") %>%
+  group_by(treatment, outcome)
+df_l_outcomes %>% filter(outcome=="inequality") %>% 
+  filter(treatment %in% c("Base", "Nominal Choice")) %>% t.test(y~treatment, data=.)
+df_l_outcomes %>% filter(outcome=="inequality") %>% 
+  filter(treatment %in% c("Base", "Forced Choice")) %>% t.test(y~treatment, data=.)
+```
+
+Counting the proportions that give nothing to the worst off participant
+```{r}
+dfl_nwo <- df_l %>% group_by(treatment) %>% mutate(nwo= (transfer %in% c(0,800))) 
+dfl_nwo %>% summarize(mean_nwo=mean(nwo))
+ce_nwo <- dfl_nwo %>%
+  group_by(treatment) %>% summarize( yc= sum(nwo), n=n())
+prop.test(ce_nwo$yc[ce_nwo$treatment %in% c("Base", "Nominal Choice") ], 
+          ce_nwo$n[ce_nwo$treatment %in% c("Base", "Nominal Choice") ])
+prop.test(ce_nwo$yc[ce_nwo$treatment %in% c("Base", "Forced Choice") ], 
+          ce_nwo$n[ce_nwo$treatment %in% c("Base", "Forced Choice") ])
+```
+
+# Regressions for paper
+## Main treatment effects
+```{r}
+t1ineq1_l <- df_l %>% lm(inequality ~ treatment , data=.)
+t1ineq2_l <- df_l %>% lm(inequality ~ treatment + leftp + female + age_h + crt_h, data=.)
+t1noth1_l <- df_l %>% lm(zero_to_worst_off ~treatment , data=.)
+t1noth2_l <- df_l %>% lm(zero_to_worst_off ~treatment + leftp + female + age_h + crt_h , data=.)
+stargazer(t1ineq1_l, t1ineq2_l, t1noth1_l, t1noth2_l,
+          se = list(sqrt(diag(cluster.vcov(t1ineq1_l, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t1ineq2_l, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t1noth1_l, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t1noth2_l, cluster=1:nrow(df_l))))),
+         type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp")
+```
+
+(And to disk, no output)
+```{r include=FALSE}
+stargazer(t1ineq1_l, t1ineq2_l, t1noth1_l, t1noth2_l,
+          se = list(sqrt(diag(cluster.vcov(t1ineq1_l, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t1ineq2_l, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t1noth1_l, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t1noth2_l, cluster=1:nrow(df_l))))),
+         style="aer", df=FALSE, keep.stat=c("rsq","n"), out="tables/main_lab.tex",
+         star.char=c("","",""), notes="", notes.append=FALSE, header=FALSE)
+```
+
+## Interactions with choice, inequality
+Now for the role of interaction. Previously we focused on the political interaction only,
+currently we aim to look broader at the heterogeneity. I make one table for the paper 
+(inequality).
+```{r}
+t2ineq1 <- df_l %>% lm(inequality ~ choice + leftp + female + age_h + crt_h, 
+                         data=.)
+t2ineq2 <- df_l %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                         choice*leftp , data=.)
+t2ineq3 <- df_l %>% lm(inequality ~ choice + leftp + + female + age_h + crt_h + 
+                         choice*female, data=.)
+t2ineq4 <- df_l %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                         choice*age_h, data=.)
+t2ineq5 <- df_l %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                          choice*crt_h, data=.)
+t2ineq6 <- df_l %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                           choice*leftp + choice*female + choice*age_h + choice*crt_h, data=.)
+```
+
+We want linear combinations with standard errors as rows in the table:
+```{r}
+c2 <- glht(t2ineq2, linfct="choiceTRUE + choiceTRUE:leftpTRUE = 0", 
+             vcov = cluster.vcov(t2ineq2, cluster=1:nrow(df_l)))
+c3 <- glht(t2ineq3, linfct="choiceTRUE + choiceTRUE:femaleTRUE = 0", 
+             vcov = cluster.vcov(t2ineq3, cluster=1:nrow(df_l)))
+c4 <- glht(t2ineq4, linfct="choiceTRUE + choiceTRUE:age_hTRUE = 0", 
+             vcov = cluster.vcov(t2ineq4, cluster=1:nrow(df_l)))
+c5 <- glht(t2ineq5, linfct="choiceTRUE + choiceTRUE:crt_hTRUE = 0", 
+             vcov = cluster.vcov(t2ineq5, cluster=1:nrow(df_l)))
+r1 <- c("Linear combination"," ", 
+        sprintf("%4.3f", summary(c2)$test$coefficients[1]),
+        sprintf("%4.3f", summary(c3)$test$coefficients[1]),
+        sprintf("%4.3f", summary(c4)$test$coefficients[1]),
+        sprintf("%4.3f", summary(c5)$test$coefficients[1]),
+        "")
+r2 <- c("","",
+        sprintf("(%4.3f)", summary(c2)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(c3)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(c4)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(c5)$test$sigma[1]),
+        "")
+r3 <- c("", "",
+        sprintf("p=%4.3f", summary(c2)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(c3)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(c4)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(c5)$test$pvalues[1]),
+        "")
+```
+
+```{r}
+stargazer(t2ineq1, t2ineq2, t2ineq3, t2ineq4, t2ineq5, t2ineq6,
+          se = list(sqrt(diag(cluster.vcov(t2ineq1, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2ineq2, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2ineq3, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2ineq4, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2ineq5, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2ineq6, cluster=1:nrow(df_l))))),
+        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h"),
+         type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+        add.lines= list(r1,r2,r3),
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp")
+```
+
+(And to disk, no output)
+```{r include=FALSE}
+stargazer(t2ineq1, t2ineq2, t2ineq3, t2ineq4, t2ineq5, t2ineq6,
+          se = list(sqrt(diag(cluster.vcov(t2ineq1, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2ineq2, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2ineq3, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2ineq4, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2ineq5, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2ineq6, cluster=1:nrow(df_l))))),
+          order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h"),
+         style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+         add.lines=list(r1,r2),
+         out="tables/heterogeneity1_lab.tex",type="latex", header=FALSE)
+```
+
+### Restricting to nominal choice (inequality)
+First defining the subset of data
+```{r}
+df_nc <- df_l %>% filter(treatment != "Forced Choice")
+```
+
+Now, rerunning on the restricted data.
+```{r}
+nct2ineq1 <- df_nc %>% lm(inequality ~ choice + leftp + female + age_h + crt_h, 
+                         data=.)
+nct2ineq2 <- df_nc %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                         choice*leftp , data=.)
+nct2ineq3 <- df_nc %>% lm(inequality ~ choice + leftp + + female + age_h + crt_h + 
+                         choice*female, data=.)
+nct2ineq4 <- df_nc %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                         choice*age_h, data=.)
+nct2ineq5 <- df_nc %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                          choice*crt_h, data=.)
+nct2ineq6 <- df_nc %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                           choice*leftp + choice*female + choice*age_h + choice*crt_h, data=.)
+```
+
+We want linear combinations with standard errors as rows in the table:
+```{r}
+nc2 <- glht(nct2ineq2, linfct="choiceTRUE + choiceTRUE:leftpTRUE = 0", 
+             vcov = cluster.vcov(nct2ineq2, cluster=1:nrow(df_nc)))
+nc3 <- glht(nct2ineq3, linfct="choiceTRUE + choiceTRUE:femaleTRUE = 0", 
+             vcov = cluster.vcov(nct2ineq3, cluster=1:nrow(df_nc)))
+nc4 <- glht(nct2ineq4, linfct="choiceTRUE + choiceTRUE:age_hTRUE = 0", 
+             vcov = cluster.vcov(nct2ineq4, cluster=1:nrow(df_nc)))
+nc5 <- glht(nct2ineq5, linfct="choiceTRUE + choiceTRUE:crt_hTRUE = 0", 
+             vcov = cluster.vcov(nct2ineq5, cluster=1:nrow(df_nc)))
+nr1 <- c("Linear combination"," ", 
+        sprintf("%4.3f", summary(nc2)$test$coefficients[1]),
+        sprintf("%4.3f", summary(nc3)$test$coefficients[1]),
+        sprintf("%4.3f", summary(nc4)$test$coefficients[1]),
+        sprintf("%4.3f", summary(nc5)$test$coefficients[1]),
+        "")
+nr2 <- c("","",
+        sprintf("(%4.3f)", summary(nc2)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(nc3)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(nc4)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(nc5)$test$sigma[1]),
+        "")
+nr3 <- c("", "",
+        sprintf("p=%4.3f", summary(nc2)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(nc3)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(nc4)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(nc5)$test$pvalues[1]),
+        "")
+```
+
+We want linear combinations with standard errors as rows in the table:
+```{r}
+nc2 <- glht(nct2ineq2, linfct="choiceTRUE + choiceTRUE:leftpTRUE = 0", 
+             vcov = cluster.vcov(nct2ineq2, cluster=1:nrow(df_nc)))
+nc3 <- glht(nct2ineq3, linfct="choiceTRUE + choiceTRUE:femaleTRUE = 0", 
+             vcov = cluster.vcov(nct2ineq3, cluster=1:nrow(df_nc)))
+nc4 <- glht(nct2ineq4, linfct="choiceTRUE + choiceTRUE:age_hTRUE = 0", 
+             vcov = cluster.vcov(nct2ineq4, cluster=1:nrow(df_nc)))
+nc5 <- glht(nct2ineq5, linfct="choiceTRUE + choiceTRUE:crt_hTRUE = 0", 
+             vcov = cluster.vcov(nct2ineq5, cluster=1:nrow(df_nc)))
+nr1 <- c("Linear combination"," ", 
+        sprintf("%4.3f", summary(nc2)$test$coefficients[1]),
+        sprintf("%4.3f", summary(nc3)$test$coefficients[1]),
+        sprintf("%4.3f", summary(nc4)$test$coefficients[1]),
+        sprintf("%4.3f", summary(nc5)$test$coefficients[1]),
+        "")
+nr2 <- c("","",
+        sprintf("(%4.3f)", summary(nc2)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(nc3)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(nc4)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(nc5)$test$sigma[1]),
+        "")
+nr3 <- c("", "",
+        sprintf("p=%4.3f", summary(nc2)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(nc3)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(nc4)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(nc5)$test$pvalues[1]),
+        "")
+```
+
+
+(And to disk, no output)
+```{r include=FALSE}
+stargazer(nct2ineq1, nct2ineq2, nct2ineq3, nct2ineq4, nct2ineq5, nct2ineq6,
+          se = list(sqrt(diag(cluster.vcov(nct2ineq1, cluster=1:nrow(df_nc)))),
+                    sqrt(diag(cluster.vcov(nct2ineq2, cluster=1:nrow(df_nc)))),
+                    sqrt(diag(cluster.vcov(nct2ineq3, cluster=1:nrow(df_nc)))),
+                    sqrt(diag(cluster.vcov(nct2ineq4, cluster=1:nrow(df_nc)))),
+                    sqrt(diag(cluster.vcov(nct2ineq5, cluster=1:nrow(df_nc)))),
+                    sqrt(diag(cluster.vcov(nct2ineq6, cluster=1:nrow(df_nc))))),
+          order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h"),
+         style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+         add.lines=list(nr1,nr2),
+         out="tables/heterogeneity1_lab_NC.tex",type="latex", header=FALSE)
+```
+
+### Restricting to forced choice (inequality)
+First defining the subset of data
+```{r}
+df_fc <- df_l %>% filter(treatment != "Nominal Choice")
+```
+
+Now, rerunning on the restricted data.
+```{r}
+fct2ineq1 <- df_fc %>% lm(inequality ~ choice + leftp + female + age_h + crt_h, 
+                         data=.)
+fct2ineq2 <- df_fc %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                         choice*leftp , data=.)
+fct2ineq3 <- df_fc %>% lm(inequality ~ choice + leftp + + female + age_h + crt_h + 
+                         choice*female, data=.)
+fct2ineq4 <- df_fc %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                         choice*age_h, data=.)
+fct2ineq5 <- df_fc %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                          choice*crt_h, data=.)
+fct2ineq6 <- df_fc %>% lm(inequality ~ choice + leftp + female + age_h + crt_h +
+                           choice*leftp + choice*female + choice*age_h + choice*crt_h, data=.)
+```
+
+We want linear combinations with standard errors as rows in the table:
+```{r}
+fc2 <- glht(fct2ineq2, linfct="choiceTRUE + choiceTRUE:leftpTRUE = 0", 
+             vcov = cluster.vcov(fct2ineq2, cluster=1:nrow(df_fc)))
+fc3 <- glht(fct2ineq3, linfct="choiceTRUE + choiceTRUE:femaleTRUE = 0", 
+             vcov = cluster.vcov(fct2ineq3, cluster=1:nrow(df_fc)))
+fc4 <- glht(fct2ineq4, linfct="choiceTRUE + choiceTRUE:age_hTRUE = 0", 
+             vcov = cluster.vcov(fct2ineq4, cluster=1:nrow(df_fc)))
+fc5 <- glht(fct2ineq5, linfct="choiceTRUE + choiceTRUE:crt_hTRUE = 0", 
+             vcov = cluster.vcov(fct2ineq5, cluster=1:nrow(df_fc)))
+fr1 <- c("Linear combination"," ", 
+        sprintf("%4.3f", summary(fc2)$test$coefficients[1]),
+        sprintf("%4.3f", summary(fc3)$test$coefficients[1]),
+        sprintf("%4.3f", summary(fc4)$test$coefficients[1]),
+        sprintf("%4.3f", summary(fc5)$test$coefficients[1]),
+        "")
+fr2 <- c("","",
+        sprintf("(%4.3f)", summary(fc2)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(fc3)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(fc4)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(fc5)$test$sigma[1]),
+        "")
+fr3 <- c("", "",
+        sprintf("p=%4.3f", summary(fc2)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(fc3)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(fc4)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(fc5)$test$pvalues[1]),
+        "")
+```
+
+
+```{r}
+stargazer(fct2ineq1, fct2ineq2, fct2ineq3, fct2ineq4, fct2ineq5, fct2ineq6,
+          se = list(sqrt(diag(cluster.vcov(fct2ineq1, cluster=1:nrow(df_fc)))),
+                    sqrt(diag(cluster.vcov(fct2ineq2, cluster=1:nrow(df_fc)))),
+                    sqrt(diag(cluster.vcov(fct2ineq3, cluster=1:nrow(df_fc)))),
+                    sqrt(diag(cluster.vcov(fct2ineq4, cluster=1:nrow(df_fc)))),
+                    sqrt(diag(cluster.vcov(fct2ineq5, cluster=1:nrow(df_fc)))),
+                    sqrt(diag(cluster.vcov(fct2ineq6, cluster=1:nrow(df_fc))))),
+        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h"),
+         type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+        add.lines= list(fr1,fr2,fr3),
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp")
+```
+
+(And to disk, no output)
+```{r include=FALSE}
+stargazer(fct2ineq1, fct2ineq2, fct2ineq3, fct2ineq4, fct2ineq5, fct2ineq6,
+          se = list(sqrt(diag(cluster.vcov(fct2ineq1, cluster=1:nrow(df_fc)))),
+                    sqrt(diag(cluster.vcov(fct2ineq2, cluster=1:nrow(df_fc)))),
+                    sqrt(diag(cluster.vcov(fct2ineq3, cluster=1:nrow(df_fc)))),
+                    sqrt(diag(cluster.vcov(fct2ineq4, cluster=1:nrow(df_fc)))),
+                    sqrt(diag(cluster.vcov(fct2ineq5, cluster=1:nrow(df_fc)))),
+                    sqrt(diag(cluster.vcov(fct2ineq6, cluster=1:nrow(df_fc))))),
+          order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h"),
+         style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+         add.lines=list(fr1,fr2),
+         out="tables/heterogeneity1_lab_FC.tex",type="latex", header=FALSE)
+```
+
+### Interactions with choice, nothing to the worst off
+We need similar interactions with our indicator for nothing to the worst off (for appendix).
+```{r}
+t2noth1 <- df_l %>% lm(zero_to_worst_off ~ choice + leftp + female + age_h + crt_h, 
+                         data=.)
+t2noth2 <- df_l %>% lm(zero_to_worst_off ~ choice + leftp + female + age_h + crt_h +
+                         choice*leftp , data=.)
+t2noth3 <- df_l %>% lm(zero_to_worst_off ~ choice + leftp + + female + age_h + crt_h + 
+                         choice*female, data=.)
+t2noth4 <- df_l %>% lm(zero_to_worst_off ~ choice + leftp + female + age_h + crt_h +
+                         choice*age_h, data=.)
+t2noth5 <- df_l %>% lm(zero_to_worst_off ~ choice + leftp + female + age_h + crt_h +
+                          choice*crt_h, data=.)
+t2noth6 <- df_l %>% lm(zero_to_worst_off ~ choice + leftp + female + age_h + crt_h +
+                           choice*leftp + choice*female + choice*age_h + choice*crt_h, data=.)
+```
+
+We want linear combinations with standard errors as rows in the table:
+```{r}
+d2 <- glht(t2noth2, linfct="choiceTRUE + choiceTRUE:leftpTRUE = 0", 
+             vcov = cluster.vcov(t2noth2, cluster=1:nrow(df_l)))
+d3 <- glht(t2noth3, linfct="choiceTRUE + choiceTRUE:femaleTRUE = 0", 
+             vcov = cluster.vcov(t2noth3, cluster=1:nrow(df_l)))
+d4 <- glht(t2noth4, linfct="choiceTRUE + choiceTRUE:age_hTRUE = 0", 
+             vcov = cluster.vcov(t2noth4, cluster=1:nrow(df_l)))
+d5 <- glht(t2noth5, linfct="choiceTRUE + choiceTRUE:crt_hTRUE = 0", 
+             vcov = cluster.vcov(t2noth5, cluster=1:nrow(df_l)))
+s1 <- c("Linear combination"," ", 
+        sprintf("%4.3f", summary(d2)$test$coefficients[1]),
+        sprintf("%4.3f", summary(d3)$test$coefficients[1]),
+        sprintf("%4.3f", summary(d4)$test$coefficients[1]),
+        sprintf("%4.3f", summary(d5)$test$coefficients[1]),
+        "")
+s2 <- c("","",
+        sprintf("(%4.3f)", summary(d2)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(d3)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(d4)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(d5)$test$sigma[1]),
+        "")
+s3 <- c("", "",
+        sprintf("p=%4.3f", summary(d2)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(d3)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(d4)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(d5)$test$pvalues[1]),
+        "")
+```
+
+Table with p-values for reference:
+```{r}
+stargazer(t2noth1, t2noth2, t2noth3, t2noth4, t2noth5, t2noth6,
+          se = list(sqrt(diag(cluster.vcov(t2noth1, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2noth2, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2noth3, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2noth4, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2noth5, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2noth6, cluster=1:nrow(df_l))))),
+        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h"),
+        add.lines=list(s1,s2,s3), 
+         type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp")
+```
+(And to disk, no output)
+```{r include=FALSE}
+stargazer(t2noth1, t2noth2, t2noth3, t2noth4, t2noth5, t2noth6,
+          se = list(sqrt(diag(cluster.vcov(t2noth1, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2noth2, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2noth3, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2noth4, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2noth5, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(t2noth6, cluster=1:nrow(df_l))))),
+          order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h"),
+          add.lines=list(s1,s2), 
+         style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+         out="tables/heterogeneity2_lab.tex",type="latex", header=FALSE)
+```
+
+## Triple interactions 
+The editor is interested in the possible triple interaction between political, left, and cognitive reflection.
+
+
+```{r}
+triple1 <- df_l %>% lm(inequality ~ choice + leftp + crt_h + female + age_h  , data=.)
+triple2 <- df_l %>% lm(inequality ~ choice + choice*leftp + leftp + crt_h + female + age_h, data=.)
+triple3 <- df_l %>% lm(inequality ~ choice + choice*crt_h + leftp + crt_h + female + age_h, data=. )
+triple4 <- df_l %>% lm(inequality ~ choice + choice*leftp + choice*crt_h + leftp + crt_h +  
+                         female + age_h, data=. )
+triple5 <- df_l %>% lm(inequality ~ choice + choice*leftp + choice*crt_h + leftp*crt_h + 
+                         leftp + crt_h +  female + age_h, data=. )
+triple6 <- df_l %>% lm(inequality ~ choice + choice*leftp + choice*crt_h + leftp*crt_h + 
+                         choice*leftp*crt_h + leftp + crt_h +  female + age_h, data=. )
+stargazer(triple1, triple2, triple3, triple4, triple5, triple6,
+          se = list(sqrt(diag(cluster.vcov(triple1, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(triple2, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(triple3, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(triple4, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(triple5, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(triple6, cluster=1:nrow(df_l))))),
+        style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp", type="text")
+```
+
+(And to disk, no output)
+```{r include=FALSE}
+stargazer(triple1, triple2, triple3, triple4, triple5, triple6,
+          se = list(sqrt(diag(cluster.vcov(triple1, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(triple2, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(triple3, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(triple4, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(triple5, cluster=1:nrow(df_l)))),
+                    sqrt(diag(cluster.vcov(triple6, cluster=1:nrow(df_l))))),
+         style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+         out="tables/triple_lab.tex",type="latex", header=FALSE)
+```
+
+# Balance table (appendix)
+```{r}
+dfl_summary <- df_l %>% group_by(treatment) %>% summarize(mean_age = mean(age), se_age = sd(age)/sqrt(n()),
+                                                          mean_female = mean(female), se_female=sd(female)/sqrt(n()),
+                                                          mean_crt = mean(cr), se_crt = sd(cr)/sqrt(n()),
+                                                          mean_left = mean(leftp), se_leftp=sd(leftp)/sqrt(n()),
+                                                          n= n())
+dfl_totals <- df_l %>% summarize(mean_age = mean(age), se_age = sd(age)/sqrt(n()),
+                                 mean_female = mean(female), se_female=sd(female)/sqrt(n()),
+                                 mean_crt = mean(cr), se_crt = sd(cr)/sqrt(n()),
+                                 mean_left = mean(leftp), se_leftp=sd(leftp)/sqrt(n()),
+                                 n= n())
+```
+Output of balance table
+```{r}
+dfl_summary %>% knitr::kable(digits=c(3,1,2,2,2,2,2,2,2,0))
+dfl_totals %>% knitr::kable(digits=c(1,2,2,2,2,2,2,2,0))
+```
+
+
+# sessionInfo()
+```{r}
+sessionInfo()
+```
+
