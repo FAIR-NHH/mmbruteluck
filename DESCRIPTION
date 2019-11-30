@@ -6,7 +6,7 @@ Authors@R: person("Erik Ø.", "Sørensen", email="erik.sorensen@nhh.no",
   role=c("aut","cre"))
 Description: Replication package for the paper "Choice and personal 
     responsibility: What is a morally relevant choice?", by Alexander W. Cappelen,
-    Sebastian Fest, Erik Ø. Sørensen and Bertil Tungodden.
+    Sebastian Fest, Erik Ø. Sørensen and Bertil Tungodden. Includes data and code.
 License: MIT
 Encoding: UTF-8
 LazyData: true
@@ -14,3 +14,4 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+RoxygenNote: 6.1.1
