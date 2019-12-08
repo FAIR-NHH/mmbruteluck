@@ -1,5 +1,5 @@
 ---
-title: "Lab experiment"
+title: "Lab Experiment"
 author: "Erik Ø. Sørensen"
 output: rmarkdown::html_vignette
 vignette: >
@@ -17,12 +17,10 @@ knitr::opts_chunk$set(
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(mmbruteluck)
-library("tidyverse")
-library("forcats")
-library("stargazer")
-library("ggplot2")
-library("multcomp")
-library("multiwayvcov")
+library(tidyverse)
+library(stargazer)
+library(multcomp)
+library(multiwayvcov)
 library(here)
 ```
 

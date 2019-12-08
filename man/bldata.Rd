@@ -8,9 +8,9 @@
 \describe{
 \item{pid}{Non-informative identifier of individual participant}
 \item{location}{Location of experiment:
-\itemize{\item 1. University of Bergen
-\item 2. NHH Norwegian School of Economics
-}}
+\itemize{
+ \item 1. University of Bergen
+ \item 2. NHH Norwegian School of Economics }}
 \item{sesid}{Id of session (not chronological)}
 \item{T}{Treatment:
  \itemize{
