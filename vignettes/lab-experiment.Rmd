@@ -1,5 +1,6 @@
 ---
 title: "Lab experiment"
+author: "Erik Ø. Sørensen"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{lab-experiment}
@@ -14,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 library(mmbruteluck)
 library("tidyverse")
 library("forcats")
@@ -22,6 +23,7 @@ library("stargazer")
 library("ggplot2")
 library("multcomp")
 library("multiwayvcov")
+library(here)
 ```
 
 # Reading in data
@@ -34,9 +36,9 @@ df_l <- bldata %>%
          crt_h = (cr %in% c(2,3)),
          age_h = (age >= median(age)),
          treatmentorg = fct_recode(as_factor(T),
-                                   "Base" = "1:No choice",
-                                   "Forced Choice" = "3:Forced choice",
-                                   "Nominal Choice" = "2:Nominal choice"),
+                                   "Base" = "1",
+                                   "Forced Choice" = "3",
+                                   "Nominal Choice" = "2"),
          treatment = fct_relevel(treatmentorg, c("Base", "Forced Choice", "Nominal Choice")),
          leftp = !(polparty %in% c(6,7)))
 ```
@@ -44,11 +46,11 @@ df_l <- bldata %>%
 # Descriptive graphs
 
 ## Histograms by treatment
-```{r}
+```{r echo=FALSE, fig.height=5, fig.width=7}
 df_l %>% ggplot(aes(x=transfer, y=1* (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
   geom_histogram() + facet_wrap(~treatment) + theme_bw() + ylab("Fraction") + 
   xlab("Transfer from Lucky to Unlucky")
-ggsave("graphs/histograms_lab.pdf")
+ggsave(here("graphs/histograms_lab.pdf"))
 ```
 
 ### Counting different aspects
@@ -78,7 +80,7 @@ prop.test(ce_n$yc[ce_n$treatment %in% c("Base", "Forced Choice") ],
 
 
 ## mean inequality and nothing to worst off by treatment (with SEM). 
-```{r}
+```{r fig.height=5, fig.width=7}
 df_mean_ineq_nothing_lab <- df_l %>% dplyr::select(treatment, inequality, zero_to_worst_off) %>%
   gather(inequality, zero_to_worst_off, key="outcome", value="y") %>%
   group_by(treatment, outcome) %>%
@@ -91,7 +93,7 @@ ggplot(aes(x=treatment, y=mean_y)) + geom_bar(stat="identity", width=0.7) +
   geom_errorbar(aes(ymax=mean_y+se_y, ymin=mean_y - se_y), width=0.2) + 
   facet_wrap(~ outcome, scales="free") + ylab("Mean +/- s.e.m.") +
   theme_bw() + xlab("")
-ggsave("graphs/mean_ineq_nothing_lab.pdf")
+ggsave(here("graphs/mean_ineq_nothing_lab.pdf"))
 ```
 
 ### Counting different aspects
@@ -141,7 +143,7 @@ stargazer(t1ineq1_l, t1ineq2_l, t1noth1_l, t1noth2_l,
                     sqrt(diag(cluster.vcov(t1ineq2_l, cluster=1:nrow(df_l)))),
                     sqrt(diag(cluster.vcov(t1noth1_l, cluster=1:nrow(df_l)))),
                     sqrt(diag(cluster.vcov(t1noth2_l, cluster=1:nrow(df_l))))),
-         style="aer", df=FALSE, keep.stat=c("rsq","n"), out="tables/main_lab.tex",
+         style="aer", df=FALSE, keep.stat=c("rsq","n"), out=here("tables/main_lab.tex"),
          star.char=c("","",""), notes="", notes.append=FALSE, header=FALSE)
 ```
 
@@ -223,7 +225,7 @@ stargazer(t2ineq1, t2ineq2, t2ineq3, t2ineq4, t2ineq5, t2ineq6,
          style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
          star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
          add.lines=list(r1,r2),
-         out="tables/heterogeneity1_lab.tex",type="latex", header=FALSE)
+         out=here("tables/heterogeneity1_lab.tex"),type="latex", header=FALSE)
 ```
 
 ### Restricting to nominal choice (inequality)
@@ -323,7 +325,7 @@ stargazer(nct2ineq1, nct2ineq2, nct2ineq3, nct2ineq4, nct2ineq5, nct2ineq6,
          style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
          star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
          add.lines=list(nr1,nr2),
-         out="tables/heterogeneity1_lab_NC.tex",type="latex", header=FALSE)
+         out=here("tables/heterogeneity1_lab_NC.tex"),type="latex", header=FALSE)
 ```
 
 ### Restricting to forced choice (inequality)
@@ -408,7 +410,7 @@ stargazer(fct2ineq1, fct2ineq2, fct2ineq3, fct2ineq4, fct2ineq5, fct2ineq6,
          style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
          star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
          add.lines=list(fr1,fr2),
-         out="tables/heterogeneity1_lab_FC.tex",type="latex", header=FALSE)
+         out=here("tables/heterogeneity1_lab_FC.tex"),type="latex", header=FALSE)
 ```
 
 ### Interactions with choice, nothing to the worst off
@@ -487,7 +489,7 @@ stargazer(t2noth1, t2noth2, t2noth3, t2noth4, t2noth5, t2noth6,
           add.lines=list(s1,s2), 
          style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
          star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
-         out="tables/heterogeneity2_lab.tex",type="latex", header=FALSE)
+         out=here("tables/heterogeneity2_lab.tex"),type="latex", header=FALSE)
 ```
 
 ## Triple interactions 
@@ -526,7 +528,7 @@ stargazer(triple1, triple2, triple3, triple4, triple5, triple6,
                     sqrt(diag(cluster.vcov(triple6, cluster=1:nrow(df_l))))),
          style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
          star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
-         out="tables/triple_lab.tex",type="latex", header=FALSE)
+         out=here("tables/triple_lab.tex"),type="latex", header=FALSE)
 ```
 
 # Balance table (appendix)
