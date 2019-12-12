@@ -1,0 +1,61 @@
+---
+title: "mmbruteluck: mTurk workers"
+author: "Erik Ø. Sørensen"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bl-mturk-workers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(mmbruteluck)
+library(tidyverse)
+```
+
+# Reading data and creating summaries
+```{r}
+rdf_summary <- mturk_workers %>% group_by(treatment) %>%
+  summarize(mean_age = mean(age), se_age = sd(age)/sqrt(n()),
+            mean_female = mean(female), se_female= sd(female)/sqrt(n()),
+            mean_education = mean(education), se_education = sd(education)/sqrt(n()),
+            mean_political = mean(political), se_political = sd(political)/sqrt(n()),
+            n = n())
+
+rdf_totals <- mturk_workers %>% 
+    summarize(mean_age = mean(age), se_age = sd(age)/sqrt(n()),
+            mean_female = mean(female), se_female= sd(female)/sqrt(n()),
+            mean_education = mean(education), se_education = sd(education)/sqrt(n()),
+            mean_political = mean(political), se_political = sd(political)/sqrt(n()),
+            n = n())
+```
+
+## Output of balance table (with marginals)
+```{r}
+rdf_summary %>% knitr::kable(digits=c(3,1,2,2,2,2,2,2,2,0))
+rdf_totals %>% knitr::kable(digits=c(1,2,2,2,2,2,2,2,0))
+```
+
+How many non-safe-choice workers?
+```{r}
+table(mturk_workers$safe)
+```
+
+
+# What did the spectators do?
+```{r}
+mturk_workers %>% group_by(treatment) %>%
+  summarize(mean_safe = mean(safe))
+```
+
+# sessionInfo()
+```{r}
+sessionInfo()
+```
