@@ -1,5 +1,5 @@
 ---
-title: "Lab Experiment"
+title: "mmbruteluck: Lab Experiment"
 author: "Erik Ø. Sørensen"
 output: rmarkdown::html_vignette
 vignette: >

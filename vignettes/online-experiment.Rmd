@@ -1,5 +1,6 @@
 ---
-title: "Online Experiment"
+title: "mmbruteluck: Online Experiment"
+author: "Erik Ø. Sørensen"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{online-experiment}
@@ -14,7 +15,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 library(mmbruteluck)
 library(tidyverse)
 library(stargazer)
@@ -22,3 +23,1091 @@ library(multcomp)
 library(multiwayvcov)
 library(here)
 ```
+
+# Reading in data.
+
+```{r, message=FALSE, warning=FALSE}
+treatmentsv = c("Base (w)", "Forced Choice (w)", "Nominal Choice (w)", 
+                "Base (nw)", "Forced Choice (nw)", "Nominal Choice (nw)",
+                "Forced Choice strong", "Forced Choice very strong")
+treatmentsv_short = c("Base", "Forced Choice", "Nominal Choice")
+df_k <- bl_kantar  %>% 
+  mutate(treatment_org = factor(treatment, levels=treatmentsv),
+         treatment = fct_recode(treatment_org,
+                                "Forced Choice (w)" = "Forced Choice strong",
+                                "Forced Choice (w)" = "Forced Choice very strong"),
+         treatment_kantar = factor(treatment_kantar),
+         treatmentgroup = factor(treatmentgroup, levels=treatmentsv_short),
+         treatmentgroup8 = fct_recode(treatment,
+                                      "Base" = "Base (w)",
+                                      "Base" = "Base (nw)",
+                                      "Nominal Choice" = "Nominal Choice (w)",
+                                      "Nominal Choice" = "Nominal Choice (nw)",
+                                      "Forced Choice" = "Forced Choice (w)",
+                                      "Forced Choice" = "Forced Choice (nw)",
+                                      "Forced Choice" = "Forced Choice strong",
+                                      "Forced Choice" = "Forced Choice very strong"),
+         gender = factor(gender),
+         education = factor(education),
+         indincome = factor(indincome),
+         work_temp = fct_relevel(as.factor(workp), c("TRUE", "FALSE")),
+         work = fct_recode(work_temp, 
+                           "Work" = "TRUE", 
+                           "No Work"= "FALSE"),
+         inequality = abs(8 - 2*y)/8.0,
+         zero_to_worst_off = (y %in% c(0,8)),
+         university = (education %in% c("Universitet/hoyskole I", "Universitet/hoyskole II")),
+         high_income = (indincome %in% c("1.000.000 kroner eller mer", 
+                                         "800.000 - 999.999 kroner",
+                                         "700-000 - 799.999 kroner",
+                                         "600.000 - 699.999 kroner",
+                                         "500.000 - 599.999 kroner")),  # Median is within 400-499 group.
+         female = (gender=="Kvinne"),
+         choice = (treatmentgroup %in% c("Forced Choice", "Nominal Choice")),
+         age_h = (age > median(age)),
+         crt_h = (crt %in% c(2,3)),
+         understanding2n = as.numeric(gsub("[^0-9]","", understanding2))) %>%
+  filter(comp==1)
+```
+
+
+# Descriptive figures
+
+## Histogram of transfers to the unlucky
+First out is a histogram of the transfer to the unlucky participant. I make it for each of the 
+three main treatments, with and without the work-distinction. 
+```{r}
+df_k %>% ggplot(aes(x=y, y=1* (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  geom_histogram() + facet_grid(work~treatmentgroup) + theme_bw() + ylab("Fraction") + 
+  xlab("Transfer from Lucky to Unlucky")
+ggsave(here("graphs", "histograms_kantar_wd.pdf"))
+df_k %>% ggplot(aes(x=y, y=1* (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  geom_histogram() + facet_grid(.~treatmentgroup) + theme_bw() + ylab("Fraction") + 
+  xlab("Transfer from Lucky to Unlucky")
+ggsave(here("graphs", "histograms_kantar.pdf"))
+```
+
+### The share that equalizes
+```{r}
+df_equal <- df_k %>% mutate(equal = (y==4)) 
+df_equal %>% 
+  group_by(treatmentgroup) %>% 
+  summarize(share_equal=mean(equal)) %>%
+  knitr::kable(digits=3)
+```
+```{r}
+ce <- df_equal %>%
+  group_by(treatmentgroup) %>% summarize( yc = sum(y==4), n=n())
+prop.test(ce$yc[ce$treatmentgroup %in% c("Base", "Nominal Choice") ], 
+          ce$n[ce$treatmentgroup %in% c("Base", "Nominal Choice") ])
+prop.test(ce$yc[ce$treatmentgroup %in% c("Base", "Forced Choice") ], 
+          ce$n[ce$treatmentgroup %in% c("Base", "Forced Choice") ])
+```
+
+### The share that gives nothing to unlucky
+```{r}
+df_0  <- df_k %>% mutate(nothing = (y==0)) 
+df_0 %>% 
+  group_by(treatmentgroup) %>% 
+  summarize(share_equal=mean(nothing)) %>%
+  knitr::kable(digits=3)
+```
+
+```{r}
+c0 <- df_0 %>%
+  group_by(treatmentgroup) %>% summarize( y0= sum(y==0), n=n())
+prop.test(c0$y0[c0$treatmentgroup %in% c("Base", "Nominal Choice") ], 
+          c0$n[c0$treatmentgroup %in% c("Base", "Nominal Choice") ])
+prop.test(c0$y0[c0$treatmentgroup %in% c("Base", "Forced Choice") ], 
+          c0$n[c0$treatmentgroup %in% c("Base", "Forced Choice") ])
+```
+
+
+
+
+## Mean inequality
+The next descriptive figure is a bargraph showing the amount of inequality
+by treatment and work status.
+
+First with work distinction:
+```{r}
+df_mean_ineq_nothing_kantar_wd <- df_k %>% 
+  dplyr::select(treatmentgroup, work, inequality, zero_to_worst_off) %>%
+  gather(inequality, zero_to_worst_off, key="outcome", value="y") %>%
+  group_by(treatmentgroup, work, outcome) %>%
+  summarize(mean_y = mean(y, na.rm=TRUE), se_y = sd(y, na.rm=TRUE)/sqrt(n())) %>%
+  mutate(outcome = fct_recode(outcome, 
+                              "Inequality" = "inequality",
+                              "Nothing to worse off" = "zero_to_worst_off"))
+df_mean_ineq_nothing_kantar_wd
+df_mean_ineq_nothing_kantar_wd %>%
+ggplot(aes(x=treatmentgroup, y=mean_y)) + geom_bar(stat="identity", width=0.7) +
+  geom_errorbar(aes(ymax=mean_y+se_y, ymin=mean_y - se_y), width=0.2) + 
+  facet_grid(work ~ outcome) + xlab("") + ylab("Mean \u00B1 s.e.m.") +
+  theme_bw()
+ggsave(here("graphs", "mean_ineq_nothing_kantar_wd.pdf"))
+```
+
+Similarly, without the work distinction for the main short paper.
+```{r}
+df_mean_ineq_nothing_kantar <- df_k %>% 
+  dplyr::select(treatmentgroup, inequality, zero_to_worst_off) %>%
+  gather(inequality, zero_to_worst_off, key="outcome", value="y") %>%
+  group_by(treatmentgroup, outcome) %>%
+  summarize(mean_y = mean(y, na.rm=TRUE), se_y = sd(y, na.rm=TRUE)/sqrt(n())) %>%
+  mutate(outcome = fct_recode(outcome, 
+                              "Inequality" = "inequality",
+                              "Nothing to worse off" = "zero_to_worst_off"))
+df_mean_ineq_nothing_kantar
+df_mean_ineq_nothing_kantar %>%
+ggplot(aes(x=treatmentgroup, y=mean_y)) + geom_bar(stat="identity", width=0.7) +
+  geom_errorbar(aes(ymax=mean_y+se_y, ymin=mean_y - se_y), width=0.2) + 
+  facet_grid(. ~ outcome) + xlab("") + ylab("Mean \u00B1 s.e.m.") +
+  theme_bw()
+ggsave(here("graphs", "mean_ineq_nothing_kantar.pdf"))
+```
+
+
+# Robustness for the "forced" alternative
+We did two variations of the "Forced Choice" treatment. One "strong" in which the alternative to the
+lottery was 0 cent with certainty, and one in which they actually had to pay 0.25 
+to avoid the lottery
+(I call it very-strong). Both these variants were with work. 
+To look at the effect of this, I graph the level of inequality of the three
+forced choice treatments (with work) with the comparison to the base treatment (with work). 
+
+```{r}
+df_k %>% filter(treatment_org %in% c("Base (w)", 
+                                 "Forced Choice (w)", 
+                                 "Forced Choice strong",
+                                 "Forced Choice very strong")) %>%
+  dplyr::select(treatment_org, inequality, zero_to_worst_off) %>%
+  gather(inequality, zero_to_worst_off, key="outcome", value="y") %>%
+  group_by(treatment_org, outcome) %>%
+  summarize(mean_y = mean(y, na.rm=TRUE), se_y = sd(y, na.rm=TRUE)/sqrt(n())) %>%
+  mutate(outcome = fct_recode(outcome, 
+                              "Inequality" = "inequality",
+                              "Nothing to worse off" = "zero_to_worst_off")) %>%
+  ggplot(aes(x=treatment_org, y=mean_y)) + geom_bar(stat="identity", width=0.7) +
+    geom_errorbar(aes(ymax=mean_y+se_y, ymin=mean_y - se_y), width=0.2) + 
+    facet_wrap(~ outcome) + xlab("") + ylab("Mean \u00B1 s.e.m.") +
+    theme_bw() + scale_x_discrete(labels=c("Base (w)",
+                                           "Forced\nChoice (w)", 
+                                           "Forced\nChoice\nstrong",
+                                           "Forced\nChoice\nvery strong"))
+ggsave(here("graphs", "mean_ineq_nothing_robust_kantar.pdf"))
+```
+
+Are the differences between the forced treatments significant? First a test
+of mean implemented inequality being the same in all forced (work) treatments:
+```{r}
+df_k %>% filter(treatment_org %in% c("Forced Choice (w)", 
+                                 "Forced Choice strong",
+                                 "Forced Choice very strong")) %>%
+  oneway.test( inequality ~ treatment_org, data=.)
+```
+
+Increases in implemented inequality compared to base treatment (for the forced choice
+variants).
+```{r}
+df_k %>% filter(treatment_org %in% c("Base (w)", 
+                                 "Forced Choice strong")) %>%
+  t.test( inequality ~ treatment_org, data=.)
+df_k %>% filter(treatment_org %in% c("Base (w)", 
+                                 "Forced Choice very strong")) %>%
+  t.test( inequality ~ treatment_org, data=.)
+```
+
+
+
+Now, the same test for the proportion implementing the nothing to the 
+worst off:
+```{r}
+uz <- df_k %>% filter(treatment_org %in% c("Forced Choice (w)", 
+                                 "Forced Choice strong",
+                                 "Forced Choice very strong")) %>% 
+  group_by(treatment_org, zero_to_worst_off) %>% 
+  summarize(n=n()) %>% 
+  spread(key=zero_to_worst_off, value=n) %>% 
+  ungroup() %>%
+  dplyr::select( -treatment_org) 
+prop.test(as.matrix(uz))
+```
+
+
+# Main regression tables
+
+
+## Work and treatments
+We want to pool the work and no-work treatments, so it is a question of interest 
+whether there are interaction effects between the work requirement and treatments. 
+```{r appendix_workdistinction}
+w1 <- df_k %>% lm(inequality ~ treatmentgroup*workp , data=.)
+w2 <- df_k %>% lm(inequality ~ treatmentgroup*workp + leftp + female + age_h + crt_h +
+                             university + high_income, data=.)
+w3 <- df_k %>% lm(inequality ~ treatmentgroup + workp + leftp + female + age_h + crt_h +
+                             university + high_income, data=.)
+w4 <- df_k %>% lm(zero_to_worst_off ~ treatmentgroup*workp , data=.)
+w5 <- df_k %>% lm(zero_to_worst_off ~ treatmentgroup*workp + leftp + female + age_h + crt_h +
+                             university + high_income, data=.)
+w6 <- df_k %>% lm(zero_to_worst_off ~ treatmentgroup + workp + leftp + female + age_h + crt_h +
+                             university + high_income, data=.)
+```
+
+We want to test the joint significance of the interactions
+```{r appendix_workdistinction_tests}
+w1t <- glht(w1, linfct= c("`treatmentgroupForced Choice:workpTRUE` = 0",
+                          "`treatmentgroupNominal Choice:workpTRUE` = 0"),
+             vcov = cluster.vcov(w1, cluster=1:nrow(df_k)))
+w2t <- glht(w2, linfct= c("`treatmentgroupForced Choice:workpTRUE` = 0",
+                          "`treatmentgroupNominal Choice:workpTRUE` = 0"),
+             vcov = cluster.vcov(w2, cluster=1:nrow(df_k)))
+w4t <- glht(w4, linfct= c("`treatmentgroupForced Choice:workpTRUE` = 0",
+                          "`treatmentgroupNominal Choice:workpTRUE` = 0"),
+             vcov = cluster.vcov(w4, cluster=1:nrow(df_k)))
+w5t <- glht(w5, linfct= c("`treatmentgroupForced Choice:workpTRUE` = 0",
+                          "`treatmentgroupNominal Choice:workpTRUE` = 0"),
+             vcov = cluster.vcov(w5, cluster=1:nrow(df_k)))
+
+wrow <- c("Joint p-value on work-interactions:", 
+          sprintf("%4.3f", summary(w1t)$test$pvalue[1]),
+          sprintf("%4.3f", summary(w2t)$test$pvalue[1]), "",
+          sprintf("%4.3f", summary(w4t)$test$pvalue[1]),
+          sprintf("%4.3f", summary(w5t)$test$pvalue[1]), "")
+```
+
+Now for table output:
+```{r appendix_workdistinction_table1}
+stargazer(w1, w2, w3, w4, w5, w6, 
+          se = list(sqrt(diag(cluster.vcov(w1, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(w2, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(w3, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(w4, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(w5, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(w6, cluster=1:nrow(df_k))))),
+        add.lines=list(wrow),
+        type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        p.auto=TRUE,
+        order=c("treatmentgroup*", "workp"),
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp", header=FALSE)
+```
+From this we conclude that we can pool the work/no-work treatments, and 
+simplify with only a dummy for work condition as a level shifter.
+
+Writing the results also to a latex file.
+
+```{r appendix_workdistinction_table2, include=FALSE}
+stargazer(w1, w2, w3, w4, w5, w6, 
+          se = list(sqrt(diag(cluster.vcov(w1, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(w2, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(w3, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(w4, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(w5, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(w6, cluster=1:nrow(df_k))))),
+        add.lines=list(wrow),
+        type="latex", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        p.auto=TRUE,
+        order=c("treatmentgroup*", "workp"),
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+        out =here("tables", "work_interactions.tex"), header=FALSE)
+```
+
+
+
+
+## The role of choice
+The first regression table just regress inequality (and zero to the worst off) 
+on treatment indicators and demographics (Table 1 in submitted version). 
+
+We want the main table for the paper to pool work/no-work completely.
+
+```{r}
+t1ineq_1 <-  df_k %>% lm(inequality ~ treatmentgroup  , data = . )
+t1ineq_2 <-  df_k %>% lm(inequality ~ treatmentgroup  +
+                             leftp + female + age_h + crt_h, data=.)
+t1ineq_3 <-  df_k %>% lm(inequality ~ treatmentgroup  +
+                             leftp + female + age_h + crt_h +
+                             university + high_income, data=.)
+
+t1noth_1 <-  df_k %>% lm( zero_to_worst_off ~ treatmentgroup, data = . )
+t1noth_2  <- df_k %>% lm( zero_to_worst_off ~ treatmentgroup  +
+                              leftp + female + age_h + crt_h, data=.)
+t1noth_3  <- df_k %>% lm( zero_to_worst_off ~ treatmentgroup  +
+                              leftp + female + age_h + crt_h +
+                              university + high_income, data=.)
+```
+
+Now, outputting these regressions to a table.
+```{r}
+stargazer(t1ineq_1, t1ineq_2, t1ineq_3, t1noth_1, t1noth_2, t1noth_3,
+          se = list(sqrt(diag(cluster.vcov(t1ineq_1, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(t1ineq_2, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(t1ineq_3, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(t1noth_1, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(t1noth_2, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(t1noth_3, cluster=1:nrow(df_k))))),
+         type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        p.auto=TRUE,
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp", header=FALSE)
+```
+
+And to disk:
+```{r include=FALSE}
+stargazer(t1ineq_1, t1ineq_2, t1ineq_3, t1noth_1, t1noth_2, t1noth_3,
+          se = list(sqrt(diag(cluster.vcov(t1ineq_1, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(t1ineq_2, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(t1ineq_3, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(t1noth_1, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(t1noth_2, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(t1noth_3, cluster=1:nrow(df_k))))),
+         style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+         out = here("tables", "main_online.tex"), header=FALSE)
+```
+
+
+## Heterogeneity in effects
+In the new heterogeneity table, we treat the background variables symmetrically.
+
+### Heterogeneity in effects on inequality
+```{r}
+h1_1 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income, 
+                      data=. )
+h1_2 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*leftp, data=. )
+h1_3 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*female , data=. )
+h1_4 <- df_k %>% lm(inequality ~ choice + leftp + crt_h + female + age_h + university + high_income +
+                        choice*age_h, data=. )
+h1_5 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*crt_h, data=. )
+h1_6 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*university, data=. )
+h1_7 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*high_income, data=. )
+h1_8 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*leftp + choice*female + choice*age_h + choice*crt_h + choice*university + 
+                        choice*high_income, data=. )
+```
+
+Want to include linear combinations for the columns 2-7:
+```{r}
+ch2 <- glht(h1_2, linfct="choiceTRUE + choiceTRUE:leftpTRUE = 0", 
+             vcov = cluster.vcov(h1_2, cluster=1:nrow(df_k)))
+ch3 <- glht(h1_3, linfct="choiceTRUE + choiceTRUE:femaleTRUE = 0", 
+             vcov = cluster.vcov(h1_3, cluster=1:nrow(df_k)))
+ch4 <- glht(h1_4, linfct="choiceTRUE + choiceTRUE:age_hTRUE = 0", 
+             vcov = cluster.vcov(h1_4, cluster=1:nrow(df_k)))
+ch5 <- glht(h1_5, linfct="choiceTRUE + choiceTRUE:crt_hTRUE = 0", 
+             vcov = cluster.vcov(h1_5, cluster=1:nrow(df_k)))
+ch6 <- glht(h1_6, linfct="choiceTRUE + choiceTRUE:universityTRUE = 0", 
+             vcov = cluster.vcov(h1_6, cluster=1:nrow(df_k)))
+ch7 <- glht(h1_7, linfct="choiceTRUE + choiceTRUE:high_incomeTRUE = 0", 
+             vcov = cluster.vcov(h1_7, cluster=1:nrow(df_k)))
+sh1 <- c("Linear combination"," ", 
+        sprintf("%4.3f", summary(ch2)$test$coefficients[1]),
+        sprintf("%4.3f", summary(ch3)$test$coefficients[1]),
+        sprintf("%4.3f", summary(ch4)$test$coefficients[1]),
+        sprintf("%4.3f", summary(ch5)$test$coefficients[1]),
+        sprintf("%4.3f", summary(ch6)$test$coefficients[1]),
+        sprintf("%4.3f", summary(ch7)$test$coefficients[1]),
+        "")
+sh2 <- c("","",
+        sprintf("(%4.3f)", summary(ch2)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(ch3)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(ch4)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(ch5)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(ch6)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(ch7)$test$sigma[1]),
+        "")
+sh3 <- c("", "",
+        sprintf("p=%4.3f", summary(ch2)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(ch3)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(ch4)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(ch5)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(ch6)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(ch7)$test$pvalues[1]),
+        "")
+```
+
+
+```{r}
+stargazer( h1_1, h1_2, h1_3, h1_4, h1_5, h1_6, h1_7, h1_8,
+           se = list( sqrt(diag(cluster.vcov(h1_1, cluster=1:length(h1_1$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_2, cluster=1:length(h1_2$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_3, cluster=1:length(h1_3$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_4, cluster=1:length(h1_4$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_5, cluster=1:length(h1_5$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_6, cluster=1:length(h1_6$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_7, cluster=1:length(h1_7$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_8, cluster=1:length(h1_8$residuals))))),
+        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
+        add.lines=list(sh1,sh2,sh3), 
+        type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        p.auto=TRUE,
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp")
+```
+
+Now to latex table on file
+```{r include=FALSE}
+stargazer( h1_1, h1_2, h1_3, h1_4, h1_5, h1_6, h1_7, h1_8,
+           se = list( sqrt(diag(cluster.vcov(h1_1, cluster=1:length(h1_1$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_2, cluster=1:length(h1_2$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_3, cluster=1:length(h1_3$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_4, cluster=1:length(h1_4$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_5, cluster=1:length(h1_5$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_6, cluster=1:length(h1_6$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_7, cluster=1:length(h1_7$residuals)))),
+                      sqrt(diag(cluster.vcov(h1_8, cluster=1:length(h1_8$residuals))))),
+        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
+        add.lines=list(sh1,sh2), 
+        type="latex", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+        out=here("tables", "heterogeneity1_representative.tex"), header=FALSE )
+```
+
+
+### Restricting heterogeneity table to Nominal Choice
+For the appendix, we want to show heterogeneity with respect to each of the types of 
+choice separately. First, restricting to nominal choice.
+```{r}
+dfmain_nc <- df_k %>% filter(treatmentgroup != "Forced Choice")
+```
+
+The regression tables are the same on this more restricted sample.
+```{r}
+hnc1_1 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income, 
+                      data=. )
+hnc1_2 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*leftp, data=. )
+hnc1_3 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*female , data=. )
+hnc1_4 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*age_h, data=. )
+hnc1_5 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*crt_h, data=. )
+hnc1_6 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*university, data=. )
+hnc1_7 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*high_income, data=. )
+hnc1_8 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*leftp + choice*female + choice*age_h + choice*crt_h + choice*university + 
+                        choice*high_income, data=. )
+```
+
+Want to include linear combinations for the columns 2-7:
+```{r}
+nch2 <- glht(hnc1_2, linfct="choiceTRUE + choiceTRUE:leftpTRUE = 0", 
+             vcov = cluster.vcov(hnc1_2, cluster=1:nrow(dfmain_nc)))
+nch3 <- glht(hnc1_3, linfct="choiceTRUE + choiceTRUE:femaleTRUE = 0", 
+             vcov = cluster.vcov(hnc1_3, cluster=1:nrow(dfmain_nc)))
+nch4 <- glht(hnc1_4, linfct="choiceTRUE + choiceTRUE:age_hTRUE = 0", 
+             vcov = cluster.vcov(hnc1_4, cluster=1:nrow(dfmain_nc)))
+nch5 <- glht(hnc1_5, linfct="choiceTRUE + choiceTRUE:crt_hTRUE = 0", 
+             vcov = cluster.vcov(hnc1_5, cluster=1:nrow(dfmain_nc)))
+nch6 <- glht(hnc1_6, linfct="choiceTRUE + choiceTRUE:universityTRUE = 0", 
+             vcov = cluster.vcov(hnc1_6, cluster=1:nrow(dfmain_nc)))
+nch7 <- glht(hnc1_7, linfct="choiceTRUE + choiceTRUE:high_incomeTRUE = 0", 
+             vcov = cluster.vcov(hnc1_7, cluster=1:nrow(dfmain_nc)))
+nsh1 <- c("Linear combination"," ", 
+        sprintf("%4.3f", summary(nch2)$test$coefficients[1]),
+        sprintf("%4.3f", summary(nch3)$test$coefficients[1]),
+        sprintf("%4.3f", summary(nch4)$test$coefficients[1]),
+        sprintf("%4.3f", summary(nch5)$test$coefficients[1]),
+        sprintf("%4.3f", summary(nch6)$test$coefficients[1]),
+        sprintf("%4.3f", summary(nch7)$test$coefficients[1]),
+        "")
+nsh2 <- c("","",
+        sprintf("(%4.3f)", summary(nch2)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(nch3)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(nch4)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(nch5)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(nch6)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(nch7)$test$sigma[1]),
+        "")
+nsh3 <- c("", "",
+        sprintf("p=%4.3f", summary(nch2)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(nch3)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(nch4)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(nch5)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(nch6)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(nch7)$test$pvalues[1]),
+        "")
+```
+
+
+```{r}
+stargazer( hnc1_1, hnc1_2, hnc1_3, hnc1_4, hnc1_5, hnc1_6, hnc1_7, hnc1_8,
+           se = list( sqrt(diag(cluster.vcov(hnc1_1, cluster=1:length(hnc1_1$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_2, cluster=1:length(hnc1_2$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_3, cluster=1:length(hnc1_3$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_4, cluster=1:length(hnc1_4$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_5, cluster=1:length(hnc1_5$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_6, cluster=1:length(hnc1_6$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_7, cluster=1:length(hnc1_7$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_8, cluster=1:length(hnc1_8$residuals))))),
+        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
+        add.lines=list(nsh1,nsh2,nsh3), 
+        type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        p.auto=TRUE,
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp")
+```
+
+Now to latex table on file
+```{r include=FALSE}
+stargazer( hnc1_1, hnc1_2, hnc1_3, hnc1_4, hnc1_5, hnc1_6, hnc1_7, hnc1_8,
+           se = list( sqrt(diag(cluster.vcov(hnc1_1, cluster=1:length(hnc1_1$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_2, cluster=1:length(hnc1_2$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_3, cluster=1:length(hnc1_3$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_4, cluster=1:length(hnc1_4$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_5, cluster=1:length(hnc1_5$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_6, cluster=1:length(hnc1_6$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_7, cluster=1:length(hnc1_7$residuals)))),
+                      sqrt(diag(cluster.vcov(hnc1_8, cluster=1:length(hnc1_8$residuals))))),
+        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
+        add.lines=list(nsh1,nsh2), 
+        type="latex", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+        out=here("tables", "heterogeneity1_representative_NC.tex"), header=FALSE )
+```
+
+### Restricting heterogeneity table to Forced Choice
+For the appendix, we want to show heterogeneity with respect to each of the types of 
+choice separately. Now, restricting to forced choice.
+
+
+```{r}
+dfmain_fc <- df_k %>% filter(treatmentgroup != "Nominal Choice")
+```
+
+The regression tables are the same on this more restricted sample.
+```{r}
+hfc1_1 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income, 
+                      data=. )
+hfc1_2 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*leftp, data=. )
+hfc1_3 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*female , data=. )
+hfc1_4 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*age_h, data=. )
+hfc1_5 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*crt_h, data=. )
+hfc1_6 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*university, data=. )
+hfc1_7 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*high_income, data=. )
+hfc1_8 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
+                        choice*leftp + choice*female + choice*age_h + choice*crt_h + choice*university + 
+                        choice*high_income, data=. )
+```
+
+Want to include linear combinations for the columns 2-7:
+```{r}
+fch2 <- glht(hfc1_2, linfct="choiceTRUE + choiceTRUE:leftpTRUE = 0", 
+             vcov = cluster.vcov(hfc1_2, cluster=1:nrow(dfmain_fc)))
+fch3 <- glht(hfc1_3, linfct="choiceTRUE + choiceTRUE:femaleTRUE = 0", 
+             vcov = cluster.vcov(hfc1_3, cluster=1:nrow(dfmain_fc)))
+fch4 <- glht(hfc1_4, linfct="choiceTRUE + choiceTRUE:age_hTRUE = 0", 
+             vcov = cluster.vcov(hfc1_4, cluster=1:nrow(dfmain_fc)))
+fch5 <- glht(hfc1_5, linfct="choiceTRUE + choiceTRUE:crt_hTRUE = 0", 
+             vcov = cluster.vcov(hfc1_5, cluster=1:nrow(dfmain_fc)))
+fch6 <- glht(hfc1_6, linfct="choiceTRUE + choiceTRUE:universityTRUE = 0", 
+             vcov = cluster.vcov(hfc1_6, cluster=1:nrow(dfmain_fc)))
+fch7 <- glht(hfc1_7, linfct="choiceTRUE + choiceTRUE:high_incomeTRUE = 0", 
+             vcov = cluster.vcov(hfc1_7, cluster=1:nrow(dfmain_fc)))
+fsh1 <- c("Linear combination"," ", 
+        sprintf("%4.3f", summary(fch2)$test$coefficients[1]),
+        sprintf("%4.3f", summary(fch3)$test$coefficients[1]),
+        sprintf("%4.3f", summary(fch4)$test$coefficients[1]),
+        sprintf("%4.3f", summary(fch5)$test$coefficients[1]),
+        sprintf("%4.3f", summary(fch6)$test$coefficients[1]),
+        sprintf("%4.3f", summary(fch7)$test$coefficients[1]),
+        "")
+fsh2 <- c("","",
+        sprintf("(%4.3f)", summary(fch2)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(fch3)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(fch4)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(fch5)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(fch6)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(fch7)$test$sigma[1]),
+        "")
+fsh3 <- c("", "",
+        sprintf("p=%4.3f", summary(fch2)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(fch3)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(fch4)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(fch5)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(fch6)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(fch7)$test$pvalues[1]),
+        "")
+```
+
+
+```{r}
+stargazer( hfc1_1, hfc1_2, hfc1_3, hfc1_4, hfc1_5, hfc1_6, hfc1_7, hfc1_8,
+           se = list( sqrt(diag(cluster.vcov(hfc1_1, cluster=1:length(hfc1_1$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_2, cluster=1:length(hfc1_2$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_3, cluster=1:length(hfc1_3$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_4, cluster=1:length(hfc1_4$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_5, cluster=1:length(hfc1_5$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_6, cluster=1:length(hfc1_6$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_7, cluster=1:length(hfc1_7$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_8, cluster=1:length(hfc1_8$residuals))))),
+        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
+        add.lines=list(fsh1,fsh2,fsh3), 
+        type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        p.auto=TRUE,
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp")
+```
+
+Now to latex table on file
+```{r include=FALSE}
+stargazer( hfc1_1, hfc1_2, hfc1_3, hfc1_4, hfc1_5, hfc1_6, hfc1_7, hfc1_8,
+           se = list( sqrt(diag(cluster.vcov(hfc1_1, cluster=1:length(hfc1_1$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_2, cluster=1:length(hfc1_2$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_3, cluster=1:length(hfc1_3$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_4, cluster=1:length(hfc1_4$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_5, cluster=1:length(hfc1_5$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_6, cluster=1:length(hfc1_6$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_7, cluster=1:length(hfc1_7$residuals)))),
+                      sqrt(diag(cluster.vcov(hfc1_8, cluster=1:length(hfc1_8$residuals))))),
+        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
+        add.lines=list(fsh1,fsh2), 
+        type="latex", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+        out=here("tables", "heterogeneity1_representative_FC.tex"), header=FALSE )
+```
+
+
+### Heterogeneity in effects on zero to worst off
+```{r}
+h2_1 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income, 
+                      data=. )
+h2_2 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*leftp, data=. )
+h2_3 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*female , data=. )
+h2_4 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*age_h, data=. )
+h2_5 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*crt_h, data=. )
+h2_6 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*university, data=. )
+h2_7 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*high_income, data=. )
+h2_8 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*leftp + choice*female + choice*age_h + choice*crt_h + choice*university + 
+                        choice*high_income, data=. )
+```
+
+Want to include linear combinations for the columns 2-7:
+```{r}
+dh2 <- glht(h2_2, linfct="choiceTRUE + choiceTRUE:leftpTRUE = 0", 
+             vcov = cluster.vcov(h2_2, cluster=1:nrow(df_k)))
+dh3 <- glht(h2_3, linfct="choiceTRUE + choiceTRUE:femaleTRUE = 0", 
+             vcov = cluster.vcov(h2_3, cluster=1:nrow(df_k)))
+dh4 <- glht(h2_4, linfct="choiceTRUE + choiceTRUE:age_hTRUE = 0", 
+             vcov = cluster.vcov(h2_4, cluster=1:nrow(df_k)))
+dh5 <- glht(h2_5, linfct="choiceTRUE + choiceTRUE:crt_hTRUE = 0", 
+             vcov = cluster.vcov(h2_5, cluster=1:nrow(df_k)))
+dh6 <- glht(h2_6, linfct="choiceTRUE + choiceTRUE:universityTRUE = 0", 
+             vcov = cluster.vcov(h2_6, cluster=1:nrow(df_k)))
+dh7 <- glht(h2_7, linfct="choiceTRUE + choiceTRUE:high_incomeTRUE = 0", 
+             vcov = cluster.vcov(h2_7, cluster=1:nrow(df_k)))
+rh1 <- c("Linear combination"," ", 
+        sprintf("%4.3f", summary(dh2)$test$coefficients[1]),
+        sprintf("%4.3f", summary(dh3)$test$coefficients[1]),
+        sprintf("%4.3f", summary(dh4)$test$coefficients[1]),
+        sprintf("%4.3f", summary(dh5)$test$coefficients[1]),
+        sprintf("%4.3f", summary(dh6)$test$coefficients[1]),
+        sprintf("%4.3f", summary(dh7)$test$coefficients[1]),
+        "")
+rh2 <- c("","",
+        sprintf("(%4.3f)", summary(dh2)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(dh3)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(dh4)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(dh5)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(dh6)$test$sigma[1]),
+        sprintf("(%4.3f)", summary(dh7)$test$sigma[1]),
+        "")
+rh3 <- c("", "",
+        sprintf("p=%4.3f", summary(dh2)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(dh3)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(dh4)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(dh5)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(dh6)$test$pvalues[1]),
+        sprintf("p=%4.3f", summary(dh7)$test$pvalues[1]),
+        "")
+```
+
+Now for table output with p-values:
+```{r}
+stargazer( h2_1, h2_2, h2_3, h2_4, h2_5, h2_6, h2_7, h2_8,
+           se = list( sqrt(diag(cluster.vcov(h2_1, cluster=1:length(h2_1$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_2, cluster=1:length(h2_2$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_3, cluster=1:length(h2_3$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_4, cluster=1:length(h2_4$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_5, cluster=1:length(h2_5$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_6, cluster=1:length(h2_6$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_7, cluster=1:length(h2_7$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_8, cluster=1:length(h2_8$residuals))))),
+        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
+        add.lines=list(rh1,rh2,rh3), 
+        type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        p.auto=TRUE,
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp")
+```
+
+Want to output also to latex table.
+
+```{r include=FALSE}
+stargazer( h2_1, h2_2, h2_3, h2_4, h2_5, h2_6, h2_7, h2_8,
+           se = list( sqrt(diag(cluster.vcov(h2_1, cluster=1:length(h2_1$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_2, cluster=1:length(h2_2$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_3, cluster=1:length(h2_3$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_4, cluster=1:length(h2_4$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_5, cluster=1:length(h2_5$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_6, cluster=1:length(h2_6$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_7, cluster=1:length(h2_7$residuals)))),
+                      sqrt(diag(cluster.vcov(h2_8, cluster=1:length(h2_8$residuals))))),
+        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
+                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
+        add.lines=list(rh1,rh2), 
+        type="latex", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+        out=here("tables", "heterogeneity2_representative.tex"), header=FALSE )
+```
+
+
+## Absolutely no effect on any party?
+In the lab experiment, we found a strong interaction between political affiliation
+and treatment.  Are there really no interactions of choice and political 
+preference in the representative sample? Let us try to run the treatment regressions party-by-party:
+
+### Treatment effects by political party
+On inequality:
+```{r}
+rAp <-df_k %>% filter(stortingsvalg=="Ap") %>% 
+  lm(inequality~choice + workp + female + age_h + crt_h + university + high_income, data=.)
+rFrp <-df_k %>% filter(stortingsvalg=="Frp") %>% 
+  lm(inequality~choice + workp + female + age_h + crt_h + university + high_income, data=.)
+rH <-df_k %>% filter(stortingsvalg=="H") %>% 
+  lm(inequality~choice + workp + female + age_h + crt_h + university + high_income, data=.)
+rKrF <- df_k %>% filter(stortingsvalg=="KrF") %>% 
+  lm(inequality~choice + workp + female + age_h + crt_h + university + high_income, data=.)
+rMDG <-df_k %>% filter(stortingsvalg=="MDG") %>% 
+  lm(inequality~choice + workp + female + age_h + crt_h + university + high_income, data=.)
+rR <-df_k %>% filter(stortingsvalg=="R") %>% 
+  lm(inequality~choice + workp + female + age_h + crt_h + university + high_income, data=.)
+rSp <-df_k %>% filter(stortingsvalg=="Sp") %>% 
+  lm(inequality~choice + workp + female + age_h + crt_h + university + high_income, data=.)
+rSV <-df_k %>% filter(stortingsvalg=="SV") %>% 
+  lm(inequality~choice + workp + female + age_h + crt_h + university + high_income, data=.)
+rV <-df_k%>% filter(stortingsvalg=="V") %>% 
+  lm(inequality~choice + workp + female + age_h + crt_h + university + high_income, data=.)
+
+stargazer( rR, rSV, rMDG, rAp, rSp, rKrF, rV, rH, rFrp,
+           se = list(sqrt(diag(cluster.vcov(rR, cluster=1:length(rR$residuals)))),
+                     sqrt(diag(cluster.vcov(rSV, cluster=1:length(rSV$residuals)))),
+                     sqrt(diag(cluster.vcov(rMDG, cluster=1:length(rMDG$residuals)))),
+                     sqrt(diag(cluster.vcov(rAp, cluster=1:length(rAp$residuals)))),
+                     sqrt(diag(cluster.vcov(rSp, cluster=1:length(rSp$residuals)))),
+                     sqrt(diag(cluster.vcov(rKrF, cluster=1:length(rKrF$residuals)))),
+                     sqrt(diag(cluster.vcov(rV, cluster=1:length(rV$residuals)))),
+                     sqrt(diag(cluster.vcov(rH, cluster=1:length(rH$residuals)))),
+                     sqrt(diag(cluster.vcov(rFrp, cluster=1:length(rFrp$residuals))))),
+           column.labels=c("R","SV","MDG","Ap","Sp","KrF","V","H","Frp"),
+           star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp",
+           type="text",  style="aer", df=FALSE, keep.stat=c("rsq","n"))
+```
+
+Output to latex (silent):
+```{r include=FALSE}
+stargazer( rR, rSV, rMDG, rAp, rSp, rKrF, rV, rH, rFrp,
+           se = list(sqrt(diag(cluster.vcov(rR, cluster=1:length(rR$residuals)))),
+                     sqrt(diag(cluster.vcov(rSV, cluster=1:length(rSV$residuals)))),
+                     sqrt(diag(cluster.vcov(rMDG, cluster=1:length(rMDG$residuals)))),
+                     sqrt(diag(cluster.vcov(rAp, cluster=1:length(rAp$residuals)))),
+                     sqrt(diag(cluster.vcov(rSp, cluster=1:length(rSp$residuals)))),
+                     sqrt(diag(cluster.vcov(rKrF, cluster=1:length(rKrF$residuals)))),
+                     sqrt(diag(cluster.vcov(rV, cluster=1:length(rV$residuals)))),
+                     sqrt(diag(cluster.vcov(rH, cluster=1:length(rH$residuals)))),
+                     sqrt(diag(cluster.vcov(rFrp, cluster=1:length(rFrp$residuals))))),
+           column.labels=c("R","SV","MDG","Ap","Sp","KrF","V","H","Frp"),
+           star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+           type="latex",  style="aer", df=FALSE, keep.stat=c("rsq","n"), 
+           out=here("tables", "all_parties.tex"), header=FALSE)
+```
+
+
+## Triple interactions 
+We are interested in the possible triple interaction between political, left, and cognitive reflection.
+
+
+```{r}
+triple1 <- df_k %>% lm(inequality ~ choice + workp + leftp + crt_h + female + age_h + university + high_income , data=.)
+triple2 <- df_k %>% lm(inequality ~ choice + workp + choice*leftp + leftp + crt_h + female + age_h + university + high_income, data=.)
+triple3 <- df_k %>% lm(inequality ~ choice + workp + choice*crt_h + leftp + crt_h + female + age_h + university + high_income, data=. )
+triple4 <- df_k %>% lm(inequality ~ choice + workp + choice*leftp + choice*crt_h + leftp + crt_h +  female + age_h + 
+                           university + high_income, data=. )
+triple5 <- df_k %>% lm(inequality ~ choice + workp + choice*leftp + choice*crt_h + leftp*crt_h + leftp + crt_h +  
+                           female + age_h +university + high_income , data=. )
+triple6 <- df_k %>% lm(inequality ~ choice + workp + choice*leftp + choice*crt_h + leftp*crt_h + choice*leftp*crt_h + 
+                           leftp + crt_h +  female + age_h +university + high_income, data=. )
+
+stargazer(triple1, triple2, triple3, triple4, triple5, triple6,
+          se = list(sqrt(diag(cluster.vcov(triple1, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(triple2, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(triple3, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(triple4, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(triple5, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(triple6, cluster=1:nrow(df_k))))),
+        style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp", type="text")
+```
+
+And also to latex (silent).
+```{r include=FALSE}
+stargazer(triple1, triple2, triple3, triple4, triple5, triple6,
+          se = list(sqrt(diag(cluster.vcov(triple1, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(triple2, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(triple3, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(triple4, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(triple5, cluster=1:nrow(df_k)))),
+                    sqrt(diag(cluster.vcov(triple6, cluster=1:nrow(df_k))))),
+        style="aer", df=FALSE, keep.stat=c("rsq","n"), p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs", type="latex", 
+        out=here("tables", "triple_representative.tex"), header=FALSE)
+```
+# Understanding / Mechanisms
+
+We collected information of two types that we can use to get an idea of how participants thought about
+the experiment. 
+1. We asked those in "nominal choice" whether they believed "Var det like sannsynlig at deltakerne valgte fargen til den ballen som senere ble trukket"
+2. We asked all "For du gjorde ditt valg tjente deltaker A 8 USD mens deltaker B tjente 0 USD pa"
+
+## In nominal choice
+A clear majority said "yes", but some said I don't know:
+```{r}
+table(df_k$understanding1)
+df_k %>% filter(treatmentgroup=="Nominal Choice") %>%
+  ggplot(aes(x=understanding1, y = (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) +
+  geom_bar(width=0.7) + theme_bw() + 
+  labs(title= "Equally likely in nominal choice?",
+                                x="", y = "Fraction")
+```
+
+Did those who didn't understand distribute any differently than others? 
+```{r}
+u1 <- df_k %>% filter(treatmentgroup == "Nominal Choice") %>% 
+  dplyr::select(understanding1, inequality, zero_to_worst_off) %>%
+  gather(inequality, zero_to_worst_off, key="outcome", value="y") %>%
+  mutate(understand = fct_recode(understanding1,
+                                 "Understand" = "Ja",
+                                 "Don't understand" = "Nei",
+                                 "Don't understand" = "Vet ikke")) %>%
+  group_by(understand, outcome) 
+u1 %>% 
+  summarize(mean_y = mean(y, na.rm=TRUE), se_y = sd(y, na.rm=TRUE)/sqrt(n())) %>%
+  mutate(outcome = fct_recode(outcome,
+                              "Inequality" = "inequality", 
+                              "Nothing to worse off" = "zero_to_worst_off")) %>%
+  ggplot(aes(x=understand, y=mean_y)) + geom_bar(stat="identity", width=0.7) + 
+    geom_errorbar(aes(ymax=mean_y+se_y, ymin=mean_y-se_y), width=0.2) + 
+  facet_wrap(~outcome, scales="free") +
+  xlab("Was the probability of winning equal in Nominal Choice situation?") + 
+  ylab("Mean \u00B1 s.e.m.") + theme_bw()
+```
+
+Are these differences significant?
+```{r}
+u1 %>% filter(outcome=="inequality") %>% t.test(y ~ understand, data=.)
+u1z <- u1 %>% filter(outcome=="zero_to_worst_off") %>% 
+  group_by(understand, y) %>% 
+  summarize(n=n()) %>% 
+  spread(key=understand, value=n) %>% 
+  dplyr::select(-y) 
+prop.test(as.matrix(u1z))
+```
+
+
+
+## Control over earnings before distribution choice
+We asked whether the two participants had any control over their own earnings before the DM made their
+choices.
+
+```{r}
+df_k %>% filter(!is.na(understanding2n)) %>% 
+  ggplot(aes(x=understanding2n, y = (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  geom_bar(width=0.7) + 
+  facet_wrap(~treatmentgroup) + theme_bw() + 
+  labs(x="Answer from 1-7. (1: no control, ..., 7: full control)", y = "Fraction") +
+  scale_x_discrete(limits=c(1,2,3,4,5,6,7))
+ggsave(here("graphs", "control_earnings.pdf"))
+```
+
+
+What are the exact shares at "no control"?
+```{r}
+df_k %>% group_by(treatmentgroup) %>% 
+  summarize(share_no_control = mean( (understanding2n==1), na.rm=TRUE),
+                                           n = n()) %>% knitr::kable(digits=3)
+```
+
+Also by treatmentgroup (excluding "strong" and "very strong"):
+```{r}
+df_k %>% group_by(treatmentgroup) %>% 
+  summarize(share_no_control = mean( (understanding2n==1), na.rm=TRUE),
+                                           n = n()) %>% knitr::kable(digits=3)
+```
+
+
+### Mediation ...
+Can we explain understanding with treatmentgroup? And does understanding
+knock out the treatment efects?
+```{r}
+dfmainu2 <- df_k %>% filter(!is.na(understanding2n))
+ru2_1 <- dfmainu2 %>% lm(understanding2n ~ treatmentgroup + leftp + female + age_h + crt_h +
+                           university + high_income , data=.)
+ru2_2 <- dfmainu2 %>% lm(inequality ~ treatmentgroup + leftp + female + age_h + crt_h +
+                           university + high_income, data=.)
+ru2_3 <- dfmainu2 %>% lm(inequality ~ treatmentgroup + understanding2n  + leftp + 
+                           female + age_h + crt_h + university + high_income, data=.)
+ru2_4 <- dfmainu2 %>% lm(inequality ~ treatmentgroup + factor(understanding2n) + 
+                           leftp + female + age_h + crt_h + university + high_income, data=.)
+ru2_5 <- dfmainu2 %>% lm(zero_to_worst_off ~ treatmentgroup +  leftp + 
+                           female + age_h + crt_h + university + high_income, data=.)
+ru2_6 <- dfmainu2 %>% lm(zero_to_worst_off ~ treatmentgroup + understanding2n + 
+                           leftp + female + age_h + crt_h + university + high_income, data=.)
+ru2_7 <- dfmainu2 %>% lm(zero_to_worst_off ~ treatmentgroup + factor(understanding2n) + 
+                           leftp + female + age_h + crt_h + university + high_income,  data=.)
+
+stargazer( ru2_1, ru2_2, ru2_3, ru2_4, ru2_5, ru2_6, ru2_7,
+           se = list( sqrt(diag(cluster.vcov(ru2_1, cluster=1:length(ru2_1$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_2, cluster=1:length(ru2_2$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_3, cluster=1:length(ru2_3$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_4, cluster=1:length(ru2_4$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_5, cluster=1:length(ru2_5$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_6, cluster=1:length(ru2_6$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_7, cluster=1:length(ru2_7$residuals))))),
+           type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+           star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp", header=FALSE)
+```
+
+Also to latex (silent):
+```{r include=FALSE}
+stargazer( ru2_1, ru2_2, ru2_3, ru2_4, ru2_5, ru2_6, ru2_7,
+           se = list( sqrt(diag(cluster.vcov(ru2_1, cluster=1:length(ru2_1$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_2, cluster=1:length(ru2_2$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_3, cluster=1:length(ru2_3$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_4, cluster=1:length(ru2_4$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_5, cluster=1:length(ru2_5$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_6, cluster=1:length(ru2_6$residuals)))),
+                      sqrt(diag(cluster.vcov(ru2_7, cluster=1:length(ru2_7$residuals))))),
+           type="latex", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+           star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+           out=here("tables", "mediation_online.tex"), header=FALSE)
+```
+
+
+We see that treatment does have a sizable effect on understanding, but that the effects
+of choice remains strong even when controlling for the level of understanding. This does not
+depend on how the understanding is added linearly (as seen by comparing column 3 vs 4, and 6 vs 7).
+
+We see that the total number of observations is lower than in the main regressions. This is because
+some respondents chose the "don't know" option, and these don't enter the regressions (or the graph above). 
+The proportion that choice the "don't know" option was not much different by treatment:
+```{r}
+df_k %>% group_by(treatment) %>% summarize(share_dont_know = mean(understanding2=="Vet ikke")) %>%
+  knitr::kable(digits=3)
+```
+
+
+### Restricting to those that were not confused
+Can we still find the main treatmentgroup if we exclude all those who are in doubt about
+the workers not having control? Let's re-estimate the main table for the representative
+sample on the subset of people who are absoluteley sure.
+
+```{r}
+df_c <- df_k %>% filter(understanding2n==1)
+
+cineq_1 <-  df_c %>% lm(inequality ~ treatmentgroup , data = . )
+cineq_2 <-  df_c %>% lm(inequality ~ treatmentgroup  +
+                             leftp + female + age_h + crt_h, data=.)
+cineq_3 <-  df_c %>% lm(inequality ~ treatmentgroup  +
+                             leftp + female + age_h + crt_h +
+                             university + high_income, data=.)
+
+cnoth_1 <-  df_c %>% lm( zero_to_worst_off ~ treatmentgroup  , data = . )
+cnoth_2  <- df_c %>% lm( zero_to_worst_off ~ treatmentgroup +
+                              leftp + female + age_h + crt_h, data=.)
+cnoth_3  <- df_c %>% lm( zero_to_worst_off ~ treatmentgroup +
+                              leftp + female + age_h + crt_h +
+                              university + high_income, data=.)
+```
+
+Now, outputting these regressions to a table.
+```{r}
+stargazer(cineq_1, cineq_2, cineq_3, cnoth_1, cnoth_2, cnoth_3,
+          se = list(sqrt(diag(cluster.vcov(cineq_1, cluster=1:nrow(df_c)))),
+                    sqrt(diag(cluster.vcov(cineq_2, cluster=1:nrow(df_c)))),
+                    sqrt(diag(cluster.vcov(cineq_3, cluster=1:nrow(df_c)))),
+                    sqrt(diag(cluster.vcov(cnoth_1, cluster=1:nrow(df_c)))),
+                    sqrt(diag(cluster.vcov(cnoth_2, cluster=1:nrow(df_c)))),
+                    sqrt(diag(cluster.vcov(cnoth_3, cluster=1:nrow(df_c))))),
+         type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"), 
+         p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp")
+```
+
+Also to latex (silent):
+```{r include=FALSE}
+stargazer(cineq_1, cineq_2, cineq_3, cnoth_1, cnoth_2, cnoth_3,
+          se = list(sqrt(diag(cluster.vcov(cineq_1, cluster=1:nrow(df_c)))),
+                    sqrt(diag(cluster.vcov(cineq_2, cluster=1:nrow(df_c)))),
+                    sqrt(diag(cluster.vcov(cineq_3, cluster=1:nrow(df_c)))),
+                    sqrt(diag(cluster.vcov(cnoth_1, cluster=1:nrow(df_c)))),
+                    sqrt(diag(cluster.vcov(cnoth_2, cluster=1:nrow(df_c)))),
+                    sqrt(diag(cluster.vcov(cnoth_3, cluster=1:nrow(df_c))))),
+         type="latex", style="aer", df=FALSE, keep.stat=c("rsq","n"), 
+         p.auto=TRUE,
+         star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
+         out=here("tables","nocontrol_representative.tex"), header=FALSE)
+```
+
+
+
+
+# Balance table (appendix)
+```{r}
+dfk_summary <- df_k %>% group_by(treatment) %>% summarize(mean_age = mean(age), se_age = sd(age)/sqrt(n()),
+                                                          mean_female = mean(female), se_female=sd(female)/sqrt(n()),
+                                                          mean_crt = mean(crt), se_crt = sd(crt)/sqrt(n()),
+                                                          mean_left = mean(leftp), se_leftp=sd(leftp)/sqrt(n()),
+                                                          n= n())
+dfk_totals <- df_k %>% summarize(mean_age = mean(age), se_age = sd(age)/sqrt(n()),
+                                 mean_female = mean(female), se_female=sd(female)/sqrt(n()),
+                                 mean_crt = mean(crt), se_crt = sd(crt)/sqrt(n()),
+                                 mean_left = mean(leftp), se_leftp=sd(leftp)/sqrt(n()),
+                                 n= n())
+```
+
+Output of balance table
+```{r}
+dfk_summary %>% knitr::kable(digits=c(3,1,2,2,2,2,2,2,2,0))
+dfk_totals %>% knitr::kable(digits=c(1,2,2,2,2,2,2,2,0))
+```
+# sessionInfo()
+
+```{r}
+sessionInfo()
+```
+
+
+
