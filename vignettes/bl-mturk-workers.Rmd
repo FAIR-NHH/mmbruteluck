@@ -1,5 +1,5 @@
 ---
-title: "mmbruteluck: mTurk workers"
+title: "3. mmbruteluck: mTurk workers"
 author: "Erik Ø. Sørensen"
 output: rmarkdown::html_vignette
 vignette: >
