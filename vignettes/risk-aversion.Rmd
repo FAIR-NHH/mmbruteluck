@@ -1,5 +1,5 @@
 ---
-title: "4. Risk aversion and forced choice"
+title: "4. Implied risk aversion of safe alternative"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{risk-aversion}
@@ -17,76 +17,74 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(mmbruteluck)
 library(rootSolve)
-require("WDI")
 ```
 
-In the experiment's forced choice condition, partipants choose between a fixed a
-mount (25 NOK in lab experiment, 0.25 USD in online experiment), and a lottery (
-between 0/800 NOK in lab, 0/8 USD online).
-We want to find the risk aversion that makes people indifferent between these
-alternatives and compare this to known risk aversions in the literature. 
+Since we implemented the forced choice with a small safe amount as alternative,
+participants with sufficient risk aversion might have opted out for this reason.
+To quantify the risk aversion needed, consider a CARA utility function,
+$$ u(c) = 1 - e^{-\gamma c},$$
+where $\gamma$ is the coefficient of absoloute risk aversion.  This
+function has the advantage that choices between a set of lotteries is
+independent of current wealth, and since wealth is unobserved in the
+experiment, this is an advantage. However, the risk aversion is
+dependent on the scale of outcomes, so a translation to a common
+monetary scale is necessary.
 
-Since we don't know the level of background wealth, it is convenient to work wit
-h
-an CARA function, since this has the benefit that risk aversion for a given lott
-ery is 
-independent of wealth. A disadvantage is that its ARA measure is indexed to the 
-value of
-a given currency. 
-
-$$ u(c) = 1 - e^{- \gamma c}$$
-
-We want to compare to the numbers in Choi, Syngjoo, Raymond Fisman, Douglas Gale
-, and Shachar Kariv. 2007. "Consistency and Heterogeneity of Individual Behavior
- under Uncertainty." American Economic Review, 97 (5): 1921-1938. <https://www.a
-eaweb.org/articles?id=10.1257/aer.97.5.1921> We aim
-to translate all ARA numbers to the benchmark of the latest data collection (in 
-2017), which
-was in terms of USD for mostly US participants (Amazon mTurk). 
-
-
-# Data sources
-Exchange rates from <https://www.norges-bank.no/Statistikk/Valutakurser/>
-In 2012: 5.821 NOK/USD. 
-
-Consumer prices from <https://www.bls.gov/data/inflation_calculator.htm>
-Jan 2007 to Jan 2017: 1.1997.
-Jan 2012 to Jan 2017: 1.0714.
-
-# Online sample
-For the online sample, the critical equation is, , 
+In the online experiment, the main Forced Choice was between 0.25 USD
+(safe) and a $\{0,8\}$ uniform lottery in 2017 USD and at US prices
+(for the AMT prticipants). The indifference condition between the safe alternati
+ve
+and the lottery is
 $$ 1 - e^{-\gamma 0.25\ } = \frac{1}{2}\left(1 - e^{-\gamma 8.00} \right).$$
 ```{r}
-labo <- function(gamma) {
-  0.5 + 0.5*exp(-gamma * 8.0) - exp(-gamma*(0.25))
+fun1 <- function(gamma) {
+  1 - exp(-gamma * 0.25 ) - (0.5*(1-exp(-gamma* 8.0)))
 }
-oroot<-uniroot( labo, c(0.001,10))
+(root1 <- uniroot(fun1, c(1,3)))
 ```
-The rate of absolute risk aversion necessary for choosing the safe alternative
-in the 2017 online experiment is **`r oroot$root`** (referenced to 2017 USD and US-prices).
+So this equation has a solution at $\gamma=$ `r root1$root`.
 
-# Lab sample
+In the lab experiment, the Forced Choice was between 25 NOK (safe) and
+a $\{0,800\}$ NOK lottery, in 2012 NOK and Norwegian prices. To
+convert into the same reference scale as the online lottery, we take
+into account that the 2012 NOK/USD exchange rate was
+5.281,[^1] 
+  the WDI purchasing power adjustment for Norwegian vs US price level
+  puts the Norwegian price level at 1.553 that of the
+  US,[^2] 
+and the 2012 to 2017 US inflation rate was 1.0714.[^3] 
+Taking this into account, the indifference equation is
+$$ 1 - e^{-\gamma \frac{25\cdot 1.0714}{5.281\cdot 1.553}} =
+\frac{1}{2}\left(1 - e^{-\gamma \frac{800\cdot 1.0714}{5.281\cdot
+      1.553}} \right).
+$$
 
-For the lab sample, the critical equation. translating Norwegian amounts at Norwegian
-prices into USD at US 2017 prices is 
-$$ 1 - e^{-\gamma \frac{25\cdot 1.0714}{5.281\cdot 1.553}} = 
-\frac{1}{2}\left(1 - e^{-\gamma \frac{800\cdot 1.0714}{5.281\cdot 1.553}} \right).$$
-We can try to get rootSolve to do solve it for us
 ```{r}
-labf <- function(gamma) {
-  0.5 + 0.5*exp(-gamma * 800 * 1.0714 / ( 5.821 * 1.553)) - 
-    exp(-gamma * 25 * 1.0714/( 5.821 * 1.553)) 
+fun2 <- function(gamma) {
+  1 - exp(-gamma * 25*1.0714/(5.281*1.553) ) - (0.5*(1-exp(-gamma * 800*1.0714/(5.281*1.553))))
 }
-froot <- uniroot( labf, c(0.001,10))
-```
-The rate of absolute risk aversion necessary for choosing the safe alternative
-in the 2012 lab experiment is **`r froot$root`** (referenced to 2017 US dollars and prices). 
+(root2 <- uniroot(fun2, c(0.1,0.3)))
+```    
+So this equation has a solution at $\gamma=$ `r root2$root`.
 
-# Comparing to estimates from Choi et al (2007). 
-In table 3, panel 2, Choi et al report a 95th percentile of 0.159 for the
-ARA coefficient. Translating by the CPI factor, we get a 2017 referenced
-95th percentile of **`r 0.159/1.1997`**. We conclude that both the
-critical values we find for the Forced Choice in our experiments are 
-well above the 95th percentile of estimated absolute risk aversion
-in Choi et al (2007). 
+In order to evaluate if these are large or small risk aversions, we consider
+the paper of Choi et al (2007).[^4] They estimate a distribution of CARA parameters
+for a lab population. They report the 95th percentile for the ARA coefficient
+to be 0.159.[^5] 
+ Considering US inflation factor from 2007 to 2017 of 1.1997,[^6]
+we find a 2017 referenced 95th percentile at $\gamma=0.159/1.1997=0.13$. We conclude
+that both the critical values we find for the Forced Choice in our experiments
+are well above the 95th percentile of estimated absolute risk aversion
+in Choi et al (2007).
+
+
+[^1]: https://www.norges-bank.no/Statistikk/Valutakurser/
+[^2]: Using the 2012 number from the **PP.NUS.PPC.RF** series 
+  from https://data.worldbank.org/products/wdi
+[^3]: January 2012 to January 2017, https://www.bls.gov/data/inflation_calculator.htm
+[^4]: Choi, S.; Fisman, R.; Gale, D. & Kariv, S. 
+    Consistency and Heterogeneity of Individual Behavior under Uncertainty American Economic Review, 
+    2007, 97, 1921-1938
+[^5]: In the lower panel of their Table 3.
+[^6]: January 2007 to January 2017, https://www.bls.gov/data/inflation_calculator.htm
 
