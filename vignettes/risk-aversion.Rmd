@@ -1,5 +1,5 @@
 ---
-title: "4. Implied risk aversion of safe alternative"
+title: "Implied risk aversion of safe alternative"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{risk-aversion}
