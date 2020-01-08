@@ -1,0 +1,44 @@
+---
+title: "Power analysis for the online experiment"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{E-power-analysis-online-experiment}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Power analysis before the online experiment was based on 
+us seeing if we could replicate the large interaction effect between 
+"left" political preference and the treatment involving "choice". The
+relevant regression coefficient on inequality was -0.192 with a standard
+error of 0.074. We wanted more treatment variants in the online
+experiment, but wanted to test if this replicated in what corresponds
+to the 3-treatment subset that would be most similar to the lab experiment
+(base, forced, and nominal choice -- with work). We also wanted sufficient
+power even for a more moderate effect size of 0.1. 
+
+To apply the R t-test command, we scale the coefficient to fit into 
+a t-test framework. What kind of power would 700 participants per
+treatments give us? Test of a regression coefficient against null
+is equivalent to a one-sample test in pooled data.
+
+```{r}
+SD <- 0.074 * sqrt(422)   # SE and n from lab experiment
+power.t.test(n=700*3, delta=0.1, sd=SD, sig.level=0.05, 
+             type="one.sample", alternative="one.sided")
+```
+
+Even if we were to consider a two-sided test of the null, we would have
+sufficient power: 
+```{r}
+power.t.test(n=700*3, delta=0.1, sd=SD, sig.level=0.05, 
+             type="one.sample", alternative="two.sided")
+```
+
