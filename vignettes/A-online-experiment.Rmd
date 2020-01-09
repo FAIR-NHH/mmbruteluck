@@ -10,6 +10,8 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
+  fig.width = 7,
+  fig.height = 4.5,
   collapse = TRUE,
   comment = "#>"
 )
@@ -85,6 +87,16 @@ df_k %>% ggplot(aes(x=y, y=1* (..count..)/tapply(..count..,..PANEL..,sum)[..PANE
   geom_histogram() + facet_grid(.~treatmentgroup) + theme_bw() + ylab("Fraction") + 
   xlab("Transfer from Lucky to Unlucky")
 ggsave(here("graphs", "histograms_kantar.pdf"))
+```
+
+It is interesting to also look at how the histograms are similar also for all the different 
+treatment variations, not only for the pooled groups:
+
+```{r}
+df_k %>% ggplot(aes(x=y, y=1* (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  geom_histogram() + facet_wrap(.~treatment_org) + theme_bw() + ylab("Fraction") + 
+  xlab("Transfer from Lucky to Unlucky")
+ggsave(here("graphs", "histograms_kantar_8.pdf"))
 ```
 
 ### The share that equalizes
