@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Data from mmbruteluck - Lab Experiment — bldata • mmbruteluck</title>
+<title>Data from mmbruteluck - Online Experiment, mTurk workers — mturk_workers • mmbruteluck</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,9 @@
 
 
 
-<meta property="og:title" content="Data from mmbruteluck - Lab Experiment — bldata" />
-<meta property="og:description" content="A dataset from the lab experiment in the appendix
-of the paper &quot;Choice and personal responsibility: What is a
+<meta property="og:title" content="Data from mmbruteluck - Online Experiment, mTurk workers — mturk_workers" />
+<meta property="og:description" content="A dataset from the online experiment in the paper
+&quot;Choice and personal responsibility: What is a
 morally relevant choice?&quot; by Alexander W. Cappelen, Sebastian
 Fest, Erik Ø. Sørensen, and Bertil Tungodden." />
 <meta name="twitter:card" content="summary" />
@@ -127,71 +127,55 @@ Fest, Erik Ø. Sørensen, and Bertil Tungodden." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Data from mmbruteluck - Lab Experiment</h1>
+    <h1>Data from mmbruteluck - Online Experiment, mTurk workers</h1>
     
-    <div class="hidden name"><code>bldata.Rd</code></div>
+    <div class="hidden name"><code>mturk_workers.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A dataset from the lab experiment in the appendix
-of the paper "Choice and personal responsibility: What is a
+    <p>A dataset from the online experiment in the paper
+"Choice and personal responsibility: What is a
 morally relevant choice?" by Alexander W. Cappelen, Sebastian
 Fest, Erik Ø. Sørensen, and Bertil Tungodden.</p>
     </div>
 
-    <pre class="usage"><span class='no'>bldata</span></pre>
+    <pre class="usage"><span class='no'>mturk_workers</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 422 observations and 15 variables:</p><dl class='dl-horizontal'>
-<dt>pid</dt><dd><p>Non-informative identifier of individual participant</p></dd>
-<dt>location</dt><dd><p>Location of experiment:
-<ul>
-<li><p>1. University of Bergen</p></li>
-<li><p>2. NHH Norwegian School of Economics</p></li>
-</ul></p></dd>
-<dt>sesid</dt><dd><p>Id of session (not chronological)</p></dd>
-<dt>T</dt><dd><p>Treatment:
- <ul>
-<li><p>1. No Choice</p></li>
-<li><p>2. Nominal Choice</p></li>
-<li><p>3. Forced Choice</p></li>
-</ul></p></dd>
-<dt>lotteryposition</dt><dd><p>Lotterychoice or allocation (character):
-<ul>
-<li><p>G: Green ball</p></li>
-<li><p>S: Safe alternative</p></li>
-<li><p>Y: Yellow ball</p></li>
-</ul></p></dd>
-<dt>transfer</dt><dd><p>Transfer from Lucky to Unlucky (0-800, in NOK).</p></dd>
-<dt>payment</dt><dd><p>Final payment received, showup fee inclusive (100-900, in NOK).</p></dd>
-<dt>kull</dt><dd><p>Program of study.
-<ul>
-<li><p>1. Bachelor</p></li>
-<li><p>2. Master</p></li>
-<li><p>9. Other program</p></li>
-</ul></p></dd>
-<dt>sex</dt><dd><p>Self-reported sex of participant:
-<ul>
-<li><p>1. Male</p></li>
-<li><p>2. Female</p></li>
-</ul></p></dd>
-<dt>age</dt><dd><p>Age (in years).</p></dd>
-<dt>polparty</dt><dd><p>Vote for in election?
-<ul>
-<li><p>1. SV</p></li>
-<li><p>2. Ap</p></li>
-<li><p>3. Sp</p></li>
-<li><p>4. KrF</p></li>
-<li><p>5. V</p></li>
-<li><p>6. H</p></li>
-<li><p>7. FrP</p></li>
-</ul></p></dd>
-<dt>cr</dt><dd><p>Cognitive reflection score (0-3).</p></dd>
-<dt>cr1</dt><dd><p>Cognitive reflection 1: Ball and a bat..., 1 if correct.</p></dd>
-<dt>cr2</dt><dd><p>Cognitive reflection 2: 5m/5/5min, what about 100m..., 1 if correct.</p></dd>
-<dt>cr3</dt><dd><p>Cognitive reflection 3: 48 days to cover pond..., 1 if correct.</p></dd>
+    <p>A data frame with 2437 observations and 17 variables:</p><dl class='dl-horizontal'>
+<dt>id</dt><dd><p>Non-informative identifier of individual participant</p></dd>
+<dt>female</dt><dd><p>Indicator for mTurker being female (0/1)</p></dd>
+<dt>age</dt><dd><p>Age of mTurker in years (numeric)</p></dd>
+<dt>education</dt><dd><p>Education category
+<dl class='dl-horizontal'>
+ <dt>1.</dt><dd><p>Less than High School</p></dd>
+ <dt>2.</dt><dd><p>High School/GED</p></dd>
+ <dt>3.</dt><dd><p>Some College</p></dd>
+ <dt>4.</dt><dd><p>2 year College Degree</p></dd>
+ <dt>5.</dt><dd><p>4 year College Degree</p></dd>
+ <dt>6.</dt><dd><p>Masters Degree</p></dd>
+ <dt>7.</dt><dd><p>Masters Degree</p></dd>
+ <dt>8.</dt><dd><p>Professional Degree (JD, MD)</p></dd></dl></p></dd>
+<dt>political</dt><dd><p>Political identification.Numeric, [-2, - 2],
+with -2 being "very liberal" and 2 "very conservative.</p></dd>
+<dt>treatment</dt><dd><p>Treatment arm (characters)</p></dd>
+<dt>safe</dt><dd><p>Did the mTurker choose the safe alternative? (0/1), 1 if they
+chose the safe alternative</p></dd>
+<dt>bonus_ingame</dt><dd><p>bonus in game (0.5USD) - 0.25 USD if worker chose
+costly safe alternative in that treatment</p></dd>
+<dt>bonus_lottery</dt><dd><p>Outcome of lottery choice prior to redistribution (numeric, in USD)</p></dd>
+<dt>bonus_final</dt><dd><p>The sum of bonus_ingame and the post redistribution income from lottery (numeric, in USD)</p></dd>
+<dt>repeater</dt><dd><p>Has the worker attempted to start the survey more than once?
+(0/1), 1 if they did so.</p></dd>
+<dt>lottery_or_green</dt><dd><p>Indicator for whether the worker chose the lottery in Forced Choice treatments or the
+green ball in Nominal Choice treatments (0/1), 1 if they dis so.</p></dd>
+<dt>duration_survey</dt><dd><p>Duration of HIT completion (numeric, in seconds)</p></dd>
+<dt>treatment_str</dt><dd><p>Treatment (characters)</p></dd>
+<dt>bonus_startup</dt><dd><p>Bonus account at startup (numeric, 0.5 USD)</p></dd>
+<dt>winner</dt><dd><p>Indicator for whether the worker is a lottery winner (0/1).</p></dd>
+<dt>loser</dt><dd><p>Indicator for whether the worker is a lottery loser (0/1).</p></dd>
 
 </dl>
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>

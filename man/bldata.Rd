@@ -3,7 +3,7 @@
 \docType{data}
 \name{bldata}
 \alias{bldata}
-\title{Data From mmbruteluck - Lab Experiment}
+\title{Data from mmbruteluck - Lab Experiment}
 \format{A data frame with 422 observations and 15 variables:
 \describe{
 \item{pid}{Non-informative identifier of individual participant}

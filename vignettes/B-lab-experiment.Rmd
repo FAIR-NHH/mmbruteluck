@@ -1,6 +1,6 @@
 ---
 title: "Lab Experiment"
-author: "Erik Ø. Sørensen"
+author: "Alexander W. Cappelen, Sebastian Fest, Erik Ø. Sørensen, and Bertil Tungodden"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{lab-experiment}

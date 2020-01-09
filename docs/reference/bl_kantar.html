@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Data from mmbruteluck - Lab Experiment — bldata • mmbruteluck</title>
+<title>Data from mmbruteluck - Online Experiment, spectator decisions — bl_kantar • mmbruteluck</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,9 @@
 
 
 
-<meta property="og:title" content="Data from mmbruteluck - Lab Experiment — bldata" />
-<meta property="og:description" content="A dataset from the lab experiment in the appendix
-of the paper &quot;Choice and personal responsibility: What is a
+<meta property="og:title" content="Data from mmbruteluck - Online Experiment, spectator decisions — bl_kantar" />
+<meta property="og:description" content="A dataset from the online experiment in the paper
+&quot;Choice and personal responsibility: What is a
 morally relevant choice?&quot; by Alexander W. Cappelen, Sebastian
 Fest, Erik Ø. Sørensen, and Bertil Tungodden." />
 <meta name="twitter:card" content="summary" />
@@ -127,71 +127,68 @@ Fest, Erik Ø. Sørensen, and Bertil Tungodden." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Data from mmbruteluck - Lab Experiment</h1>
+    <h1>Data from mmbruteluck - Online Experiment, spectator decisions</h1>
     
-    <div class="hidden name"><code>bldata.Rd</code></div>
+    <div class="hidden name"><code>bl_kantar.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A dataset from the lab experiment in the appendix
-of the paper "Choice and personal responsibility: What is a
+    <p>A dataset from the online experiment in the paper
+"Choice and personal responsibility: What is a
 morally relevant choice?" by Alexander W. Cappelen, Sebastian
 Fest, Erik Ø. Sørensen, and Bertil Tungodden.</p>
     </div>
 
-    <pre class="usage"><span class='no'>bldata</span></pre>
+    <pre class="usage"><span class='no'>bl_kantar</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 422 observations and 15 variables:</p><dl class='dl-horizontal'>
-<dt>pid</dt><dd><p>Non-informative identifier of individual participant</p></dd>
-<dt>location</dt><dd><p>Location of experiment:
-<ul>
-<li><p>1. University of Bergen</p></li>
-<li><p>2. NHH Norwegian School of Economics</p></li>
-</ul></p></dd>
-<dt>sesid</dt><dd><p>Id of session (not chronological)</p></dd>
-<dt>T</dt><dd><p>Treatment:
- <ul>
-<li><p>1. No Choice</p></li>
-<li><p>2. Nominal Choice</p></li>
-<li><p>3. Forced Choice</p></li>
-</ul></p></dd>
-<dt>lotteryposition</dt><dd><p>Lotterychoice or allocation (character):
-<ul>
-<li><p>G: Green ball</p></li>
-<li><p>S: Safe alternative</p></li>
-<li><p>Y: Yellow ball</p></li>
-</ul></p></dd>
-<dt>transfer</dt><dd><p>Transfer from Lucky to Unlucky (0-800, in NOK).</p></dd>
-<dt>payment</dt><dd><p>Final payment received, showup fee inclusive (100-900, in NOK).</p></dd>
-<dt>kull</dt><dd><p>Program of study.
-<ul>
-<li><p>1. Bachelor</p></li>
-<li><p>2. Master</p></li>
-<li><p>9. Other program</p></li>
-</ul></p></dd>
-<dt>sex</dt><dd><p>Self-reported sex of participant:
-<ul>
-<li><p>1. Male</p></li>
-<li><p>2. Female</p></li>
-</ul></p></dd>
-<dt>age</dt><dd><p>Age (in years).</p></dd>
-<dt>polparty</dt><dd><p>Vote for in election?
-<ul>
-<li><p>1. SV</p></li>
-<li><p>2. Ap</p></li>
-<li><p>3. Sp</p></li>
-<li><p>4. KrF</p></li>
-<li><p>5. V</p></li>
-<li><p>6. H</p></li>
-<li><p>7. FrP</p></li>
-</ul></p></dd>
-<dt>cr</dt><dd><p>Cognitive reflection score (0-3).</p></dd>
-<dt>cr1</dt><dd><p>Cognitive reflection 1: Ball and a bat..., 1 if correct.</p></dd>
-<dt>cr2</dt><dd><p>Cognitive reflection 2: 5m/5/5min, what about 100m..., 1 if correct.</p></dd>
-<dt>cr3</dt><dd><p>Cognitive reflection 3: 48 days to cover pond..., 1 if correct.</p></dd>
+    <p>A data frame with 7124 observations and 22 variables:</p><dl class='dl-horizontal'>
+<dt>Respondent_Serial</dt><dd><p>Non-informative identifier of individual participant</p></dd>
+<dt>comp</dt><dd><p>Did the person complete the experiment (1: yes, 2: no)</p></dd>
+<dt>treatment</dt><dd><p>Treatment name (characters)</p></dd>
+<dt>treatment_kantar</dt><dd><p>Treatment names as from kantar (characters)</p></dd>
+<dt>treatmentgroup</dt><dd><p>Grouping of treatments into "Base", "Forced Choice" and "Nominal Choice")</p></dd>
+<dt>y</dt><dd><p>Transfer to the unlucky (numeric)</p></dd>
+<dt>workp</dt><dd><p>Was there a work requirement in this treatment? (logical)</p></dd>
+<dt>org_strictp</dt><dd><p>Indicator for treatment mapping 1:1 to lab experiment (logical)</p></dd>
+<dt>org_weakp</dt><dd><p>Indicator for treatment being in lab experiment, but possibly without a work requirement (logical)</p></dd>
+<dt>cr1</dt><dd><p>First cognitive reflection question (0/1)</p></dd>
+<dt>cr2</dt><dd><p>Second cognitive reflection question (0/1)</p></dd>
+<dt>cr3</dt><dd><p>Third cognitive reflection question (0/1)</p></dd>
+<dt>crt</dt><dd><p>Cognitive reflection score (0-3)</p></dd>
+<dt>understanding1</dt><dd><p>First understanding question, characters ("Ja" (yes), "Nei" (no), "Vet ikke" (don't know))</p></dd>
+<dt>understanding2</dt><dd><p>Second understanding question, characters</p></dd>
+<dt>age</dt><dd><p>Age in years (numeric)</p></dd>
+<dt>gender</dt><dd><p>Gender, characters ("Kvinne": female, "Mann": male)</p></dd>
+<dt>education</dt><dd><p>Education (characters)
+  <dl class='dl-horizontal'>
+  <dt>Grunnskole</dt><dd><p>Primary school</p></dd>
+  <dt>Fagutdanning</dt><dd><p>Vocational</p></dd>
+  <dt>Videregaaende</dt><dd><p>High school</p></dd>
+  <dt>Universitet/hoyskole I</dt><dd><p>Some university / college</p></dd>
+  <dt>Universitet/hoyskole II</dt><dd><p>University / college</p></dd></dl></p></dd>
+<dt>indincome</dt><dd><p>Individual income bracket (characters)</p></dd>
+<dt>occupation</dt><dd><p>Occupation (characters)</p></dd>
+<dt>stortingsvalg</dt><dd><p>Vote in last election
+<dl class='dl-horizontal'>
+ <dt>R</dt><dd><p>"Rødt" ("Red", far left)</p></dd>
+ <dt>SV</dt><dd><p>"Sosialistisk Venstreparti" ("socialist left")</p></dd>
+ <dt>Ap</dt><dd><p>"Arbeiderpartiet" ("Labour")</p></dd>
+ <dt>MDG</dt><dd><p>"Miljøpartiet De Grønne" ("Environmental Green Party")</p></dd>
+ <dt>Sp</dt><dd><p>"Senterpartiet" ("Center party" (farm and rural party))</p></dd>
+ <dt>KrF</dt><dd><p>"Kristelig Folkeparti" ("Christian democrats", centrist)</p></dd>
+ <dt>Kp</dt><dd><p>"Kystpartiet" ("Coast party")</p></dd>
+ <dt>V</dt><dd><p>"Venstre" ("Left", European liberal party, centrist )</p></dd>
+ <dt>H</dt><dd><p>"Høyre" ("Right", conservative party)</p></dd>
+ <dt>Frp</dt><dd><p>"Fremskrittspartiet" ("Progress party", right-populist party)</p></dd>
+ <dt>Andre partier og lister</dt><dd><p>"Some other party"</p></dd>
+ <dt>Vil ikke oppgi parti"</dt><dd><p>"Don't want to report"</p></dd>
+ <dt>Stemte ikke</dt><dd><p>"Did not vote"</p></dd>
+ <dt>Hadde ikke stemmerett"</dt><dd><p>"Did not have a right to vote"</p></dd>
+ <dt>Husker ikke/vet ikke"</dt><dd><p>"Don't remember/don't know"</p></dd></dl></p></dd>
+<dt>leftp</dt><dd><p>Code for not voting to the right (logical, recode of "stortingsvalg")</p></dd>
 
 </dl>
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>

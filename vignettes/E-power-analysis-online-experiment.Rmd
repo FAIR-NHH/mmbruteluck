@@ -1,5 +1,6 @@
 ---
 title: "Power analysis for the online experiment"
+author: "Alexander W. Cappelen, Sebastian Fest, Erik Ø. Sørensen, and Bertil Tungodden"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{E-power-analysis-online-experiment}
