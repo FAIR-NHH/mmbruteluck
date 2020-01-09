@@ -91,7 +91,7 @@ df_mean_ineq_nothing_lab <- df_l %>% dplyr::select(treatment, inequality, zero_t
 df_mean_ineq_nothing_lab %>%
 ggplot(aes(x=treatment, y=mean_y)) + geom_bar(stat="identity", width=0.7) +
   geom_errorbar(aes(ymax=mean_y+se_y, ymin=mean_y - se_y), width=0.2) + 
-  facet_wrap(~ outcome, scales="free") + ylab("Mean +/- s.e.m.") +
+  facet_wrap(~ outcome, scales="free") + ylab("Mean \u00B1 s.e.m.") +
   theme_bw() + xlab("")
 ggsave(here("graphs/mean_ineq_nothing_lab.pdf"))
 ```
