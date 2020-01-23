@@ -179,6 +179,22 @@ ggplot(aes(x=treatmentgroup, y=mean_y)) + geom_bar(stat="identity", width=0.7) +
 ggsave(here("graphs", "mean_ineq_nothing_kantar.pdf"))
 ```
 
+### Testing Forced vs Nominal
+First, for mean inequality:
+```{r}
+df_k %>% filter(treatmentgroup %in% c("Forced Choice", "Nominal Choice")) %>%
+  t.test(inequality ~ treatmentgroup, data=.)
+```
+Second, for giving nothing to the worst off
+```{r}
+df_k %>%  group_by(treatmentgroup) %>% summarize( nothing = sum(inequality == 1), n=n())
+prop.test(c0$y0[c0$treatmentgroup %in% c("Forced Choice", "Nominal Choice") ], 
+          c0$n[c0$treatmentgroup %in% c("Forced Choice", "Nominal Choice") ])
+```
+
+
+
+
 
 # Robustness for the "forced" alternative
 We did two variations of the "Forced Choice" treatment. One "strong" in which the alternative to the
