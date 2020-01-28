@@ -1,5 +1,10 @@
 pandoc: 2.3.1
 pkgdown: 1.4.1
 pkgdown_sha: ~
-articles: []
+articles:
+  A-online-experiment: A-online-experiment.html
+  B-lab-experiment: B-lab-experiment.html
+  C-bl-mturk-workers: C-bl-mturk-workers.html
+  D-risk-aversion: D-risk-aversion.html
+  E-power-analysis-online-experiment: E-power-analysis-online-experiment.html
 
