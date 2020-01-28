@@ -113,7 +113,10 @@ ce <- df_equal %>%
 prop.test(ce$yc[ce$treatmentgroup %in% c("Base", "Nominal Choice") ], 
           ce$n[ce$treatmentgroup %in% c("Base", "Nominal Choice") ])
 prop.test(ce$yc[ce$treatmentgroup %in% c("Base", "Forced Choice") ], 
-          ce$n[ce$treatmentgroup %in% c("Base", "Forced Choice") ])
+                    ce$n[ce$treatmentgroup %in% c("Base", "Forced Choice") ])
+prop.test(ce$yc[ce$treatmentgroup %in% c("Nominal Choice", "Forced Choice") ], 
+          ce$n[ce$treatmentgroup %in% c("Nominal Choice", "Forced Choice") ])
+
 ```
 
 ### The share that gives nothing to unlucky
@@ -132,6 +135,9 @@ prop.test(c0$y0[c0$treatmentgroup %in% c("Base", "Nominal Choice") ],
           c0$n[c0$treatmentgroup %in% c("Base", "Nominal Choice") ])
 prop.test(c0$y0[c0$treatmentgroup %in% c("Base", "Forced Choice") ], 
           c0$n[c0$treatmentgroup %in% c("Base", "Forced Choice") ])
+prop.test(c0$y0[c0$treatmentgroup %in% c("Nominal Choice", "Forced Choice") ], 
+          c0$n[c0$treatmentgroup %in% c("Nominal Choice", "Forced Choice") ])
+
 ```
 
 
@@ -187,9 +193,14 @@ df_k %>% filter(treatmentgroup %in% c("Forced Choice", "Nominal Choice")) %>%
 ```
 Second, for giving nothing to the worst off
 ```{r}
-df_k %>%  group_by(treatmentgroup) %>% summarize( nothing = sum(inequality == 1), n=n())
-prop.test(c0$y0[c0$treatmentgroup %in% c("Forced Choice", "Nominal Choice") ], 
-          c0$n[c0$treatmentgroup %in% c("Forced Choice", "Nominal Choice") ])
+nothingtw <- df_k %>%  group_by(treatmentgroup) %>% 
+  summarize( nothing = sum(inequality == 1), n=n())
+prop.test(nothingtw$nothing[nothingtw$treatmentgroup %in% c("Forced Choice", "Nominal Choice") ], 
+          nothingtw$n[nothingtw$treatmentgroup %in% c("Forced Choice", "Nominal Choice") ])
+prop.test(nothingtw$nothing[nothingtw$treatmentgroup %in% c("Base", "Nominal Choice") ], 
+          nothingtw$n[nothingtw$treatmentgroup %in% c("Base", "Nominal Choice") ])
+prop.test(nothingtw$nothing[nothingtw$treatmentgroup %in% c("Forced Choice", "Base") ], 
+          nothingtw$n[nothingtw$treatmentgroup %in% c("Forced Choice", "Base") ])
 ```
 
 
@@ -254,12 +265,9 @@ worst off:
 uz <- df_k %>% filter(treatment_org %in% c("Forced Choice (w)", 
                                  "Forced Choice strong",
                                  "Forced Choice very strong")) %>% 
-  group_by(treatment_org, zero_to_worst_off) %>% 
-  summarize(n=n()) %>% 
-  spread(key=zero_to_worst_off, value=n) %>% 
-  ungroup() %>%
-  dplyr::select( -treatment_org) 
-prop.test(as.matrix(uz))
+  group_by(treatment_org) %>% 
+  summarize(tw0 = sum(inequality==1),  n=n()) 
+prop.test(uz$tw0, uz$n)
 ```
 
 
@@ -987,6 +995,13 @@ df_k %>% group_by(treatmentgroup) %>%
   summarize(share_no_control = mean( (understanding2n==1), na.rm=TRUE),
                                            n = n()) %>% knitr::kable(digits=3)
 ```
+
+Are these differences significant?
+```{r}
+c1 <- df_k %>%  group_by(treatmentgroup) %>% summarize( no_control = sum(inequality == 1), n=n())
+prop.test(c1$no_control, c1$n)
+```
+
 
 Also by treatmentgroup (excluding "strong" and "very strong"):
 ```{r}

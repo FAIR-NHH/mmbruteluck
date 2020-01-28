@@ -64,6 +64,9 @@ prop.test(ce_l$yc[ce_l$treatment %in% c("Base", "Nominal Choice") ],
           ce_l$n[ce_l$treatment %in% c("Base", "Nominal Choice") ])
 prop.test(ce_l$yc[ce_l$treatment %in% c("Base", "Forced Choice") ], 
           ce_l$n[ce_l$treatment %in% c("Base", "Forced Choice") ])
+prop.test(ce_l$yc[ce_l$treatment %in% c("Nominal Choice", "Forced Choice") ], 
+          ce_l$n[ce_l$treatment %in% c("Nominal Choice", "Forced Choice") ])
+
 ```
 
 Counting the proportions that give nothing to the unlucky participant
@@ -71,11 +74,13 @@ Counting the proportions that give nothing to the unlucky participant
 dfl_nothing <- df_l %>% group_by(treatment) %>% mutate(nothing= (transfer==0)) 
 dfl_nothing %>% summarize(mean_nothing=mean(nothing))
 ce_n <- dfl_nothing %>%
-  group_by(treatment) %>% summarize( yc= sum(transfer==0), n=n())
-prop.test(ce_n$yc[ce_n$treatment %in% c("Base", "Nominal Choice") ], 
+  group_by(treatment) %>% summarize( y0= sum(transfer==0), n=n())
+prop.test(ce_n$y0[ce_n$treatment %in% c("Base", "Nominal Choice") ], 
           ce_n$n[ce_n$treatment %in% c("Base", "Nominal Choice") ])
-prop.test(ce_n$yc[ce_n$treatment %in% c("Base", "Forced Choice") ], 
+prop.test(ce_n$y0[ce_n$treatment %in% c("Base", "Forced Choice") ], 
           ce_n$n[ce_n$treatment %in% c("Base", "Forced Choice") ])
+prop.test(ce_n$y0[ce_n$treatment %in% c("Nominal Choice", "Forced Choice") ], 
+          ce_n$n[ce_n$treatment %in% c("Nominal Choice", "Forced Choice") ])
 ```
 
 
@@ -118,6 +123,8 @@ prop.test(ce_nwo$yc[ce_nwo$treatment %in% c("Base", "Nominal Choice") ],
           ce_nwo$n[ce_nwo$treatment %in% c("Base", "Nominal Choice") ])
 prop.test(ce_nwo$yc[ce_nwo$treatment %in% c("Base", "Forced Choice") ], 
           ce_nwo$n[ce_nwo$treatment %in% c("Base", "Forced Choice") ])
+prop.test(ce_nwo$yc[ce_nwo$treatment %in% c("Nominal Choice", "Forced Choice") ], 
+          ce_nwo$n[ce_nwo$treatment %in% c("Nominal Choice", "Forced Choice") ])
 ```
 
 # Regressions for paper
