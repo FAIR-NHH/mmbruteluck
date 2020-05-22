@@ -6,19 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Power analysis for the online experiment • mmbruteluck</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Power analysis for the online experiment">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="mmbruteluck">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -68,6 +68,9 @@
     <li>
       <a href="../articles/E-power-analysis-online-experiment.html">Power analysis for the online experiment</a>
     </li>
+    <li>
+      <a href="../articles/F-AppendixB.html">Appendix B, experimental instructions</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -84,7 +87,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Power analysis for the online experiment</h1>
+      <h1 data-toc-skip>Power analysis for the online experiment</h1>
                         <h4 class="author">Alexander W. Cappelen, Sebastian Fest, Erik Ø. Sørensen, and Bertil Tungodden</h4>
             
       
@@ -97,33 +100,33 @@
     
 <p>Power analysis before the online experiment was based on us seeing if we could replicate the large interaction effect between “left” political preference and the treatment involving “choice”. The relevant regression coefficient on inequality was -0.192 with a standard error of 0.074. We wanted more treatment variants in the online experiment, but wanted to test if this replicated in what corresponds to the 3-treatment subset that would be most similar to the lab experiment (base, forced, and nominal choice – with work). We also wanted sufficient power even for a more moderate effect size of 0.1.</p>
 <p>To apply the R t-test command, we scale the coefficient to fit into a t-test framework. What kind of power would 700 participants per treatments give us? Test of a regression coefficient against null is equivalent to a one-sample test in pooled data.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">SD &lt;-<span class="st"> </span><span class="fl">0.074</span> <span class="op">*</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="dv">422</span>)   <span class="co"># SE and n from lab experiment</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/stats/power.t.test.html">power.t.test</a></span>(<span class="dt">n=</span><span class="dv">700</span><span class="op">*</span><span class="dv">3</span>, <span class="dt">delta=</span><span class="fl">0.1</span>, <span class="dt">sd=</span>SD, <span class="dt">sig.level=</span><span class="fl">0.05</span>, </a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">             <span class="dt">type=</span><span class="st">"one.sample"</span>, <span class="dt">alternative=</span><span class="st">"one.sided"</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#&gt;      One-sample t test power calculation </span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt;               n = 2100</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt;           delta = 0.1</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt;              sd = 1.520155</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt;       sig.level = 0.05</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt;           power = 0.9144565</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt;     alternative = one.sided</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">SD</span> <span class="kw">&lt;-</span> <span class="fl">0.074</span> * <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fl">422</span>)   <span class="co"># SE and n from lab experiment</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/power.t.test.html">power.t.test</a></span>(<span class="kw">n</span><span class="kw">=</span><span class="fl">700</span>*<span class="fl">3</span>, <span class="kw">delta</span><span class="kw">=</span><span class="fl">0.1</span>, <span class="kw">sd</span><span class="kw">=</span><span class="no">SD</span>, <span class="kw">sig.level</span><span class="kw">=</span><span class="fl">0.05</span>,
+             <span class="kw">type</span><span class="kw">=</span><span class="st">"one.sample"</span>, <span class="kw">alternative</span><span class="kw">=</span><span class="st">"one.sided"</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      One-sample t test power calculation </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;               n = 2100</span>
+<span class="co">#&gt;           delta = 0.1</span>
+<span class="co">#&gt;              sd = 1.520155</span>
+<span class="co">#&gt;       sig.level = 0.05</span>
+<span class="co">#&gt;           power = 0.9144565</span>
+<span class="co">#&gt;     alternative = one.sided</span></pre></body></html></div>
 <p>Even if we were to consider a two-sided test of the null, we would have sufficient power:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/stats/power.t.test.html">power.t.test</a></span>(<span class="dt">n=</span><span class="dv">700</span><span class="op">*</span><span class="dv">3</span>, <span class="dt">delta=</span><span class="fl">0.1</span>, <span class="dt">sd=</span>SD, <span class="dt">sig.level=</span><span class="fl">0.05</span>, </a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">             <span class="dt">type=</span><span class="st">"one.sample"</span>, <span class="dt">alternative=</span><span class="st">"two.sided"</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt;      One-sample t test power calculation </span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt;               n = 2100</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt;           delta = 0.1</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt;              sd = 1.520155</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt;       sig.level = 0.05</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt;           power = 0.8538756</span></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt;     alternative = two.sided</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/stats/power.t.test.html">power.t.test</a></span>(<span class="kw">n</span><span class="kw">=</span><span class="fl">700</span>*<span class="fl">3</span>, <span class="kw">delta</span><span class="kw">=</span><span class="fl">0.1</span>, <span class="kw">sd</span><span class="kw">=</span><span class="no">SD</span>, <span class="kw">sig.level</span><span class="kw">=</span><span class="fl">0.05</span>,
+             <span class="kw">type</span><span class="kw">=</span><span class="st">"one.sample"</span>, <span class="kw">alternative</span><span class="kw">=</span><span class="st">"two.sided"</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      One-sample t test power calculation </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;               n = 2100</span>
+<span class="co">#&gt;           delta = 0.1</span>
+<span class="co">#&gt;              sd = 1.520155</span>
+<span class="co">#&gt;       sig.level = 0.05</span>
+<span class="co">#&gt;           power = 0.8538756</span>
+<span class="co">#&gt;     alternative = two.sided</span></pre></body></html></div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
       </div>
 
@@ -136,7 +139,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
