@@ -1,0 +1,947 @@
+---
+title: "Appendix B, experimental instructions"
+output: rmarkdown::html_vignette
+
+vignette: >
+  %\VignetteIndexEntry{Appendix B, experimental instructions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+In this appendix, we present the instructions used in the two
+experiments. All instructions were originally in Norwegian and
+translated accordingly. Please note that the text in square brackets
+contains comments related to the experimental procedures. Comments in
+curly brackets, on the other hand, indicate for which set of subject the
+text below the comment applies to.
+
+# Online experiment with the general population
+
+## Workers
+
+### General introduction
+
+> {[The following text applies to all workers]{.smallcaps}}
+
+**Introduction**\
+Welcome to this research project! We very much appreciate your
+participation.\
+This is a study about the economics of decision-making. Several research
+institutions have provided funds for this research.\
+**Payment**\
+Your payment will consist of the participation fee plus the amount of
+bonus points that you accumulate throughout the study. Your initial
+endowment of bonus points amounts to 50 bonus points. The exact amount
+of bonus points that you receive will depend on your and/or others'
+decision. At the end, each bonus points is converted into USD at a rate
+of 1 cent per bonus point.\
+Your bonus will be paid to you using the bonus system within a few weeks
+after the completion of this HIT. Your payment for taking the HIT will
+be sent to you shortly after the completion of this HIT.\
+**Procedures**\
+The study consists of two parts and you will be given instructions on
+your screen before every single part of the survey. Please always make
+sure to read the instructions carefully before you continue.\
+**Participation**\
+Participation in this research study is completely voluntary. You have
+the right to withdraw at anytime or refuse to participate entirely
+without jeopardy to future participation in other studies conducted by
+us.\
+**Confidentiality**
+
+All data obtained from you will be kept confidential and will only be
+reported in an aggregate format (by reporting only combined results and
+never reporting individual ones). All submissions will be concealed, and
+no one other than the primary investigator will have access to them. The
+data collected will be stored in the HIPPA-compliant, secure database
+until it has been deleted by us.\
+**Verification**\
+At the end of this survey, you will be given a completion code. You will
+need to copy this code to the survey code field on the AMT web page that
+directed you here at the beginning.\
+**Questions about the Research**\
+If you have questions regarding this study, you may contact:\
+thechoicelab\@nhh.no\
+
+### Work phase
+
+> [The following text applies only to subjects who had to fulfill the
+> work requirement]
+
+In the first part of this study, we ask you to work on an assignment.
+After you are done with the assignments, a number of bonus points will
+be determined for you.\
+The first part of this study is followed by a redistribution phase and a
+set of general questions that will complete this study.\
+Please always make sure to read the instructions carefully before you
+continue.\
+
+> [Description of the picture categorization task]
+
+For the assignment, you will be working on a picture categorization
+task. You will see a picture on your screen and are asked to select the
+categories from the menu below the picture that you think fit to the
+picture and its content. You can select multiple categories from the
+menu if you think that the picture fits into that category as well.\
+Your answer will be submitted automatically after 30 seconds and you
+will be given a new picture. The task will last for 10 minutes and we
+ask you to work thoroughly with each picture.\
+
+> [Picture categorization task starts and ends after 10
+> minutes]
+
+### Payment phase
+
+> [The following text applies only to subjects who had to fulfill the
+> work requirement]
+
+You have now completed the assignment. The next page will tell you how
+the bonus for the assignment will be determined.\
+
+> [The following text applies only to subjects in the Baseline
+> treatment with and without work requirement]
+
+Your bonus points will be determined by a lottery in which you with
+equal probability can earn 800 bonus points or 0 bonus points. In the
+lottery, a ball will be randomly drawn from an urn containing an equal
+number of yellow and green balls. If a yellow ball is drawn, you will
+earn 800 bonus points, and if a green ball is drawn, you will earn 0
+bonus points.
+
+> [The following text applies only to subjects in the Forced Choice
+> treatment with and without work requirement]
+
+Your bonus points will be determined in the following way. You can
+either choose to earn 25 bonus points or to let the amount of bonus
+points be determined by a lottery in which you with equal probability
+can earn 800 bonus points or 0 bonus points. In the lottery, a ball will
+be randomly drawn from an urn containing an equal number of yellow and
+green balls. If a yellow ball is drawn, you will earn 800 bonus points,
+and if a green ball is drawn, you will earn 0 bonus points.\
+
+- 25 bonus points
+- Lottery with 50% chance of earning 800 bonus points
+
+> [The following text applies only to subjects in the Forced Choice
+> Strong treatment]
+
+Your bonus points will be determined in the following way. You can
+either choose to earn no bonus points or to let the amount of bonus
+points be determined by a lottery in which you with equal probability
+can earn 800 bonus points or 0 bonus points. In the lottery, a ball will
+be randomly drawn from an urn containing an equal number of yellow and
+green balls. If a yellow ball is drawn, you will earn 800 bonus points,
+and if a green ball is drawn, you will earn 0 bonus points.\
+
+- 0 bonus points
+- Lottery with 50% chance of earning 800 bonus points
+
+> [The following text applies only to subjects in the Forced Choice
+> Very Strong treatment]
+
+Your bonus points will be determined in the following way. You can
+either choose to get 25 bonus points deducted from the amount of bonus
+points that you currently have or to let the amount of bonus points be
+determined by a lottery in which you with equal probability can earn 800
+bonus points or 0 bonus points. In the lottery, a ball will be randomly
+drawn from an urn containing an equal number of yellow and green balls.
+If a yellow ball is drawn, you will earn 800 bonus points, and if a
+green ball is drawn, you will earn 0 bonus points.\
+
+-   Deduct 25 bonus points
+-   Lottery with 50% chance of earning 800 bonus points
+
+> [The following text applies only to subjects in the Nominal Choice
+> treatment with and without work requirement]
+
+Your bonus points will be determined in the following way. You can
+choose between two colors, yellow and green. Your choice of color will
+then determine the outcome of a lottery in which you with equal
+probability can earn 800 bonus points or 0 bonus points. In the lottery,
+a ball will be randomly drawn from an urn containing an equal number of
+yellow and green balls. If you chose the color of the ball that is
+drawn, you will earn 800 bonus points, if you choose the other color,
+you will earn 0 bonus points.\
+
+-   Yellow
+-   Green
+
+> [Payment phase is concluded. Subjects answer a set of control
+> questions before receiving information about how their final earnings
+> are determined.]
+
+> [The following text applies to all treatments involving a work
+> requirement and subjects who faced a lottery draw to determine
+> earnings]
+
+We will now explain how the final amount of bonus points is generated.\
+The total amount of bonus points you receive consists of the initial
+endowment plus what you earned for working on the assignment.\
+**Initial Endowment**\
+The initial endowment was 50 bonus points.\
+**Assignment**\
+For determining the earnings from the assignments, we will match you
+with another participant who has completed the same HIT. The payment to
+you and the other participant is then determined in the following way.\
+First, the outcome of the payment lotteries will be determined.
+Afterwards, a randomly selected third person who has not participated in
+this study will be given the opportunity to redistribute the earnings
+from the assignment between you and the other participant. This person
+will not know the identity of you or the other participant, but will be
+informed about the nature of the assignment and your earnings for this
+assignment.\
+If the third person chooses not to redistribute, each of you will be
+paid your earnings from the assignment. If the third person chooses to
+redistribute earnings, then each of you will be paid according to this
+decision.\
+
+> [The following text applies to all treatments involving a work
+> requirement and subjects who did not face a lottery draw to determine
+> earnings]
+
+We will now explain how the final amount of bonus points is generated.\
+The total amount of bonus points you receive consists of the initial
+endowment plus what you earned for working on the assignment.\
+**Initial Endowment**\
+The initial endowment was 50 bonus points.\
+**Assignment**\
+You will receive -25/0/25 bonus points for working on the assignment.
+
+> [The following text applies to all treatments without a work
+> requirement and subjects who faced a lottery draw to determine
+> earnings]
+
+We will now explain how the final amount of bonus points is generated.\
+The total amount of bonus points you receive consists of the initial
+endowment plus what you earned from the lottery draw.\
+**Initial Endowment**\
+The initial endowment was 50 bonus points.\
+**Lottery draw**\
+For determining the earnings from the lottery draw, we will match you
+with another participant who has completed the same HIT. The payment to
+you and the other participant is then determined in the following way.\
+First, the outcome of the payment lotteries will be determined.
+Afterwards, a randomly selected third person who has not participated in
+this study will be given the opportunity to redistribute the earnings
+between you and the other participant. This person will not know the
+identity of you or the other participant, but will be informed about the
+earnings from the lottery draw.\
+If the third person chooses not to redistribute, each of you will be
+paid your earnings from the lottery. If the third person chooses to
+redistribute earnings, then each of you will be paid according to this
+decision.\
+
+> [The following text applies to all treatments without a work
+> requirement and subjects who did not face a lottery draw to determine
+> earnings]
+
+We will now explain how the final amount of bonus points is generated.\
+The total amount of bonus points you receive consists of the initial
+endowment plus what you earned as a result of your decision.\
+**Initial Endowment**\
+The initial endowment was 50 bonus points.\
+**Your decision**\
+You will receive -25/0/25 bonus points as a result of your decision.\
+
+> [The following text applies to all treatments]
+
+We will calculate and pay your bonus as soon as this full batch of HITs
+is finished. This includes that we need to wait for third party
+decisions. It generally takes us a few days to match the data and pay
+out the bonuses.
+
+> [End of study for workers]
+
+## Spectators
+
+### Redistribution phase
+
+#### Base
+
+We now ask you to make a choice that can have consequences for a real
+life situation. We will randomly select one out of five respondents and
+implement the choice made by this respondent.
+
+A few days ago, individuals were recruited via an online labor market to
+participate in a study. They were paid a participation compensation of 2
+USD, but could also earn additional money in the course of the study.
+
+In the study, participants were asked to work on an assignment.
+Participants were not told how they will be paid for the assignment
+before the assignment was completed. After the assignment was completed,
+participants were informed that their earnings would be determined by a
+lottery.
+
+In the lottery, a ball would be randomly drawn from an urn containing an
+equal number of yellow and green balls. If a yellow ball was drawn, the
+participant would earn 8 USD, and if a green ball was drawn the
+participant would earn 0 USD for completing the assignment.
+
+Participants were not informed about the outcome of the lottery.
+However, they were told that they would be matched with another
+participant who had also taken part in the study. They were also told
+that a third-party person not taking part in the study would be informed
+about the assignment and their earnings. This third-party person would
+be given the opportunity to redistribute the earnings between the two of
+them and thus determine how much each of them was paid for the
+assignment.
+
+We now want you to choose whether to redistribute the earnings between
+two of the participants -- who we are going to refer to as participant A
+and participant B. Your decision is completely anonymous. The
+participants will receive the payment that you choose for them within a
+few days, but will not receive any further information.
+
+A yellow ball was drawn for participant A while a green ball was drawn
+for participant B. Therefore, participant A earned 8 USD while
+participant B earned 0 USD.
+
+In the field below, we ask you to write how much of the 8 USD you want
+to transfer from participant A to participant B. Remember that your
+choice will determine how much participant A and participant B are paid
+for the assignment.
+
+#### Base, No Work
+
+We now ask you to make a choice that can have consequences for a real
+life situation. We will randomly select one out of five respondents and
+implement the choice made by this respondent.
+
+A few days ago, individuals were recruited via an online labor market to
+participate in a study. They were paid a participation compensation of 2
+USD, but could also earn additional money in the course of the study.
+
+What they could earn in addition was determined by a lottery. In the
+lottery, a ball would be randomly drawn from an urn containing an equal
+number of yellow and green balls. If a yellow ball was drawn, the
+participant would earn 8 USD, and if a green ball was drawn the
+participant would earn 0 USD in addition.
+
+Participants were not informed about the outcome of the lottery.
+However, they were told that they would be matched with another
+participant who had also taken part in the study. They were also told
+that a third-party person not taking part in the study would be informed
+about their earnings. This third-party person would be given the
+opportunity to redistribute the earnings between the two of them and
+thus determine how much each of them was paid.
+
+We now want you to choose whether to redistribute the earnings between
+two of the participants -- who we are going to refer to as participant A
+and participant B. Your decision is completely anonymous. The
+participants will receive the payment that you choose for them within a
+few days, but will not receive any further information.
+
+A yellow ball was drawn for participant A while a green ball was drawn
+for participant B. Therefore, participant A earned 8 USD while
+participant B earned 0 USD.
+
+In the field below, we ask you to write how much of the 8 USD you want
+to transfer from participant A to participant B. Remember that your
+choice will determine how much participant A and participant B are paid.
+
+#### Forced Choice
+
+We now ask you to make a choice that can have consequences for a real
+life situation. We will randomly select one out of five respondents and
+implement the choice made by this respondent.
+
+A few days ago, individuals were recruited via an online labor market to
+participate in a study. They were paid a participation compensation of 2
+USD, but could also earn additional money in the course of the study.
+
+In the study, participants were asked to work on an assignment.
+Participants were not told how they will be paid for the assignment
+before the assignment was completed. After the assignment was completed,
+participants were informed that they could choose how their earnings for
+the assignment would be determined.
+
+Participants could choose to let their earnings from the assignment be
+determined by a lottery or not. In the lottery, a ball would be randomly
+drawn from an urn containing an equal number of yellow and green balls.
+If a yellow ball was drawn, the participant would earn 8 USD, and if a
+green ball was drawn the participant would earn 0 USD for the
+assignment. If they did not choose the lottery, they would earn 25 cents
+for having completed the assignment.
+
+Participants who chose the lottery to determine earnings were not
+informed about the outcome of the lottery. However, they were told that
+they would be matched with another participant who had also taken part
+in the study. They were also told that a third-party person not taking
+part in the study would be informed about the assignment and their
+earnings. This third-party person would be given the opportunity to
+redistribute the earnings between the two of them and thus determine how
+much each of them was paid for the assignment.
+
+We now want you to choose whether to redistribute the earnings between
+two of the participants -- who we are going to refer to as participant A
+and participant B. Your decision is completely anonymous. The
+participants will receive the payment that you choose for them within a
+few days, but will not receive any further information.
+
+Both participants chose the lottery to determine earnings. A yellow ball
+was drawn for participant A while a green ball was drawn for participant
+B. Therefore, participant A earned 8 USD while participant B earned 0
+USD.
+
+In the field below, we ask you to write how much of the 8 USD you want
+to transfer from participant A to participant B. Remember that your
+choice will determine how much participant A and participant B are paid.
+
+#### Forced Choice, Strong
+
+We now ask you to make a choice that can have consequences for a real
+life situation. We will randomly select one out of five respondents and
+implement the choice made by this respondent.
+
+A few days ago, individuals were recruited via an online labor market to
+participate in a study. They were paid a participation compensation of 2
+USD, but could also earn additional money in the course of the study.
+
+In the study, participants were asked to work on an assignment.
+Participants were not told how they will be paid for the assignment
+before the assignment was completed. After the assignment was completed,
+participants were informed that they could choose how their earnings for
+the assignment would be determined.
+
+Participants could choose to let their earnings from the assignment be
+determined by a lottery or not. In the lottery, a ball would be randomly
+drawn from an urn containing an equal number of yellow and green balls.
+If a yellow ball was drawn, the participant would earn 8 USD, and if a
+green ball was drawn the participant would earn 0 USD for the
+assignment. If they did not choose the lottery, they would earn 0 USD
+for having completed the assignment.
+
+Participants who chose the lottery to determine earnings were not
+informed about the outcome of the lottery. However, they were told that
+they would be matched with another participant who had also taken part
+in the study. They were also told that a third-party person not taking
+part in the study would be informed about the assignment and their
+earnings. This third-party person would be given the opportunity to
+redistribute the earnings between the two of them and thus determine how
+much each of them was paid for the assignment.
+
+We now want you to choose whether to redistribute the earnings between
+two of the participants -- who we are going to refer to as participant A
+and participant B. Your decision is completely anonymous. The
+participants will receive the payment that you choose for them within a
+few days, but will not receive any further information.
+
+Both participants chose the lottery to determine earnings. A yellow ball
+was drawn for participant A while a green ball was drawn for participant
+B. Therefore, participant A earned 8 USD while participant B earned 0
+USD.
+
+In the field below, we ask you to write how much of the 8 USD you want
+to transfer from participant A to participant B. Remember that your
+choice will determine how much participant A and participant B are paid.
+
+#### Forced Choice, Very Strong
+
+We now ask you to make a choice that can have consequences for a real
+life situation. We will randomly select one out of five respondents and
+implement the choice made by this respondent.
+
+A few days ago, individuals were recruited via an online labor market to
+participate in a study. They were paid a participation compensation of 2
+USD, but could also earn additional money in the course of the study.
+
+In the study, participants were asked to work on an assignment.
+Participants were not told how they will be paid for the assignment
+before the assignment was completed. After the assignment was completed,
+participants were informed that they could choose how their earnings for
+the assignment would be determined.
+
+Participants could choose to let their earnings from the assignment be
+determined by a lottery or not. In the lottery, a ball would be randomly
+drawn from an urn containing an equal number of yellow and green balls.
+If a yellow ball was drawn, the participant would earn 8 USD, and if a
+green ball was drawn the participant would earn 0 USD for completing the
+assignment (in addition to the 2 USD participation compensation). If
+they did not choose the lottery, they would have to pay 25 cents (which
+would be deducted from the 2 USD participation compensation).
+
+Participants who chose the lottery to determine earnings were not
+informed about the outcome of the lottery. However, they were told that
+they would be matched with another participant who had also taken part
+in the study. They were also told that a third-party person not taking
+part in the study would be informed about the assignment and their
+earnings. This third-party person would be given the opportunity to
+redistribute the earnings between the two of them and thus determine how
+much each of them was paid for the assignment.
+
+We now want you to choose whether to redistribute the earnings between
+two of the participants -- who we are going to refer to as participant A
+and participant B. Your decision is completely anonymous. The
+participants will receive the payment that you choose for them within a
+few days, but will not receive any further information.
+
+Both participants chose the lottery to determine earnings. A yellow ball
+was drawn for participant A while a green ball was drawn for participant
+B. Therefore, participant A earned 8 USD while participant B earned 0
+USD.
+
+In the field below, we ask you to write how much of the 8 USD you want
+to transfer from participant A to participant B. Remember that your
+choice will determine how much participant A and participant B are paid.
+
+#### Forced Choice, No Work
+
+We now ask you to make a choice that can have consequences for a real
+life situation. We will randomly select one out of five respondents and
+implement the choice made by this respondent.
+
+A few days ago, individuals were recruited via an online labor market to
+participate in a study. They were paid a participation compensation of 2
+USD, but could also earn additional money in the course of the study.
+
+Participants could choose to let their earnings be determined by a
+lottery or not. In the lottery, a ball would be randomly drawn from an
+urn containing an equal number of yellow and green balls. If a yellow
+ball was drawn, the participant would earn 8 USD, and if a green ball
+was drawn the participant would earn 0 USD. If they did not choose the
+lottery, they would earn 0 USD in addition.
+
+Participants who chose the lottery to determine earnings were not
+informed about the outcome of the lottery. However, they were told that
+they would be matched with another participant who had also taken part
+in the study. They were also told that a third-party person not taking
+part in the study would be informed about their earnings. This
+third-party person would be given the opportunity to redistribute the
+earnings between the two of them and thus determine how much each of
+them was paid.
+
+We now want you to choose whether to redistribute the earnings between
+two of the participants -- who we are going to refer to as participant A
+and participant B. Your decision is completely anonymous. The
+participants will receive the payment that you choose for them within a
+few days, but will not receive any further information.
+
+Both participants chose the lottery to determine earnings. A yellow ball
+was drawn for participant A while a green ball was drawn for participant
+B. Therefore, participant A earned 8 USD while participant B earned 0
+USD.
+
+In the field below, we ask you to write how much of the 8 USD you want
+to transfer from participant A to participant B. Remember that your
+choice will determine how much participant A and participant B are paid.
+
+#### Nominal Choice
+
+We now ask you to make a choice that can have consequences for a real
+life situation. We will randomly select one out of five respondents and
+implement the choice made by this respondent.
+
+A few days ago, individuals were recruited via an online labor market to
+participate in a study. They were paid a participation compensation of 2
+USD, but could also earn additional money in the course of the study.
+
+In the study, participants were asked to work on an assignment.
+Participants were not told how they will be paid for the assignment
+before the assignment was completed. After the assignment was completed,
+participants were informed that they could choose how their earnings for
+the assignment would be determined.
+
+Participants could choose between two colors, yellow and green, where
+their choice would determine the outcome of a lottery. In the lottery, a
+ball would be randomly drawn from an urn containing an equal number of
+yellow and green balls. If they chose the color of the ball that was
+drawn, they would earn 8 USD, if they chose the other color, they would
+earn 0 USD for completing the assignment.
+
+Participants were not informed about the outcome of the lottery.
+However, they were told that they would be matched with another
+participant who had also taken part in the study. They were also told
+that a third-party person not taking part in the study would be informed
+about the assignment and their earnings. This third-party person would
+be given the opportunity to redistribute the earnings between the two of
+them and thus determine how much each of them was paid for the
+assignment.
+
+We now want you to choose whether to redistribute the earnings between
+two of the participants -- who we are going to refer to as participant A
+and participant B. Your decision is completely anonymous. The
+participants will receive the payment that you choose for them within a
+few days, but will not receive any further information.
+
+Participant A chose the color of the ball that was drawn, while
+participant B chose the color that was not drawn. Therefore, participant
+A earned 8 USD while participant B earned 0 USD.
+
+In the field below, we ask you to write how much of the 8 USD you want
+to transfer from participant A to participant B. Remember that your
+choice will determine how much participant A and participant B are paid.
+
+#### Nominal Choice, No Work
+
+We now ask you to make a choice that can have consequences for a real
+life situation. We will randomly select one out of five respondents and
+implement the choice made by this respondent.
+
+A few days ago, individuals were recruited via an online labor market to
+participate in a study. They were paid a participation compensation of 2
+USD, but could also earn additional money in the course of the study.
+
+Participants could choose how their additional earnings were determined.
+Participants could choose between two colors, yellow and green, where
+their choice would determine the outcome of a lottery. In the lottery, a
+ball would be randomly drawn from an urn containing an equal number of
+yellow and green balls. If they chose the color of the ball that was
+drawn, they would earn 8 USD, if they chose the other color, they would
+earn 0 USD.
+
+Participants were not informed about the outcome of the lottery.
+However, they were told that they would be matched with another
+participant who had also taken part in the study. They were also told
+that a third-party person not taking part in the study would be informed
+about their earnings. This third-party person would be given the
+opportunity to redistribute the earnings between the two of them and
+thus determine how much each of them was paid.
+
+We now want you to choose whether to redistribute the earnings between
+two of the participants -- who we are going to refer to as participant A
+and participant B. Your decision is completely anonymous. The
+participants will receive the payment that you choose for them within a
+few days, but will not receive any further information.
+
+Participant A chose the color of the ball that was drawn, while
+participant B chose the color that was not drawn. Therefore, participant
+A earned 8 USD while participant B earned 0 USD.
+
+In the field below, we ask you to write how much of the 8 USD you want
+to transfer from participant A to participant B. Remember that your
+choice will determine how much participant A and participant B are paid.
+
+### Additional questions
+
+> {[The following text applies only to subjects in the Nominal Choice
+> treatment with and without work requirement]{.smallcaps}}
+
+In the lottery, a ball would be randomly drawn from an urn containing an
+equal number of yellow and green balls. Do you believe that some are
+better than others at guessing if a yellow or a green ball will be
+drawn?
+
+> {[The following text applies to all treatments]{.smallcaps}}
+
+Before you made your choice, participant A earned 8 USD while
+participant B earned 0 USD. To what extent did the two participants have
+control over what they earned before you made your choice?
+
+### Follow-up question
+
+> {[Due to a programming mistake by the survey provider, a few of the
+> first respondents needed to be asked a follow-up
+> question]{.smallcaps}}
+
+Your role in the study you responded to was to choose whether to
+redistribute the earnings between two participants. You could transfer
+up to 8 USD from one participant to another participant. Was it the case
+that you tried to answer "0" to the question on what amount you wanted
+to transfer?
+
+-   Yes, I tried to answer 0 but the form did not accept that.
+-   No, my answer was accepted without problems.
+-   I first tried to register another amount between 0 and 1 that was
+    not accepted: **AMOUNT**
+-   Don't remember
+
+# Lab experiment with student sample
+
+## General introduction
+
+> {[The following text applies to all treatments]{.smallcaps}}
+
+Welcome to this experiment. My name is \... and I will lead this
+session.\
+In this experiment you can, depending on the decisions you and others
+make and independent of your seating in one of the rooms, earn more
+money in addition to the 100 NOK that you receive in show-up fee. Your
+earnings will be added to your show-up fee and paid to you in cash at
+the end of the session.\
+The results of this experiment are going to be used in a research
+project and it is therefore important that everybody complies with the
+guidelines that are also lying on your desks.\
+
+-   You are not allowed to talk to other participants during the
+    session.
+-   If you have questions, please raise your hand. A member of the
+    research team will come to you and answer them in private.
+-   You must not open other webpages.
+
+Violation of these rules will lead to the exclusion from the session and
+all payments. It is likely that there will be small delays during this
+session and we ask you to remain seated and quiet.\
+You will be completely anonymous throughout the session, which means
+that it will not be possible for the other participants - or us - to
+identify which decisions you have made.\
+At the end of the session you will get a payment code on your screen.
+You will be asked to write this code down on the sheet that is in the
+folder next to you. You will show this sheet when you leave the session,
+and you will then be handed over an envelope with the corresponding
+code, which contains the money you have earned in the session. The
+research assistants who have prepared the envelope will not be in the
+room when the envelopes are distributed, which ensures that no one can
+identify how much each of you have earned in the session.\
+The experiment consists of three parts and you will be given
+instructions on your screen before every single part of the experiment.
+We will soon reveal information about the first part of the experiment
+on your pc-screen. Please make sure to read the instructions carefully
+before you confirm that you have read the instructions.\
+
+> \[[Leader waits from OK from other SAs via Skype and opens for
+> introductions to part $1$.]{.smallcaps}\]
+
+### Work phase
+
+> {[The following text applies to all treatments]{.smallcaps}}
+
+> \[[Short intro when the status page shows that everyone has read
+> instructions to part $1$]{.smallcaps}\]
+
+Everyone has now read the instructions for the first part of the
+experiment. This task will take half an hour and you will soon asked to
+begin working on this task. It can happen that there will be a small
+delay when the task is completed and will will ask you to remain quiet
+in this case until you receive new instructions.
+
+> [Leader waits from OK from other SAs via Skype and opens for
+> sentence descrambling task.]
+
+> [Leader informs other SAs via Skype when the status page shows that
+> everyone has completed sentence descrambling task.]
+
+### Payment phase and redistribution phase
+
+> {[The following text applies to all treatments]}
+
+> [Start intro when leader gives info that everyone has completed
+> sentence descrambling task]
+
+You have now worked for half an hour and we ask you to submit the last
+sentence. The first part of the experiment is finished and you will soon
+be shown information about the second part of the experiment on your
+pc-screen. Please make sure to read the instructions carefully before
+you confirm that you have read the instructions. The second part of the
+experiment will first start when everyone has read the instructions. It
+can happen that there will be a small delay when the task is completed
+and will will ask you to remain quiet in this case until you receive new
+instructions.
+
+> [SA informs leader when finished reading intro. Leader opens for
+> lottery]
+
+> [Leader informs other SAs via Skype when the status page shows that
+> everyone has completed the redistribution phase.]
+
+## On screen instructions
+
+### Work phase
+
+**Screen 1**
+
+> {[The following text applies to all treatments]{.smallcaps}}
+
+Welcome to the experiment! We have to wait until everyone is ready.
+
+**Screen 2**
+
+> {[The following text applies to all treatments]}
+
+In the first part of the experiment you will be working on a language
+task. You will be shown five English words and are asked to form a
+sentence or an expression by using four of these words. The sentence or
+expression must contain four words. For example, if the words given to
+you are "sky, blue, is, the, old", then you can construct the sentence
+"the sky is blue".\
+We ask you to work continuously with this task for 30 minutes. After
+you have submitted a sentence or expression, you will be given five new
+words. The aim of this task is not to submit as many sentences or
+expressions as possible but to work thoroughly with each set of words.
+Please work continuously on this task until the given time has run out.
+
+**Screen 3**
+
+> {[The following text applies to all treatments]{.smallcaps}}
+
+Use the following words to construct a sentence or expression that
+consists of four words.
+
+### Payment phase and redistribution phase
+
+**Screen 4**
+
+> {[The following text applies to all treatments]{.smallcaps}}
+
+You have now worked on the language task for $30$ minutes. For this
+working task you are going to be paid and we will in in the following
+explain to you how your payment will be determined. After the next part
+of the experiment, there will also be a redistribution phase and you
+will receive more information on that later.\
+
+> {[The following text applies only to the Baseline
+> treatment]{.smallcaps}}
+
+Your payment will be determined by a lottery in which you with equal
+probability earn either $800$ NOK or $0$ NOK. In the lottery, a ball
+will be randomly drawn from an urn containing an equal number of yellow
+and green balls. If a yellow ball is drawn, you earn $800$ NOK and if a
+green ball is drawn, you earn $0$ NOK.\
+
+> [The following text applies only to the Forced Choice
+> treatment]
+
+You can choose between two different forms of payments. You can either
+choose to earn $25$ NOK or let your earnings be determined by a lottery
+in which you with equal probability earn either $800$ NOK or $0$ NOK. In
+the lottery, a ball will be randomly drawn from an urn containing an
+equal number of yellow and green balls. If a yellow ball is drawn, you
+earn $800$ NOK and if a green ball is drawn, you earn $0$ NOK.\
+
+> [The following text applies only to the Nominal Choice
+> treatment]{
+
+We will now ask you to choose between two colors, yellow and green. Your
+choice will determine the outcome of a lottery in which you with equal
+probability earn either $800$ NOK or $0$ NOK. In the lottery, a ball
+will be randomly drawn from an urn containing an equal number of yellow
+and green balls. If you choose the color of the ball that is drawn, you
+will earn $800$ NOK, if you choose the other color, you earn $0$ NOK.
+
+**Screen 5**
+
+> [The following text applies only to the Forced Choice
+> treatment]
+
+If you choose the picture showing coins, you will earn $25$ NOK, if you
+choose the picture of the lottery, your payment will be determined
+through a lottery in which you with equal probability earn either $800$
+NOK or $0$ NOK.\
+
+> [The following text applies only to the Nominal Choice
+> treatment]
+
+We ask you now to indicate your choice by clicking on one of the two
+pictures below.\
+If you choose the color of the ball that is drawn, you will earn $800$
+NOK, if you choose the other color, you earn $0$ NOK.\
+Remember that the urn contains an equal number of yellow and green
+balls.\
+
+**Screen 6**
+
+> [The following text applies to all treatments]
+
+We now have reached the redistribution phase. On the next screen, we
+will ask you to determine the distribution of money that two other
+participants have earned. Your choice will with some probability decide
+how much each of the two other participants will be paid from the
+experiment. Your choice will not determine how much you will earn from
+the experiment.\
+
+**Screen 7**
+
+> [The following text applies to all treatments]
+
+You will determine the distribution of money of two other participants
+in this experiment that we are going to refer to as person A and person
+B. Both have worked for $30$ minutes and their payment was determined in
+the same way as yours.\
+
+> [The following text applies only to the Baseline
+> treatment]
+
+A yellow ball was drawn for person A and a green ball for person B. The
+result was therefore that person A earned $800$ NOK from working while
+person B earned $0$ NOK from working.
+
+> [The following text applies only to the Forced Choice
+> treatment]
+
+Both participants chose to let their payment be determined by a lottery.
+A yellow ball was drawn for person A and a green ball for person B. The
+result was therefore that person A earned $800$ NOK from working while
+person B earned $0$ NOK from working.
+
+> [The following text applies only to the Nominal Choice
+> treatment]
+
+The two participants chose different colors. Person A chose yellow wile
+person B chose green. A yellow ball was drawn both for person A and
+person B. The result was therefore that person A earned $800$ NOK from
+working while person B earned $0$ NOK from working.
+
+> [The following text applies to all treatments]
+
+I the field below you are suppose to write how much of the $800$ NOK you
+want to transfer from person A to person B. Remember that your choice
+can determine how much person A and person B will get paid from the
+experiment.
+
+## Closing remarks
+
+### Additional questions
+
+> [The following text applies to all treatments]
+
+> [Start intro when leader gives info that everyone has completed the
+> distribution phase.]
+
+Everyone has now completed the third part of the experiment. will now
+ask you to answer a couple of questions on your computer screen. Your
+answers to these questions will not have any bearing on your payment
+from the experiment. Please click on the continue button on your
+pc-screen if you have answered all the questions. If you have finished
+answering all your questions, it can happen that there will be a small
+delay and will will ask you to remain quiet in this case until you
+receive new instructions.
+
+> [SA informs leader when finished reading intro. Leader opens set of
+> questions.]
+
+> [Leader informs other SAs via Skype when the status page shows that
+> everyone has completed answering the questions.]
+
+### Payment
+
+> [The following text applies to all treatments]
+
+> [Start intro when leader gives info that everyone has completed
+> answering the questions.]
+
+All questions have been answered and you will soon be shown and overview
+over your payments from the experiment. If you have seen your payment
+you can continue to the next screen where you will get your personal
+payment code by clicking on the link on the bottom of your page. We ask
+you to write down your own personal payment code on the sheet that is
+provided to you for this purpose on your desk. Make sure to write down
+the code correctly since this will identify your payment from the
+experiment.
+
+As soon as the envelopes with payment have been brought into the lab, we
+will start the payment process. On request, show the payment code to my
+colleague and he will hand you the envelope with this code. This envelop
+contains your earnings. Please remain seated until we read your payment
+code.
+
+> [Leader will open the payment page.]
+
+Since we will conduct further sessions today, please do not talk to
+anyone about the experiment before tomorrow.
+
+This part ends the session. On behalf of the research group, I should
+like to thank you for your participation. Your participation is an
+important contribution to our research.
+
+> [Leader waits until the envelopes arrives and the SA2 who has
+> prepared them has left the room.]
+
+> [SA2 stands at the door and hands out the envelopes to those leaving
+> one by one - session closed.]

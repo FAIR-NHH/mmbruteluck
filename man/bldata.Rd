@@ -4,7 +4,8 @@
 \name{bldata}
 \alias{bldata}
 \title{Data from mmbruteluck - Lab Experiment}
-\format{A data frame with 422 observations and 15 variables:
+\format{
+A data frame with 422 observations and 15 variables:
 \describe{
 \item{pid}{Non-informative identifier of individual participant}
 \item{location}{Location of experiment:
@@ -47,7 +48,8 @@
 \item{cr1}{Cognitive reflection 1: Ball and a bat..., 1 if correct.}
 \item{cr2}{Cognitive reflection 2: 5m/5/5min, what about 100m..., 1 if correct.}
 \item{cr3}{Cognitive reflection 3: 48 days to cover pond..., 1 if correct.}
-}}
+}
+}
 \source{
 Experiment conducted by the authors of the paper.
 }

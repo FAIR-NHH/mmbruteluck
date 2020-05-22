@@ -4,7 +4,8 @@
 \name{mturk_workers}
 \alias{mturk_workers}
 \title{Data from mmbruteluck - Online Experiment, mTurk workers}
-\format{A data frame with 2437 observations and 17 variables:
+\format{
+A data frame with 2437 observations and 17 variables:
 \describe{
 \item{id}{Non-informative identifier of individual participant}
 \item{female}{Indicator for mTurker being female (0/1)}
@@ -39,7 +40,8 @@ green ball in Nominal Choice treatments (0/1), 1 if they dis so.}
 \item{bonus_startup}{Bonus account at startup (numeric, 0.5 USD)}
 \item{winner}{Indicator for whether the worker is a lottery winner (0/1).}
 \item{loser}{Indicator for whether the worker is a lottery loser (0/1).}
-}}
+}
+}
 \source{
 Experiment conducted by the authors of the paper.
 }

@@ -4,7 +4,8 @@
 \name{bl_kantar}
 \alias{bl_kantar}
 \title{Data from mmbruteluck - Online Experiment, spectator decisions}
-\format{A data frame with 7124 observations and 22 variables:
+\format{
+A data frame with 7124 observations and 22 variables:
 \describe{
 \item{Respondent_Serial}{Non-informative identifier of individual participant}
 \item{comp}{Did the person complete the experiment (1: yes, 2: no)}
@@ -53,7 +54,8 @@
  \item{Husker ikke/vet ikke"}{"Don't remember/don't know"}
 }}
 \item{leftp}{Code for not voting to the right (logical, recode of "stortingsvalg")}
-}}
+}
+}
 \source{
 Experiment conducted by the authors of the paper.
 }
