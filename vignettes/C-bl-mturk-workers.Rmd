@@ -45,6 +45,18 @@ rdf_summary %>% knitr::kable(digits=c(3,1,2,2,2,2,2,2,2,0))
 rdf_totals %>% knitr::kable(digits=c(1,2,2,2,2,2,2,2,0))
 ```
 
+Requested balance tests:
+```{r}
+mturk_workers %>% lm(age ~ treatment, data=.) %>% summary()
+mturk_workers %>% lm(female ~ treatment, data=.) %>% summary()
+mturk_workers %>% lm(education ~ treatment, data=.) %>% summary()
+mturk_workers %>% lm(political ~ treatment, data=.) %>% summary()
+
+```
+
+
+
+
 How many non-safe-choice workers?
 ```{r}
 table(mturk_workers$safe)

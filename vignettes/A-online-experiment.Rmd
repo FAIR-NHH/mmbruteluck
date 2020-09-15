@@ -89,6 +89,18 @@ df_k %>% ggplot(aes(x=y, y=1* (..count..)/tapply(..count..,..PANEL..,sum)[..PANE
 ggsave(here("graphs", "histograms_kantar.pdf"))
 ```
 
+Now for a variant, without the weak forced choice (0.25), and only the work conditions: 
+```{r}
+df_k %>%  filter(workp==TRUE) %>%
+  filter(!( treatment_org %in% c("Forced Choice (w)", "Forced Choice (nw)"))) %>%
+  ggplot(aes(x=y, y=1* (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..])) + 
+  geom_histogram() + facet_grid(.~treatmentgroup) + theme_bw() + 
+  labs(y = "Fraction",
+       x="Transfer from Lucky to Unlucky",
+       caption="Only treatment with work and K\u22640.")
+ggsave(here("graphs", "histograms_kantar_strong.pdf"))
+```
+
 It is interesting to also look at how the histograms are similar also for all the different 
 treatment variations, not only for the pooled groups:
 
@@ -183,6 +195,32 @@ ggplot(aes(x=treatmentgroup, y=mean_y)) + geom_bar(stat="identity", width=0.7) +
   facet_grid(. ~ outcome) + xlab("") + ylab("Mean \u00B1 s.e.m.") +
   theme_bw()
 ggsave(here("graphs", "mean_ineq_nothing_kantar.pdf"))
+```
+
+The same, but variant with  Forced Choice ($K\leq0$) and only the work conditions:
+
+
+```{r}
+df_mean_ineq_nothing_kantar_wstrong <- df_k %>% 
+  filter(!( treatment_org %in% c("Forced Choice (w)", "Forced Choice (nw)"))) %>%
+  filter(workp==TRUE) %>%
+  dplyr::select(treatmentgroup, inequality, zero_to_worst_off) %>%
+  gather(inequality, zero_to_worst_off, key="outcome", value="y") %>%
+  group_by(treatmentgroup, outcome) %>%
+  summarize(mean_y = mean(y, na.rm=TRUE), se_y = sd(y, na.rm=TRUE)/sqrt(n())) %>%
+  mutate(outcome = fct_recode(outcome, 
+                              "Inequality" = "inequality",
+                              "Nothing to worse off" = "zero_to_worst_off"))
+df_mean_ineq_nothing_kantar_wstrong
+df_mean_ineq_nothing_kantar_wstrong %>%
+ggplot(aes(x=treatmentgroup, y=mean_y)) + geom_bar(stat="identity", width=0.7) +
+  geom_errorbar(aes(ymax=mean_y+se_y, ymin=mean_y - se_y), width=0.2) + 
+  facet_grid(. ~ outcome) + 
+  labs(x = element_blank(),
+       y = "Mean \u00B1 s.e.m.",
+       caption="Only treatment with work and K\u22640.") +
+  theme_bw()
+ggsave(here("graphs", "mean_ineq_nothing_kantar_wstrong.pdf"), device=cairo_pdf)
 ```
 
 ### Testing Forced vs Nominal
@@ -358,17 +396,17 @@ on treatment indicators and demographics (Table 1 in submitted version).
 We want the main table for the paper to pool work/no-work completely.
 
 ```{r}
-t1ineq_1 <-  df_k %>% lm(inequality ~ treatmentgroup  , data = . )
-t1ineq_2 <-  df_k %>% lm(inequality ~ treatmentgroup  +
+t1ineq_1 <-  df_k %>% lm(inequality ~ treatmentgroup + workp , data = . )
+t1ineq_2 <-  df_k %>% lm(inequality ~ treatmentgroup + workp  +
                              leftp + female + age_h + crt_h, data=.)
-t1ineq_3 <-  df_k %>% lm(inequality ~ treatmentgroup  +
+t1ineq_3 <-  df_k %>% lm(inequality ~ treatmentgroup  + workp +
                              leftp + female + age_h + crt_h +
                              university + high_income, data=.)
 
-t1noth_1 <-  df_k %>% lm( zero_to_worst_off ~ treatmentgroup, data = . )
-t1noth_2  <- df_k %>% lm( zero_to_worst_off ~ treatmentgroup  +
+t1noth_1 <-  df_k %>% lm( zero_to_worst_off ~ treatmentgroup + workp, data = . )
+t1noth_2  <- df_k %>% lm( zero_to_worst_off ~ treatmentgroup + workp  +
                               leftp + female + age_h + crt_h, data=.)
-t1noth_3  <- df_k %>% lm( zero_to_worst_off ~ treatmentgroup  +
+t1noth_3  <- df_k %>% lm( zero_to_worst_off ~ treatmentgroup  + workp +
                               leftp + female + age_h + crt_h +
                               university + high_income, data=.)
 ```
@@ -400,6 +438,45 @@ stargazer(t1ineq_1, t1ineq_2, t1ineq_3, t1noth_1, t1noth_2, t1noth_3,
          star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
          out = here("tables", "main_online.tex"), header=FALSE)
 ```
+
+### Variant with only work and strict forced choice
+
+```{r}
+df_kwK <- df_k %>% filter(treatment_org %in% c("Base (w)",
+                                               "Nominal Choice (w)",
+                                               "Forced Choice (w)", 
+                                               "Forced Choice strong",
+                                               "Forced Choice very strong"))
+t1ineq_1v <-  df_kwK %>% lm(inequality ~ treatmentgroup  , data = . )
+t1ineq_2v <-  df_kwK %>% lm(inequality ~ treatmentgroup   +
+                             leftp + female + age_h + crt_h, data=.)
+t1ineq_3v <-  df_kwK %>% lm(inequality ~ treatmentgroup  +
+                             leftp + female + age_h + crt_h +
+                             university + high_income, data=.)
+
+t1noth_1v <-  df_kwK %>% lm( zero_to_worst_off ~ treatmentgroup , data = . )
+t1noth_2v  <- df_kwK %>% lm( zero_to_worst_off ~ treatmentgroup   +
+                              leftp + female + age_h + crt_h, data=.)
+t1noth_3v  <- df_kwK %>% lm( zero_to_worst_off ~ treatmentgroup  +
+                              leftp + female + age_h + crt_h +
+                              university + high_income, data=.)
+```
+
+Now, outputting these regressions to a table.
+```{r}
+stargazer(t1ineq_1v, t1ineq_2v, t1ineq_3v, t1noth_1v, t1noth_2v, t1noth_3v,
+          se = list(sqrt(diag(cluster.vcov(t1ineq_1v, cluster=1:nrow(df_kwK)))),
+                    sqrt(diag(cluster.vcov(t1ineq_2v, cluster=1:nrow(df_kwK)))),
+                    sqrt(diag(cluster.vcov(t1ineq_3v, cluster=1:nrow(df_kwK)))),
+                    sqrt(diag(cluster.vcov(t1noth_1v, cluster=1:nrow(df_kwK)))),
+                    sqrt(diag(cluster.vcov(t1noth_2v, cluster=1:nrow(df_kwK)))),
+                    sqrt(diag(cluster.vcov(t1noth_3v, cluster=1:nrow(df_kwK))))),
+         type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"),
+        p.auto=TRUE,
+        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp", header=FALSE,
+        out = here("tables", "main_onlinev.tex"))
+```
+
 
 
 ## Heterogeneity in effects
@@ -1146,6 +1223,16 @@ Output of balance table
 dfk_summary %>% knitr::kable(digits=c(3,1,2,2,2,2,2,2,2,0))
 dfk_totals %>% knitr::kable(digits=c(1,2,2,2,2,2,2,2,0))
 ```
+## Balance tests
+```{r}
+df_k %>% lm(age ~ treatment_org, data=.) %>% summary()
+df_k %>% lm(female ~ treatment_org, data=.) %>% summary()
+df_k %>% lm(crt ~ treatment_org, data=.) %>% summary()
+df_k %>% lm(leftp ~ treatment_org, data=.) %>% summary()
+```
+
+
+
 # sessionInfo()
 
 ```{r}

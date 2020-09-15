@@ -557,6 +557,15 @@ dfl_summary %>% knitr::kable(digits=c(3,1,2,2,2,2,2,2,2,0))
 dfl_totals %>% knitr::kable(digits=c(1,2,2,2,2,2,2,2,0))
 ```
 
+## Balance tests
+
+```{r}
+df_l %>% lm(age ~ treatment, data=.) %>% summary()
+df_l %>% lm(female ~ treatment, data=.) %>% summary()
+df_l %>% lm(cr  ~ treatment, data=.) %>% summary()
+df_l %>% lm(leftp ~ treatment, data=.) %>% summary()
+```
+
 
 # sessionInfo()
 ```{r}

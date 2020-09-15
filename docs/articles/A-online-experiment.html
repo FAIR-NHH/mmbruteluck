@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mmbruteluck</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.X</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="A-online-experiment_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Online Experiment</h1>
@@ -166,23 +166,118 @@
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"histograms_kantar.pdf"</span>))
 <span class="co">#&gt; Saving 7 x 4.5 in image</span>
 <span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></pre></body></html></div>
+<p>Now for a variant, without the weak forced choice (0.25), and only the work conditions:</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">workp</span><span class="kw">==</span><span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(!( <span class="no">treatment_org</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Forced Choice (w)"</span>, <span class="st">"Forced Choice (nw)"</span>))) <span class="kw">%&gt;%</span>
+  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="kw">x</span><span class="kw">=</span><span class="no">y</span>, <span class="kw">y</span><span class="kw">=</span><span class="fl">1</span>* (<span class="no">..count..</span>)/<span class="fu"><a href="https://rdrr.io/r/base/tapply.html">tapply</a></span>(<span class="no">..count..</span>,<span class="no">..PANEL..</span>,<span class="no">sum</span>)[<span class="no">..PANEL..</span>])) +
+  <span class="fu">geom_histogram</span>() + <span class="fu">facet_grid</span>(<span class="no">.</span>~<span class="no">treatmentgroup</span>) + <span class="fu">theme_bw</span>() +
+  <span class="fu">labs</span>(<span class="kw">y</span> <span class="kw">=</span> <span class="st">"Fraction"</span>,
+       <span class="kw">x</span><span class="kw">=</span><span class="st">"Transfer from Lucky to Unlucky"</span>,
+       <span class="kw">caption</span><span class="kw">=</span><span class="st">"Only treatment with work and K\u22640."</span>)
+<span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></pre></body></html></div>
+<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"histograms_kantar_strong.pdf"</span>))
+<span class="co">#&gt; Saving 7 x 4.5 in image</span>
+<span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;e2&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;89&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;a4&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;e2&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;89&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;a4&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;e2&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;89&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;a4&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;e2&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;89&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;a4&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;e2&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;89&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;a4&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;e2&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;89&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;a4&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;e2&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;89&gt;</span>
+<span class="co">#&gt; Warning in grid.Call(C_textBounds, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;a4&gt;</span>
+<span class="co">#&gt; Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;e2&gt;</span>
+<span class="co">#&gt; Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;89&gt;</span>
+<span class="co">#&gt; Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;a4&gt;</span>
+<span class="co">#&gt; Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;e2&gt;</span>
+<span class="co">#&gt; Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;89&gt;</span>
+<span class="co">#&gt; Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x, x$y, :</span>
+<span class="co">#&gt; conversion failure on 'Only treatment with work and K≤0.' in 'mbcsToSbcs': dot</span>
+<span class="co">#&gt; substituted for &lt;a4&gt;</span></pre></body></html></div>
 <p>It is interesting to also look at how the histograms are similar also for all the different treatment variations, not only for the pooled groups:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="kw">x</span><span class="kw">=</span><span class="no">y</span>, <span class="kw">y</span><span class="kw">=</span><span class="fl">1</span>* (<span class="no">..count..</span>)/<span class="fu"><a href="https://rdrr.io/r/base/tapply.html">tapply</a></span>(<span class="no">..count..</span>,<span class="no">..PANEL..</span>,<span class="no">sum</span>)[<span class="no">..PANEL..</span>])) +
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="kw">x</span><span class="kw">=</span><span class="no">y</span>, <span class="kw">y</span><span class="kw">=</span><span class="fl">1</span>* (<span class="no">..count..</span>)/<span class="fu"><a href="https://rdrr.io/r/base/tapply.html">tapply</a></span>(<span class="no">..count..</span>,<span class="no">..PANEL..</span>,<span class="no">sum</span>)[<span class="no">..PANEL..</span>])) +
   <span class="fu">geom_histogram</span>() + <span class="fu">facet_wrap</span>(<span class="no">.</span>~<span class="no">treatment_org</span>) + <span class="fu">theme_bw</span>() + <span class="fu">ylab</span>(<span class="st">"Fraction"</span>) +
   <span class="fu">xlab</span>(<span class="st">"Transfer from Lucky to Unlucky"</span>)
 <span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></pre></body></html></div>
-<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"histograms_kantar_8.pdf"</span>))
+<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"histograms_kantar_8.pdf"</span>))
 <span class="co">#&gt; Saving 7 x 4.5 in image</span>
 <span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></pre></body></html></div>
 <div id="the-share-that-equalizes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#the-share-that-equalizes" class="anchor"></a>The share that equalizes</h3>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">df_equal</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">mutate</span>(<span class="kw">equal</span> <span class="kw">=</span> (<span class="no">y</span><span class="kw">==</span><span class="fl">4</span>))
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">df_equal</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">mutate</span>(<span class="kw">equal</span> <span class="kw">=</span> (<span class="no">y</span><span class="kw">==</span><span class="fl">4</span>))
 <span class="no">df_equal</span> <span class="kw">%&gt;%</span>
   <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span>
   <span class="fu">summarize</span>(<span class="kw">share_equal</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">equal</span>)) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fl">3</span>)</pre></body></html></div>
+  <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fl">3</span>)
+<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span></pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">treatmentgroup</th>
@@ -203,8 +298,9 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">ce</span> <span class="kw">&lt;-</span> <span class="no">df_equal</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">ce</span> <span class="kw">&lt;-</span> <span class="no">df_equal</span> <span class="kw">%&gt;%</span>
   <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span> <span class="fu">summarize</span>( <span class="kw">yc</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="no">y</span><span class="kw">==</span><span class="fl">4</span>), <span class="kw">n</span><span class="kw">=</span><span class="fu">n</span>())
+<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/prop.test.html">prop.test</a></span>(<span class="no">ce</span>$<span class="no">yc</span>[<span class="no">ce</span>$<span class="no">treatmentgroup</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Base"</span>, <span class="st">"Nominal Choice"</span>) ],
           <span class="no">ce</span>$<span class="no">n</span>[<span class="no">ce</span>$<span class="no">treatmentgroup</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Base"</span>, <span class="st">"Nominal Choice"</span>) ])
 <span class="co">#&gt; </span>
@@ -248,11 +344,12 @@
 <div id="the-share-that-gives-nothing-to-unlucky" class="section level3">
 <h3 class="hasAnchor">
 <a href="#the-share-that-gives-nothing-to-unlucky" class="anchor"></a>The share that gives nothing to unlucky</h3>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">df_0</span>  <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">mutate</span>(<span class="kw">nothing</span> <span class="kw">=</span> (<span class="no">y</span><span class="kw">==</span><span class="fl">0</span>))
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">df_0</span>  <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">mutate</span>(<span class="kw">nothing</span> <span class="kw">=</span> (<span class="no">y</span><span class="kw">==</span><span class="fl">0</span>))
 <span class="no">df_0</span> <span class="kw">%&gt;%</span>
   <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span>
   <span class="fu">summarize</span>(<span class="kw">share_equal</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">nothing</span>)) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fl">3</span>)</pre></body></html></div>
+  <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fl">3</span>)
+<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span></pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">treatmentgroup</th>
@@ -273,8 +370,9 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">c0</span> <span class="kw">&lt;-</span> <span class="no">df_0</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">c0</span> <span class="kw">&lt;-</span> <span class="no">df_0</span> <span class="kw">%&gt;%</span>
   <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span> <span class="fu">summarize</span>( <span class="kw">y0</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="no">y</span><span class="kw">==</span><span class="fl">0</span>), <span class="kw">n</span><span class="kw">=</span><span class="fu">n</span>())
+<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/prop.test.html">prop.test</a></span>(<span class="no">c0</span>$<span class="no">y0</span>[<span class="no">c0</span>$<span class="no">treatmentgroup</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Base"</span>, <span class="st">"Nominal Choice"</span>) ],
           <span class="no">c0</span>$<span class="no">n</span>[<span class="no">c0</span>$<span class="no">treatmentgroup</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Base"</span>, <span class="st">"Nominal Choice"</span>) ])
 <span class="co">#&gt; </span>
@@ -321,7 +419,7 @@
 <a href="#mean-inequality" class="anchor"></a>Mean inequality</h2>
 <p>The next descriptive figure is a bargraph showing the amount of inequality by treatment and work status.</p>
 <p>First with work distinction:</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">df_mean_ineq_nothing_kantar_wd</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">df_mean_ineq_nothing_kantar_wd</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span>
   <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">treatmentgroup</span>, <span class="no">work</span>, <span class="no">inequality</span>, <span class="no">zero_to_worst_off</span>) <span class="kw">%&gt;%</span>
   <span class="fu">gather</span>(<span class="no">inequality</span>, <span class="no">zero_to_worst_off</span>, <span class="kw">key</span><span class="kw">=</span><span class="st">"outcome"</span>, <span class="kw">value</span><span class="kw">=</span><span class="st">"y"</span>) <span class="kw">%&gt;%</span>
   <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>, <span class="no">work</span>, <span class="no">outcome</span>) <span class="kw">%&gt;%</span>
@@ -329,6 +427,7 @@
   <span class="fu">mutate</span>(<span class="kw">outcome</span> <span class="kw">=</span> <span class="fu">fct_recode</span>(<span class="no">outcome</span>,
                               <span class="st">"Inequality"</span> <span class="kw">=</span> <span class="st">"inequality"</span>,
                               <span class="st">"Nothing to worse off"</span> <span class="kw">=</span> <span class="st">"zero_to_worst_off"</span>))
+<span class="co">#&gt; `summarise()` regrouping output by 'treatmentgroup', 'work' (override with `.groups` argument)</span>
 <span class="no">df_mean_ineq_nothing_kantar_wd</span>
 <span class="co">#&gt; # A tibble: 12 x 5</span>
 <span class="co">#&gt; # Groups:   treatmentgroup, work [6]</span>
@@ -351,11 +450,11 @@
   <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="kw">ymax</span><span class="kw">=</span><span class="no">mean_y</span>+<span class="no">se_y</span>, <span class="kw">ymin</span><span class="kw">=</span><span class="no">mean_y</span> - <span class="no">se_y</span>), <span class="kw">width</span><span class="kw">=</span><span class="fl">0.2</span>) +
   <span class="fu">facet_grid</span>(<span class="no">work</span> ~ <span class="no">outcome</span>) + <span class="fu">xlab</span>(<span class="st">""</span>) + <span class="fu">ylab</span>(<span class="st">"Mean \u00B1 s.e.m."</span>) +
   <span class="fu">theme_bw</span>()</pre></body></html></div>
-<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"mean_ineq_nothing_kantar_wd.pdf"</span>))
+<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"mean_ineq_nothing_kantar_wd.pdf"</span>))
 <span class="co">#&gt; Saving 7 x 4.5 in image</span></pre></body></html></div>
 <p>Similarly, without the work distinction for the main short paper.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">df_mean_ineq_nothing_kantar</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">df_mean_ineq_nothing_kantar</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span>
   <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">treatmentgroup</span>, <span class="no">inequality</span>, <span class="no">zero_to_worst_off</span>) <span class="kw">%&gt;%</span>
   <span class="fu">gather</span>(<span class="no">inequality</span>, <span class="no">zero_to_worst_off</span>, <span class="kw">key</span><span class="kw">=</span><span class="st">"outcome"</span>, <span class="kw">value</span><span class="kw">=</span><span class="st">"y"</span>) <span class="kw">%&gt;%</span>
   <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>, <span class="no">outcome</span>) <span class="kw">%&gt;%</span>
@@ -363,6 +462,7 @@
   <span class="fu">mutate</span>(<span class="kw">outcome</span> <span class="kw">=</span> <span class="fu">fct_recode</span>(<span class="no">outcome</span>,
                               <span class="st">"Inequality"</span> <span class="kw">=</span> <span class="st">"inequality"</span>,
                               <span class="st">"Nothing to worse off"</span> <span class="kw">=</span> <span class="st">"zero_to_worst_off"</span>))
+<span class="co">#&gt; `summarise()` regrouping output by 'treatmentgroup' (override with `.groups` argument)</span>
 <span class="no">df_mean_ineq_nothing_kantar</span>
 <span class="co">#&gt; # A tibble: 6 x 4</span>
 <span class="co">#&gt; # Groups:   treatmentgroup [3]</span>
@@ -379,14 +479,48 @@
   <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="kw">ymax</span><span class="kw">=</span><span class="no">mean_y</span>+<span class="no">se_y</span>, <span class="kw">ymin</span><span class="kw">=</span><span class="no">mean_y</span> - <span class="no">se_y</span>), <span class="kw">width</span><span class="kw">=</span><span class="fl">0.2</span>) +
   <span class="fu">facet_grid</span>(<span class="no">.</span> ~ <span class="no">outcome</span>) + <span class="fu">xlab</span>(<span class="st">""</span>) + <span class="fu">ylab</span>(<span class="st">"Mean \u00B1 s.e.m."</span>) +
   <span class="fu">theme_bw</span>()</pre></body></html></div>
-<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"mean_ineq_nothing_kantar.pdf"</span>))
+<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"mean_ineq_nothing_kantar.pdf"</span>))
+<span class="co">#&gt; Saving 7 x 4.5 in image</span></pre></body></html></div>
+<p>The same, but variant with Forced Choice (<span class="math inline">\(K\leq0\)</span>) and only the work conditions:</p>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">df_mean_ineq_nothing_kantar_wstrong</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(!( <span class="no">treatment_org</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Forced Choice (w)"</span>, <span class="st">"Forced Choice (nw)"</span>))) <span class="kw">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">workp</span><span class="kw">==</span><span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
+  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">treatmentgroup</span>, <span class="no">inequality</span>, <span class="no">zero_to_worst_off</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">gather</span>(<span class="no">inequality</span>, <span class="no">zero_to_worst_off</span>, <span class="kw">key</span><span class="kw">=</span><span class="st">"outcome"</span>, <span class="kw">value</span><span class="kw">=</span><span class="st">"y"</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>, <span class="no">outcome</span>) <span class="kw">%&gt;%</span>
+  <span class="fu">summarize</span>(<span class="kw">mean_y</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">y</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>), <span class="kw">se_y</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">y</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>())) <span class="kw">%&gt;%</span>
+  <span class="fu">mutate</span>(<span class="kw">outcome</span> <span class="kw">=</span> <span class="fu">fct_recode</span>(<span class="no">outcome</span>,
+                              <span class="st">"Inequality"</span> <span class="kw">=</span> <span class="st">"inequality"</span>,
+                              <span class="st">"Nothing to worse off"</span> <span class="kw">=</span> <span class="st">"zero_to_worst_off"</span>))
+<span class="co">#&gt; `summarise()` regrouping output by 'treatmentgroup' (override with `.groups` argument)</span>
+<span class="no">df_mean_ineq_nothing_kantar_wstrong</span>
+<span class="co">#&gt; # A tibble: 6 x 4</span>
+<span class="co">#&gt; # Groups:   treatmentgroup [3]</span>
+<span class="co">#&gt;   treatmentgroup outcome              mean_y    se_y</span>
+<span class="co">#&gt;   &lt;fct&gt;          &lt;fct&gt;                 &lt;dbl&gt;   &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 Base           Inequality           0.134  0.0104 </span>
+<span class="co">#&gt; 2 Base           Nothing to worse off 0.0644 0.00900</span>
+<span class="co">#&gt; 3 Forced Choice  Inequality           0.295  0.0104 </span>
+<span class="co">#&gt; 4 Forced Choice  Nothing to worse off 0.179  0.0102 </span>
+<span class="co">#&gt; 5 Nominal Choice Inequality           0.242  0.0133 </span>
+<span class="co">#&gt; 6 Nominal Choice Nothing to worse off 0.129  0.0126</span>
+<span class="no">df_mean_ineq_nothing_kantar_wstrong</span> <span class="kw">%&gt;%</span>
+<span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="kw">x</span><span class="kw">=</span><span class="no">treatmentgroup</span>, <span class="kw">y</span><span class="kw">=</span><span class="no">mean_y</span>)) + <span class="fu">geom_bar</span>(<span class="kw">stat</span><span class="kw">=</span><span class="st">"identity"</span>, <span class="kw">width</span><span class="kw">=</span><span class="fl">0.7</span>) +
+  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="kw">ymax</span><span class="kw">=</span><span class="no">mean_y</span>+<span class="no">se_y</span>, <span class="kw">ymin</span><span class="kw">=</span><span class="no">mean_y</span> - <span class="no">se_y</span>), <span class="kw">width</span><span class="kw">=</span><span class="fl">0.2</span>) +
+  <span class="fu">facet_grid</span>(<span class="no">.</span> ~ <span class="no">outcome</span>) +
+  <span class="fu">labs</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fu">element_blank</span>(),
+       <span class="kw">y</span> <span class="kw">=</span> <span class="st">"Mean \u00B1 s.e.m."</span>,
+       <span class="kw">caption</span><span class="kw">=</span><span class="st">"Only treatment with work and K\u22640."</span>) +
+  <span class="fu">theme_bw</span>()</pre></body></html></div>
+<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"mean_ineq_nothing_kantar_wstrong.pdf"</span>), <span class="kw">device</span><span class="kw">=</span><span class="no">cairo_pdf</span>)
 <span class="co">#&gt; Saving 7 x 4.5 in image</span></pre></body></html></div>
 <div id="testing-forced-vs-nominal" class="section level3">
 <h3 class="hasAnchor">
 <a href="#testing-forced-vs-nominal" class="anchor"></a>Testing Forced vs Nominal</h3>
 <p>First, for mean inequality:</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatmentgroup</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Forced Choice"</span>, <span class="st">"Nominal Choice"</span>)) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatmentgroup</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Forced Choice"</span>, <span class="st">"Nominal Choice"</span>)) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  Welch Two Sample t-test</span>
@@ -400,8 +534,9 @@
 <span class="co">#&gt;  mean in group Forced Choice mean in group Nominal Choice </span>
 <span class="co">#&gt;                    0.3169867                    0.2761830</span></pre></body></html></div>
 <p>Second, for giving nothing to the worst off</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">nothingtw</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span>  <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">nothingtw</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span>  <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span>
   <span class="fu">summarize</span>( <span class="kw">nothing</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="no">inequality</span> <span class="kw">==</span> <span class="fl">1</span>), <span class="kw">n</span><span class="kw">=</span><span class="fu">n</span>())
+<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/prop.test.html">prop.test</a></span>(<span class="no">nothingtw</span>$<span class="no">nothing</span>[<span class="no">nothingtw</span>$<span class="no">treatmentgroup</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Forced Choice"</span>, <span class="st">"Nominal Choice"</span>) ],
           <span class="no">nothingtw</span>$<span class="no">n</span>[<span class="no">nothingtw</span>$<span class="no">treatmentgroup</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Forced Choice"</span>, <span class="st">"Nominal Choice"</span>) ])
 <span class="co">#&gt; </span>
@@ -448,7 +583,7 @@
 <h1 class="hasAnchor">
 <a href="#robustness-for-the-forced-alternative" class="anchor"></a>Robustness for the “forced” alternative</h1>
 <p>We did two variations of the “Forced Choice” treatment. One “strong” in which the alternative to the lottery was 0 cent with certainty, and one in which they actually had to pay 0.25 to avoid the lottery (I call it very-strong). Both these variants were with work. To look at the effect of this, I graph the level of inequality of the three forced choice treatments (with work) with the comparison to the base treatment (with work).</p>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatment_org</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Base (w)"</span>,
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatment_org</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Base (w)"</span>,
                                  <span class="st">"Forced Choice (w)"</span>,
                                  <span class="st">"Forced Choice strong"</span>,
                                  <span class="st">"Forced Choice very strong"</span>)) <span class="kw">%&gt;%</span>
@@ -465,12 +600,13 @@
     <span class="fu">theme_bw</span>() + <span class="fu">scale_x_discrete</span>(<span class="kw">labels</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Base (w)"</span>,
                                            <span class="st">"Forced\nChoice (w)"</span>,
                                            <span class="st">"Forced\nChoice\nstrong"</span>,
-                                           <span class="st">"Forced\nChoice\nvery strong"</span>))</pre></body></html></div>
-<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"mean_ineq_nothing_robust_kantar.pdf"</span>))
+                                           <span class="st">"Forced\nChoice\nvery strong"</span>))
+<span class="co">#&gt; `summarise()` regrouping output by 'treatment_org' (override with `.groups` argument)</span></pre></body></html></div>
+<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"mean_ineq_nothing_robust_kantar.pdf"</span>))
 <span class="co">#&gt; Saving 7 x 4.5 in image</span></pre></body></html></div>
 <p>Are the differences between the forced treatments significant? First a test of mean implemented inequality being the same in all forced (work) treatments:</p>
-<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatment_org</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Forced Choice (w)"</span>,
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatment_org</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Forced Choice (w)"</span>,
                                  <span class="st">"Forced Choice strong"</span>,
                                  <span class="st">"Forced Choice very strong"</span>)) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/oneway.test.html">oneway.test</a></span>( <span class="no">inequality</span> ~ <span class="no">treatment_org</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
@@ -480,7 +616,7 @@
 <span class="co">#&gt; data:  inequality and treatment_org</span>
 <span class="co">#&gt; F = 6.9709, num df = 2.0, denom df = 1409.9, p-value = 0.0009715</span></pre></body></html></div>
 <p>Increases in implemented inequality compared to base treatment (for the forced choice variants).</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatment_org</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Base (w)"</span>,
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatment_org</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Base (w)"</span>,
                                  <span class="st">"Forced Choice strong"</span>)) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span>( <span class="no">inequality</span> ~ <span class="no">treatment_org</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
 <span class="co">#&gt; </span>
@@ -509,11 +645,12 @@
 <span class="co">#&gt;                  mean in group Base (w) mean in group Forced Choice very strong </span>
 <span class="co">#&gt;                               0.1343624                               0.3339260</span></pre></body></html></div>
 <p>Now, the same test for the proportion implementing the nothing to the worst off:</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">uz</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatment_org</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Forced Choice (w)"</span>,
+<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">uz</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatment_org</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Forced Choice (w)"</span>,
                                  <span class="st">"Forced Choice strong"</span>,
                                  <span class="st">"Forced Choice very strong"</span>)) <span class="kw">%&gt;%</span>
   <span class="fu">group_by</span>(<span class="no">treatment_org</span>) <span class="kw">%&gt;%</span>
   <span class="fu">summarize</span>(<span class="kw">tw0</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="no">inequality</span><span class="kw">==</span><span class="fl">1</span>),  <span class="kw">n</span><span class="kw">=</span><span class="fu">n</span>())
+<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/prop.test.html">prop.test</a></span>(<span class="no">uz</span>$<span class="no">tw0</span>, <span class="no">uz</span>$<span class="no">n</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  3-sample test for equality of proportions without continuity</span>
@@ -533,7 +670,7 @@
 <h2 class="hasAnchor">
 <a href="#work-and-treatments" class="anchor"></a>Work and treatments</h2>
 <p>We want to pool the work and no-work treatments, so it is a question of interest whether there are interaction effects between the work requirement and treatments.</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">w1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>*<span class="no">workp</span> , <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">w1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>*<span class="no">workp</span> , <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
 <span class="no">w2</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>*<span class="no">workp</span> + <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> +
                              <span class="no">university</span> + <span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
 <span class="no">w3</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span> + <span class="no">workp</span> + <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> +
@@ -544,7 +681,7 @@
 <span class="no">w6</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">zero_to_worst_off</span> ~ <span class="no">treatmentgroup</span> + <span class="no">workp</span> + <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> +
                              <span class="no">university</span> + <span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)</pre></body></html></div>
 <p>We want to test the joint significance of the interactions</p>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">w1t</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">w1</span>, <span class="kw">linfct</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"`treatmentgroupForced Choice:workpTRUE` = 0"</span>,
+<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">w1t</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">w1</span>, <span class="kw">linfct</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"`treatmentgroupForced Choice:workpTRUE` = 0"</span>,
                           <span class="st">"`treatmentgroupNominal Choice:workpTRUE` = 0"</span>),
              <span class="kw">vcov</span> <span class="kw">=</span> <span class="fu">cluster.vcov</span>(<span class="no">w1</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_k</span>)))
 <span class="no">w2t</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">w2</span>, <span class="kw">linfct</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"`treatmentgroupForced Choice:workpTRUE` = 0"</span>,
@@ -563,7 +700,7 @@
           <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"%4.3f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">w4t</span>)$<span class="no">test</span>$<span class="no">pvalue</span>[<span class="fl">1</span>]),
           <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"%4.3f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">w5t</span>)$<span class="no">test</span>$<span class="no">pvalue</span>[<span class="fl">1</span>]), <span class="st">""</span>)</pre></body></html></div>
 <p>Now for table output:</p>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu">stargazer</span>(<span class="no">w1</span>, <span class="no">w2</span>, <span class="no">w3</span>, <span class="no">w4</span>, <span class="no">w5</span>, <span class="no">w6</span>,
+<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu">stargazer</span>(<span class="no">w1</span>, <span class="no">w2</span>, <span class="no">w3</span>, <span class="no">w4</span>, <span class="no">w5</span>, <span class="no">w6</span>,
           <span class="kw">se</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">w1</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_k</span>)))),
                     <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">w2</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_k</span>)))),
                     <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">w3</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_k</span>)))),
@@ -641,21 +778,21 @@
 <a href="#the-role-of-choice" class="anchor"></a>The role of choice</h2>
 <p>The first regression table just regress inequality (and zero to the worst off) on treatment indicators and demographics (Table 1 in submitted version).</p>
 <p>We want the main table for the paper to pool work/no-work completely.</p>
-<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">t1ineq_1</span> <span class="kw">&lt;-</span>  <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>  , <span class="kw">data</span> <span class="kw">=</span> <span class="no">.</span> )
-<span class="no">t1ineq_2</span> <span class="kw">&lt;-</span>  <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>  +
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="no">t1ineq_1</span> <span class="kw">&lt;-</span>  <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span> + <span class="no">workp</span> , <span class="kw">data</span> <span class="kw">=</span> <span class="no">.</span> )
+<span class="no">t1ineq_2</span> <span class="kw">&lt;-</span>  <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span> + <span class="no">workp</span>  +
                              <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
-<span class="no">t1ineq_3</span> <span class="kw">&lt;-</span>  <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>  +
+<span class="no">t1ineq_3</span> <span class="kw">&lt;-</span>  <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>  + <span class="no">workp</span> +
                              <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> +
                              <span class="no">university</span> + <span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
 
-<span class="no">t1noth_1</span> <span class="kw">&lt;-</span>  <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>( <span class="no">zero_to_worst_off</span> ~ <span class="no">treatmentgroup</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">.</span> )
-<span class="no">t1noth_2</span>  <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>( <span class="no">zero_to_worst_off</span> ~ <span class="no">treatmentgroup</span>  +
+<span class="no">t1noth_1</span> <span class="kw">&lt;-</span>  <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>( <span class="no">zero_to_worst_off</span> ~ <span class="no">treatmentgroup</span> + <span class="no">workp</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">.</span> )
+<span class="no">t1noth_2</span>  <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>( <span class="no">zero_to_worst_off</span> ~ <span class="no">treatmentgroup</span> + <span class="no">workp</span>  +
                               <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
-<span class="no">t1noth_3</span>  <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>( <span class="no">zero_to_worst_off</span> ~ <span class="no">treatmentgroup</span>  +
+<span class="no">t1noth_3</span>  <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>( <span class="no">zero_to_worst_off</span> ~ <span class="no">treatmentgroup</span>  + <span class="no">workp</span> +
                               <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> +
                               <span class="no">university</span> + <span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)</pre></body></html></div>
 <p>Now, outputting these regressions to a table.</p>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu">stargazer</span>(<span class="no">t1ineq_1</span>, <span class="no">t1ineq_2</span>, <span class="no">t1ineq_3</span>, <span class="no">t1noth_1</span>, <span class="no">t1noth_2</span>, <span class="no">t1noth_3</span>,
+<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu">stargazer</span>(<span class="no">t1ineq_1</span>, <span class="no">t1ineq_2</span>, <span class="no">t1ineq_3</span>, <span class="no">t1noth_1</span>, <span class="no">t1noth_2</span>, <span class="no">t1noth_3</span>,
           <span class="kw">se</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">t1ineq_1</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_k</span>)))),
                     <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">t1ineq_2</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_k</span>)))),
                     <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">t1ineq_3</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_k</span>)))),
@@ -670,19 +807,23 @@
 <span class="co">#&gt;                                       inequality                 zero_to_worst_off      </span>
 <span class="co">#&gt;                                 (1)       (2)       (3)       (4)       (5)       (6)   </span>
 <span class="co">#&gt; ----------------------------------------------------------------------------------------</span>
-<span class="co">#&gt; treatmentgroupForced Choice    0.151     0.146     0.146     0.116     0.114     0.113  </span>
-<span class="co">#&gt;                               (0.011)   (0.011)   (0.011)   (0.010)   (0.010)   (0.010) </span>
+<span class="co">#&gt; treatmentgroupForced Choice    0.166     0.162     0.162     0.130     0.127     0.127  </span>
+<span class="co">#&gt;                               (0.011)   (0.011)   (0.011)   (0.011)   (0.011)   (0.011) </span>
 <span class="co">#&gt;                              p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000</span>
 <span class="co">#&gt;                                                                                         </span>
-<span class="co">#&gt; treatmentgroupNominal Choice   0.110     0.109     0.109     0.067     0.067     0.067  </span>
+<span class="co">#&gt; treatmentgroupNominal Choice   0.109     0.108     0.108     0.066     0.066     0.066  </span>
 <span class="co">#&gt;                               (0.013)   (0.013)   (0.013)   (0.012)   (0.012)   (0.012) </span>
 <span class="co">#&gt;                              p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000</span>
 <span class="co">#&gt;                                                                                         </span>
-<span class="co">#&gt; leftp                                   -0.066    -0.063              -0.050    -0.047  </span>
+<span class="co">#&gt; workp                         -0.068    -0.069    -0.069    -0.058    -0.059    -0.059  </span>
+<span class="co">#&gt;                               (0.011)   (0.010)   (0.010)   (0.010)   (0.010)   (0.010) </span>
+<span class="co">#&gt;                              p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000</span>
+<span class="co">#&gt;                                                                                         </span>
+<span class="co">#&gt; leftp                                   -0.067    -0.064              -0.050    -0.047  </span>
 <span class="co">#&gt;                                         (0.011)   (0.011)             (0.011)   (0.011) </span>
 <span class="co">#&gt;                                        p = 0.000 p = 0.000           p = 0.000 p = 0.000</span>
 <span class="co">#&gt;                                                                                         </span>
-<span class="co">#&gt; female                                  -0.093    -0.082              -0.053    -0.043  </span>
+<span class="co">#&gt; female                                  -0.094    -0.084              -0.054    -0.044  </span>
 <span class="co">#&gt;                                         (0.010)   (0.010)             (0.010)   (0.010) </span>
 <span class="co">#&gt;                                        p = 0.000 p = 0.000           p = 0.000 p = 0.000</span>
 <span class="co">#&gt;                                                                                         </span>
@@ -690,27 +831,106 @@
 <span class="co">#&gt;                                         (0.010)   (0.010)             (0.009)   (0.009) </span>
 <span class="co">#&gt;                                        p = 0.000 p = 0.000           p = 0.000 p = 0.000</span>
 <span class="co">#&gt;                                                                                         </span>
-<span class="co">#&gt; crt_h                                    0.067     0.060               0.060     0.052  </span>
+<span class="co">#&gt; crt_h                                    0.066     0.059               0.059     0.051  </span>
 <span class="co">#&gt;                                         (0.010)   (0.010)             (0.010)   (0.010) </span>
 <span class="co">#&gt;                                        p = 0.000 p = 0.000           p = 0.000 p = 0.000</span>
 <span class="co">#&gt;                                                                                         </span>
 <span class="co">#&gt; university                                         0.016                         0.021  </span>
 <span class="co">#&gt;                                                   (0.010)                       (0.010) </span>
-<span class="co">#&gt;                                                  p = 0.125                     p = 0.033</span>
+<span class="co">#&gt;                                                  p = 0.123                     p = 0.033</span>
 <span class="co">#&gt;                                                                                         </span>
 <span class="co">#&gt; high_income                                        0.050                         0.049  </span>
 <span class="co">#&gt;                                                   (0.011)                       (0.011) </span>
 <span class="co">#&gt;                                                  p = 0.000                     p = 0.000</span>
 <span class="co">#&gt;                                                                                         </span>
-<span class="co">#&gt; Constant                       0.166     0.262     0.232     0.084     0.142     0.110  </span>
-<span class="co">#&gt;                               (0.008)   (0.014)   (0.015)   (0.007)   (0.013)   (0.014) </span>
+<span class="co">#&gt; Constant                       0.201     0.299     0.269     0.113     0.174     0.141  </span>
+<span class="co">#&gt;                               (0.010)   (0.015)   (0.016)   (0.009)   (0.015)   (0.015) </span>
 <span class="co">#&gt;                              p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000</span>
 <span class="co">#&gt;                                                                                         </span>
 <span class="co">#&gt; Observations                   5,757     5,757     5,757     5,757     5,757     5,757  </span>
-<span class="co">#&gt; R2                             0.026     0.072     0.077     0.017     0.043     0.049  </span>
+<span class="co">#&gt; R2                             0.033     0.080     0.084     0.023     0.049     0.054  </span>
 <span class="co">#&gt; ----------------------------------------------------------------------------------------</span>
 <span class="co">#&gt; Notes:</span></pre></body></html></div>
 <p>And to disk:</p>
+<div id="variant-with-only-work-and-strict-forced-choice" class="section level3">
+<h3 class="hasAnchor">
+<a href="#variant-with-only-work-and-strict-forced-choice" class="anchor"></a>Variant with only work and strict forced choice</h3>
+<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="no">df_kwK</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatment_org</span> <span class="kw">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Base (w)"</span>,
+                                               <span class="st">"Nominal Choice (w)"</span>,
+                                               <span class="st">"Forced Choice (w)"</span>,
+                                               <span class="st">"Forced Choice strong"</span>,
+                                               <span class="st">"Forced Choice very strong"</span>))
+<span class="no">t1ineq_1v</span> <span class="kw">&lt;-</span>  <span class="no">df_kwK</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>  , <span class="kw">data</span> <span class="kw">=</span> <span class="no">.</span> )
+<span class="no">t1ineq_2v</span> <span class="kw">&lt;-</span>  <span class="no">df_kwK</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>   +
+                             <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
+<span class="no">t1ineq_3v</span> <span class="kw">&lt;-</span>  <span class="no">df_kwK</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>  +
+                             <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> +
+                             <span class="no">university</span> + <span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
+
+<span class="no">t1noth_1v</span> <span class="kw">&lt;-</span>  <span class="no">df_kwK</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>( <span class="no">zero_to_worst_off</span> ~ <span class="no">treatmentgroup</span> , <span class="kw">data</span> <span class="kw">=</span> <span class="no">.</span> )
+<span class="no">t1noth_2v</span>  <span class="kw">&lt;-</span> <span class="no">df_kwK</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>( <span class="no">zero_to_worst_off</span> ~ <span class="no">treatmentgroup</span>   +
+                              <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
+<span class="no">t1noth_3v</span>  <span class="kw">&lt;-</span> <span class="no">df_kwK</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>( <span class="no">zero_to_worst_off</span> ~ <span class="no">treatmentgroup</span>  +
+                              <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> +
+                              <span class="no">university</span> + <span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)</pre></body></html></div>
+<p>Now, outputting these regressions to a table.</p>
+<div class="sourceCode" id="cb32"><html><body><pre class="r"><span class="fu">stargazer</span>(<span class="no">t1ineq_1v</span>, <span class="no">t1ineq_2v</span>, <span class="no">t1ineq_3v</span>, <span class="no">t1noth_1v</span>, <span class="no">t1noth_2v</span>, <span class="no">t1noth_3v</span>,
+          <span class="kw">se</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">t1ineq_1v</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_kwK</span>)))),
+                    <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">t1ineq_2v</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_kwK</span>)))),
+                    <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">t1ineq_3v</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_kwK</span>)))),
+                    <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">t1noth_1v</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_kwK</span>)))),
+                    <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">t1noth_2v</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_kwK</span>)))),
+                    <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">t1noth_3v</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_kwK</span>))))),
+         <span class="kw">type</span><span class="kw">=</span><span class="st">"text"</span>, <span class="kw">style</span><span class="kw">=</span><span class="st">"aer"</span>, <span class="kw">df</span><span class="kw">=</span><span class="fl">FALSE</span>, <span class="kw">keep.stat</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"rsq"</span>,<span class="st">"n"</span>),
+        <span class="kw">p.auto</span><span class="kw">=</span><span class="fl">TRUE</span>,
+        <span class="kw">star.char</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">""</span>, <span class="st">""</span>,<span class="st">""</span>), <span class="kw">notes</span><span class="kw">=</span><span class="st">""</span>, <span class="kw">notes.append</span><span class="kw">=</span><span class="fl">FALSE</span>, <span class="kw">report</span><span class="kw">=</span><span class="st">"vcsp"</span>, <span class="kw">header</span><span class="kw">=</span><span class="fl">FALSE</span>,
+        <span class="kw">out</span> <span class="kw">=</span> <span class="fu">here</span>(<span class="st">"tables"</span>, <span class="st">"main_onlinev.tex"</span>))
+<span class="co">#&gt; </span>
+<span class="co">#&gt; ========================================================================================</span>
+<span class="co">#&gt;                                       inequality                 zero_to_worst_off      </span>
+<span class="co">#&gt;                                 (1)       (2)       (3)       (4)       (5)       (6)   </span>
+<span class="co">#&gt; ----------------------------------------------------------------------------------------</span>
+<span class="co">#&gt; treatmentgroupForced Choice    0.165     0.160     0.160     0.115     0.112     0.112  </span>
+<span class="co">#&gt;                               (0.014)   (0.013)   (0.013)   (0.012)   (0.012)   (0.012) </span>
+<span class="co">#&gt;                              p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000</span>
+<span class="co">#&gt;                                                                                         </span>
+<span class="co">#&gt; treatmentgroupNominal Choice   0.108     0.102     0.102     0.065     0.061     0.061  </span>
+<span class="co">#&gt;                               (0.017)   (0.017)   (0.017)   (0.015)   (0.015)   (0.015) </span>
+<span class="co">#&gt;                              p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000</span>
+<span class="co">#&gt;                                                                                         </span>
+<span class="co">#&gt; leftp                                   -0.062    -0.058              -0.049    -0.045  </span>
+<span class="co">#&gt;                                         (0.013)   (0.013)             (0.013)   (0.013) </span>
+<span class="co">#&gt;                                        p = 0.000 p = 0.000           p = 0.001 p = 0.001</span>
+<span class="co">#&gt;                                                                                         </span>
+<span class="co">#&gt; female                                  -0.093    -0.081              -0.045    -0.033  </span>
+<span class="co">#&gt;                                         (0.012)   (0.013)             (0.012)   (0.012) </span>
+<span class="co">#&gt;                                        p = 0.000 p = 0.000           p = 0.001 p = 0.005</span>
+<span class="co">#&gt;                                                                                         </span>
+<span class="co">#&gt; age_h                                   -0.074    -0.075              -0.050    -0.050  </span>
+<span class="co">#&gt;                                         (0.012)   (0.012)             (0.011)   (0.011) </span>
+<span class="co">#&gt;                                        p = 0.000 p = 0.000           p = 0.000 p = 0.000</span>
+<span class="co">#&gt;                                                                                         </span>
+<span class="co">#&gt; crt_h                                    0.062     0.057               0.053     0.048  </span>
+<span class="co">#&gt;                                         (0.012)   (0.012)             (0.012)   (0.012) </span>
+<span class="co">#&gt;                                        p = 0.000 p = 0.000           p = 0.000 p = 0.000</span>
+<span class="co">#&gt;                                                                                         </span>
+<span class="co">#&gt; university                                         0.009                         0.010  </span>
+<span class="co">#&gt;                                                   (0.013)                       (0.012) </span>
+<span class="co">#&gt;                                                  p = 0.471                     p = 0.387</span>
+<span class="co">#&gt;                                                                                         </span>
+<span class="co">#&gt; high_income                                        0.059                         0.056  </span>
+<span class="co">#&gt;                                                   (0.014)                       (0.014) </span>
+<span class="co">#&gt;                                                  p = 0.000                     p = 0.000</span>
+<span class="co">#&gt;                                                                                         </span>
+<span class="co">#&gt; Constant                       0.134     0.229     0.197     0.064     0.119     0.088  </span>
+<span class="co">#&gt;                               (0.010)   (0.017)   (0.018)   (0.009)   (0.016)   (0.017) </span>
+<span class="co">#&gt;                              p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000 p = 0.000</span>
+<span class="co">#&gt;                                                                                         </span>
+<span class="co">#&gt; Observations                   3,581     3,581     3,581     3,581     3,581     3,581  </span>
+<span class="co">#&gt; R2                             0.030     0.074     0.080     0.017     0.038     0.045  </span>
+<span class="co">#&gt; ----------------------------------------------------------------------------------------</span>
+<span class="co">#&gt; Notes:</span></pre></body></html></div>
+</div>
 </div>
 <div id="heterogeneity-in-effects" class="section level2">
 <h2 class="hasAnchor">
@@ -719,7 +939,7 @@
 <div id="heterogeneity-in-effects-on-inequality" class="section level3">
 <h3 class="hasAnchor">
 <a href="#heterogeneity-in-effects-on-inequality" class="anchor"></a>Heterogeneity in effects on inequality</h3>
-<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">h1_1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">leftp</span>  + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span>,
+<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="no">h1_1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">leftp</span>  + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span>,
                       <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )
 <span class="no">h1_2</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">leftp</span>  + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span> +
                         <span class="no">choice</span>*<span class="no">leftp</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )
@@ -737,7 +957,7 @@
                         <span class="no">choice</span>*<span class="no">leftp</span> + <span class="no">choice</span>*<span class="no">female</span> + <span class="no">choice</span>*<span class="no">age_h</span> + <span class="no">choice</span>*<span class="no">crt_h</span> + <span class="no">choice</span>*<span class="no">university</span> +
                         <span class="no">choice</span>*<span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )</pre></body></html></div>
 <p>Want to include linear combinations for the columns 2-7:</p>
-<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">ch2</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">h1_2</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:leftpTRUE = 0"</span>,
+<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="no">ch2</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">h1_2</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:leftpTRUE = 0"</span>,
              <span class="kw">vcov</span> <span class="kw">=</span> <span class="fu">cluster.vcov</span>(<span class="no">h1_2</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_k</span>)))
 <span class="no">ch3</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">h1_3</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:femaleTRUE = 0"</span>,
              <span class="kw">vcov</span> <span class="kw">=</span> <span class="fu">cluster.vcov</span>(<span class="no">h1_3</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_k</span>)))
@@ -773,7 +993,7 @@
         <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"p=%4.3f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">ch6</span>)$<span class="no">test</span>$<span class="no">pvalues</span>[<span class="fl">1</span>]),
         <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"p=%4.3f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">ch7</span>)$<span class="no">test</span>$<span class="no">pvalues</span>[<span class="fl">1</span>]),
         <span class="st">""</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="fu">stargazer</span>( <span class="no">h1_1</span>, <span class="no">h1_2</span>, <span class="no">h1_3</span>, <span class="no">h1_4</span>, <span class="no">h1_5</span>, <span class="no">h1_6</span>, <span class="no">h1_7</span>, <span class="no">h1_8</span>,
+<div class="sourceCode" id="cb35"><html><body><pre class="r"><span class="fu">stargazer</span>( <span class="no">h1_1</span>, <span class="no">h1_2</span>, <span class="no">h1_3</span>, <span class="no">h1_4</span>, <span class="no">h1_5</span>, <span class="no">h1_6</span>, <span class="no">h1_7</span>, <span class="no">h1_8</span>,
            <span class="kw">se</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">h1_1</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">h1_1</span>$<span class="no">residuals</span>)))),
                       <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">h1_2</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">h1_2</span>$<span class="no">residuals</span>)))),
                       <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">h1_3</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">h1_3</span>$<span class="no">residuals</span>)))),
@@ -862,9 +1082,9 @@
 <h3 class="hasAnchor">
 <a href="#restricting-heterogeneity-table-to-nominal-choice" class="anchor"></a>Restricting heterogeneity table to Nominal Choice</h3>
 <p>For the appendix, we want to show heterogeneity with respect to each of the types of choice separately. First, restricting to nominal choice.</p>
-<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="no">dfmain_nc</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatmentgroup</span> <span class="kw">!=</span> <span class="st">"Forced Choice"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="no">dfmain_nc</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatmentgroup</span> <span class="kw">!=</span> <span class="st">"Forced Choice"</span>)</pre></body></html></div>
 <p>The regression tables are the same on this more restricted sample.</p>
-<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="no">hnc1_1</span> <span class="kw">&lt;-</span> <span class="no">dfmain_nc</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">leftp</span> + <span class="no">workp</span> + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span>,
+<div class="sourceCode" id="cb37"><html><body><pre class="r"><span class="no">hnc1_1</span> <span class="kw">&lt;-</span> <span class="no">dfmain_nc</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">leftp</span> + <span class="no">workp</span> + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span>,
                       <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )
 <span class="no">hnc1_2</span> <span class="kw">&lt;-</span> <span class="no">dfmain_nc</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">leftp</span> + <span class="no">workp</span> + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span> +
                         <span class="no">choice</span>*<span class="no">leftp</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )
@@ -882,7 +1102,7 @@
                         <span class="no">choice</span>*<span class="no">leftp</span> + <span class="no">choice</span>*<span class="no">female</span> + <span class="no">choice</span>*<span class="no">age_h</span> + <span class="no">choice</span>*<span class="no">crt_h</span> + <span class="no">choice</span>*<span class="no">university</span> +
                         <span class="no">choice</span>*<span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )</pre></body></html></div>
 <p>Want to include linear combinations for the columns 2-7:</p>
-<div class="sourceCode" id="cb32"><html><body><pre class="r"><span class="no">nch2</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">hnc1_2</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:leftpTRUE = 0"</span>,
+<div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="no">nch2</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">hnc1_2</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:leftpTRUE = 0"</span>,
              <span class="kw">vcov</span> <span class="kw">=</span> <span class="fu">cluster.vcov</span>(<span class="no">hnc1_2</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dfmain_nc</span>)))
 <span class="no">nch3</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">hnc1_3</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:femaleTRUE = 0"</span>,
              <span class="kw">vcov</span> <span class="kw">=</span> <span class="fu">cluster.vcov</span>(<span class="no">hnc1_3</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dfmain_nc</span>)))
@@ -918,7 +1138,7 @@
         <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"p=%4.3f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">nch6</span>)$<span class="no">test</span>$<span class="no">pvalues</span>[<span class="fl">1</span>]),
         <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"p=%4.3f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">nch7</span>)$<span class="no">test</span>$<span class="no">pvalues</span>[<span class="fl">1</span>]),
         <span class="st">""</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="fu">stargazer</span>( <span class="no">hnc1_1</span>, <span class="no">hnc1_2</span>, <span class="no">hnc1_3</span>, <span class="no">hnc1_4</span>, <span class="no">hnc1_5</span>, <span class="no">hnc1_6</span>, <span class="no">hnc1_7</span>, <span class="no">hnc1_8</span>,
+<div class="sourceCode" id="cb39"><html><body><pre class="r"><span class="fu">stargazer</span>( <span class="no">hnc1_1</span>, <span class="no">hnc1_2</span>, <span class="no">hnc1_3</span>, <span class="no">hnc1_4</span>, <span class="no">hnc1_5</span>, <span class="no">hnc1_6</span>, <span class="no">hnc1_7</span>, <span class="no">hnc1_8</span>,
            <span class="kw">se</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">hnc1_1</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">hnc1_1</span>$<span class="no">residuals</span>)))),
                       <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">hnc1_2</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">hnc1_2</span>$<span class="no">residuals</span>)))),
                       <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">hnc1_3</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">hnc1_3</span>$<span class="no">residuals</span>)))),
@@ -1011,9 +1231,9 @@
 <h3 class="hasAnchor">
 <a href="#restricting-heterogeneity-table-to-forced-choice" class="anchor"></a>Restricting heterogeneity table to Forced Choice</h3>
 <p>For the appendix, we want to show heterogeneity with respect to each of the types of choice separately. Now, restricting to forced choice.</p>
-<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="no">dfmain_fc</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatmentgroup</span> <span class="kw">!=</span> <span class="st">"Nominal Choice"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="no">dfmain_fc</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatmentgroup</span> <span class="kw">!=</span> <span class="st">"Nominal Choice"</span>)</pre></body></html></div>
 <p>The regression tables are the same on this more restricted sample.</p>
-<div class="sourceCode" id="cb35"><html><body><pre class="r"><span class="no">hfc1_1</span> <span class="kw">&lt;-</span> <span class="no">dfmain_fc</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">leftp</span> + <span class="no">workp</span> + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span>,
+<div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="no">hfc1_1</span> <span class="kw">&lt;-</span> <span class="no">dfmain_fc</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">leftp</span> + <span class="no">workp</span> + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span>,
                       <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )
 <span class="no">hfc1_2</span> <span class="kw">&lt;-</span> <span class="no">dfmain_fc</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">leftp</span> + <span class="no">workp</span> + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span> +
                         <span class="no">choice</span>*<span class="no">leftp</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )
@@ -1031,7 +1251,7 @@
                         <span class="no">choice</span>*<span class="no">leftp</span> + <span class="no">choice</span>*<span class="no">female</span> + <span class="no">choice</span>*<span class="no">age_h</span> + <span class="no">choice</span>*<span class="no">crt_h</span> + <span class="no">choice</span>*<span class="no">university</span> +
                         <span class="no">choice</span>*<span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )</pre></body></html></div>
 <p>Want to include linear combinations for the columns 2-7:</p>
-<div class="sourceCode" id="cb36"><html><body><pre class="r"><span class="no">fch2</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">hfc1_2</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:leftpTRUE = 0"</span>,
+<div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="no">fch2</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">hfc1_2</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:leftpTRUE = 0"</span>,
              <span class="kw">vcov</span> <span class="kw">=</span> <span class="fu">cluster.vcov</span>(<span class="no">hfc1_2</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dfmain_fc</span>)))
 <span class="no">fch3</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">hfc1_3</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:femaleTRUE = 0"</span>,
              <span class="kw">vcov</span> <span class="kw">=</span> <span class="fu">cluster.vcov</span>(<span class="no">hfc1_3</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">dfmain_fc</span>)))
@@ -1067,7 +1287,7 @@
         <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"p=%4.3f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fch6</span>)$<span class="no">test</span>$<span class="no">pvalues</span>[<span class="fl">1</span>]),
         <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"p=%4.3f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fch7</span>)$<span class="no">test</span>$<span class="no">pvalues</span>[<span class="fl">1</span>]),
         <span class="st">""</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb37"><html><body><pre class="r"><span class="fu">stargazer</span>( <span class="no">hfc1_1</span>, <span class="no">hfc1_2</span>, <span class="no">hfc1_3</span>, <span class="no">hfc1_4</span>, <span class="no">hfc1_5</span>, <span class="no">hfc1_6</span>, <span class="no">hfc1_7</span>, <span class="no">hfc1_8</span>,
+<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="fu">stargazer</span>( <span class="no">hfc1_1</span>, <span class="no">hfc1_2</span>, <span class="no">hfc1_3</span>, <span class="no">hfc1_4</span>, <span class="no">hfc1_5</span>, <span class="no">hfc1_6</span>, <span class="no">hfc1_7</span>, <span class="no">hfc1_8</span>,
            <span class="kw">se</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">hfc1_1</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">hfc1_1</span>$<span class="no">residuals</span>)))),
                       <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">hfc1_2</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">hfc1_2</span>$<span class="no">residuals</span>)))),
                       <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">hfc1_3</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">hfc1_3</span>$<span class="no">residuals</span>)))),
@@ -1159,7 +1379,7 @@
 <div id="heterogeneity-in-effects-on-zero-to-worst-off" class="section level3">
 <h3 class="hasAnchor">
 <a href="#heterogeneity-in-effects-on-zero-to-worst-off" class="anchor"></a>Heterogeneity in effects on zero to worst off</h3>
-<div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="no">h2_1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">zero_to_worst_off</span> ~ <span class="no">choice</span> + <span class="no">leftp</span>  + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span>,
+<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="no">h2_1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">zero_to_worst_off</span> ~ <span class="no">choice</span> + <span class="no">leftp</span>  + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span>,
                       <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )
 <span class="no">h2_2</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">zero_to_worst_off</span> ~ <span class="no">choice</span> + <span class="no">leftp</span>  + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span> +
                         <span class="no">choice</span>*<span class="no">leftp</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )
@@ -1177,7 +1397,7 @@
                         <span class="no">choice</span>*<span class="no">leftp</span> + <span class="no">choice</span>*<span class="no">female</span> + <span class="no">choice</span>*<span class="no">age_h</span> + <span class="no">choice</span>*<span class="no">crt_h</span> + <span class="no">choice</span>*<span class="no">university</span> +
                         <span class="no">choice</span>*<span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )</pre></body></html></div>
 <p>Want to include linear combinations for the columns 2-7:</p>
-<div class="sourceCode" id="cb39"><html><body><pre class="r"><span class="no">dh2</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">h2_2</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:leftpTRUE = 0"</span>,
+<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="no">dh2</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">h2_2</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:leftpTRUE = 0"</span>,
              <span class="kw">vcov</span> <span class="kw">=</span> <span class="fu">cluster.vcov</span>(<span class="no">h2_2</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_k</span>)))
 <span class="no">dh3</span> <span class="kw">&lt;-</span> <span class="fu">glht</span>(<span class="no">h2_3</span>, <span class="kw">linfct</span><span class="kw">=</span><span class="st">"choiceTRUE + choiceTRUE:femaleTRUE = 0"</span>,
              <span class="kw">vcov</span> <span class="kw">=</span> <span class="fu">cluster.vcov</span>(<span class="no">h2_3</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_k</span>)))
@@ -1214,7 +1434,7 @@
         <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span>(<span class="st">"p=%4.3f"</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">dh7</span>)$<span class="no">test</span>$<span class="no">pvalues</span>[<span class="fl">1</span>]),
         <span class="st">""</span>)</pre></body></html></div>
 <p>Now for table output with p-values:</p>
-<div class="sourceCode" id="cb40"><html><body><pre class="r"><span class="fu">stargazer</span>( <span class="no">h2_1</span>, <span class="no">h2_2</span>, <span class="no">h2_3</span>, <span class="no">h2_4</span>, <span class="no">h2_5</span>, <span class="no">h2_6</span>, <span class="no">h2_7</span>, <span class="no">h2_8</span>,
+<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="fu">stargazer</span>( <span class="no">h2_1</span>, <span class="no">h2_2</span>, <span class="no">h2_3</span>, <span class="no">h2_4</span>, <span class="no">h2_5</span>, <span class="no">h2_6</span>, <span class="no">h2_7</span>, <span class="no">h2_8</span>,
            <span class="kw">se</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>( <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">h2_1</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">h2_1</span>$<span class="no">residuals</span>)))),
                       <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">h2_2</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">h2_2</span>$<span class="no">residuals</span>)))),
                       <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">h2_3</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">h2_3</span>$<span class="no">residuals</span>)))),
@@ -1308,7 +1528,7 @@
 <h3 class="hasAnchor">
 <a href="#treatment-effects-by-political-party" class="anchor"></a>Treatment effects by political party</h3>
 <p>On inequality:</p>
-<div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="no">rAp</span> <span class="kw">&lt;-</span><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">stortingsvalg</span><span class="kw">==</span><span class="st">"Ap"</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb47"><html><body><pre class="r"><span class="no">rAp</span> <span class="kw">&lt;-</span><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">stortingsvalg</span><span class="kw">==</span><span class="st">"Ap"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span>~<span class="no">choice</span> + <span class="no">workp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> + <span class="no">university</span> + <span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
 <span class="no">rFrp</span> <span class="kw">&lt;-</span><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">stortingsvalg</span><span class="kw">==</span><span class="st">"Frp"</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span>~<span class="no">choice</span> + <span class="no">workp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> + <span class="no">university</span> + <span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
@@ -1389,7 +1609,7 @@
 <h2 class="hasAnchor">
 <a href="#triple-interactions" class="anchor"></a>Triple interactions</h2>
 <p>We are interested in the possible triple interaction between political, left, and cognitive reflection.</p>
-<div class="sourceCode" id="cb42"><html><body><pre class="r"><span class="no">triple1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">workp</span> + <span class="no">leftp</span> + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span> , <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
+<div class="sourceCode" id="cb48"><html><body><pre class="r"><span class="no">triple1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">workp</span> + <span class="no">leftp</span> + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span> , <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
 <span class="no">triple2</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">workp</span> + <span class="no">choice</span>*<span class="no">leftp</span> + <span class="no">leftp</span> + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
 <span class="no">triple3</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">workp</span> + <span class="no">choice</span>*<span class="no">crt_h</span> + <span class="no">leftp</span> + <span class="no">crt_h</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">university</span> + <span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span> )
 <span class="no">triple4</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">choice</span> + <span class="no">workp</span> + <span class="no">choice</span>*<span class="no">leftp</span> + <span class="no">choice</span>*<span class="no">crt_h</span> + <span class="no">leftp</span> + <span class="no">crt_h</span> +  <span class="no">female</span> + <span class="no">age_h</span> +
@@ -1480,7 +1700,7 @@
 <h2 class="hasAnchor">
 <a href="#in-nominal-choice" class="anchor"></a>In nominal choice</h2>
 <p>A clear majority said “yes”, but some said I don’t know:</p>
-<div class="sourceCode" id="cb43"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">df_k</span>$<span class="no">understanding1</span>)
+<div class="sourceCode" id="cb49"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">df_k</span>$<span class="no">understanding1</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt;       Ja      Nei Vet ikke </span>
 <span class="co">#&gt;     1190       97      150</span>
@@ -1489,9 +1709,9 @@
   <span class="fu">geom_bar</span>(<span class="kw">width</span><span class="kw">=</span><span class="fl">0.7</span>) + <span class="fu">theme_bw</span>() +
   <span class="fu">labs</span>(<span class="kw">title</span><span class="kw">=</span> <span class="st">"Equally likely in nominal choice?"</span>,
                                 <span class="kw">x</span><span class="kw">=</span><span class="st">""</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="st">"Fraction"</span>)</pre></body></html></div>
-<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-43-1.png" width="672"></p>
+<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-47-1.png" width="672"></p>
 <p>Did those who didn’t understand distribute any differently than others?</p>
-<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="no">u1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatmentgroup</span> <span class="kw">==</span> <span class="st">"Nominal Choice"</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb50"><html><body><pre class="r"><span class="no">u1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">treatmentgroup</span> <span class="kw">==</span> <span class="st">"Nominal Choice"</span>) <span class="kw">%&gt;%</span>
   <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">understanding1</span>, <span class="no">inequality</span>, <span class="no">zero_to_worst_off</span>) <span class="kw">%&gt;%</span>
   <span class="fu">gather</span>(<span class="no">inequality</span>, <span class="no">zero_to_worst_off</span>, <span class="kw">key</span><span class="kw">=</span><span class="st">"outcome"</span>, <span class="kw">value</span><span class="kw">=</span><span class="st">"y"</span>) <span class="kw">%&gt;%</span>
   <span class="fu">mutate</span>(<span class="kw">understand</span> <span class="kw">=</span> <span class="fu">fct_recode</span>(<span class="no">understanding1</span>,
@@ -1508,10 +1728,11 @@
     <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="kw">ymax</span><span class="kw">=</span><span class="no">mean_y</span>+<span class="no">se_y</span>, <span class="kw">ymin</span><span class="kw">=</span><span class="no">mean_y</span>-<span class="no">se_y</span>), <span class="kw">width</span><span class="kw">=</span><span class="fl">0.2</span>) +
   <span class="fu">facet_wrap</span>(~<span class="no">outcome</span>, <span class="kw">scales</span><span class="kw">=</span><span class="st">"free"</span>) +
   <span class="fu">xlab</span>(<span class="st">"Was the probability of winning equal in Nominal Choice situation?"</span>) +
-  <span class="fu">ylab</span>(<span class="st">"Mean \u00B1 s.e.m."</span>) + <span class="fu">theme_bw</span>()</pre></body></html></div>
-<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-44-1.png" width="672"></p>
+  <span class="fu">ylab</span>(<span class="st">"Mean \u00B1 s.e.m."</span>) + <span class="fu">theme_bw</span>()
+<span class="co">#&gt; `summarise()` regrouping output by 'understand' (override with `.groups` argument)</span></pre></body></html></div>
+<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-48-1.png" width="672"></p>
 <p>Are these differences significant?</p>
-<div class="sourceCode" id="cb45"><html><body><pre class="r"><span class="no">u1</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">outcome</span><span class="kw">==</span><span class="st">"inequality"</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span>(<span class="no">y</span> ~ <span class="no">understand</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
+<div class="sourceCode" id="cb51"><html><body><pre class="r"><span class="no">u1</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">outcome</span><span class="kw">==</span><span class="st">"inequality"</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span>(<span class="no">y</span> ~ <span class="no">understand</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  Welch Two Sample t-test</span>
 <span class="co">#&gt; </span>
@@ -1528,6 +1749,7 @@
   <span class="fu">summarize</span>(<span class="kw">n</span><span class="kw">=</span><span class="fu">n</span>()) <span class="kw">%&gt;%</span>
   <span class="fu">spread</span>(<span class="kw">key</span><span class="kw">=</span><span class="no">understand</span>, <span class="kw">value</span><span class="kw">=</span><span class="no">n</span>) <span class="kw">%&gt;%</span>
   <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(-<span class="no">y</span>)
+<span class="co">#&gt; `summarise()` regrouping output by 'understand' (override with `.groups` argument)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/prop.test.html">prop.test</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">u1z</span>))
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  2-sample test for equality of proportions with continuity correction</span>
@@ -1545,19 +1767,22 @@
 <h2 class="hasAnchor">
 <a href="#control-over-earnings-before-distribution-choice" class="anchor"></a>Control over earnings before distribution choice</h2>
 <p>We asked whether the two participants had any control over their own earnings before the DM made their choices.</p>
-<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">understanding2n</span>)) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb52"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">understanding2n</span>)) <span class="kw">%&gt;%</span>
   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="kw">x</span><span class="kw">=</span><span class="no">understanding2n</span>, <span class="kw">y</span> <span class="kw">=</span> (<span class="no">..count..</span>)/<span class="fu"><a href="https://rdrr.io/r/base/tapply.html">tapply</a></span>(<span class="no">..count..</span>,<span class="no">..PANEL..</span>,<span class="no">sum</span>)[<span class="no">..PANEL..</span>])) +
   <span class="fu">geom_bar</span>(<span class="kw">width</span><span class="kw">=</span><span class="fl">0.7</span>) +
   <span class="fu">facet_wrap</span>(~<span class="no">treatmentgroup</span>) + <span class="fu">theme_bw</span>() +
   <span class="fu">labs</span>(<span class="kw">x</span><span class="kw">=</span><span class="st">"Answer from 1-7. (1: no control, ..., 7: full control)"</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="st">"Fraction"</span>) +
-  <span class="fu">scale_x_discrete</span>(<span class="kw">limits</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">7</span>))</pre></body></html></div>
-<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-46-1.png" width="672"></p>
-<div class="sourceCode" id="cb47"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"control_earnings.pdf"</span>))
+  <span class="fu">scale_x_discrete</span>(<span class="kw">limits</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">7</span>))
+<span class="co">#&gt; Warning: Continuous limits supplied to discrete scale.</span>
+<span class="co">#&gt; Did you mean `limits = factor(...)` or `scale_*_continuous()`?</span></pre></body></html></div>
+<p><img src="A-online-experiment_files/figure-html/unnamed-chunk-50-1.png" width="672"></p>
+<div class="sourceCode" id="cb53"><html><body><pre class="r"><span class="fu">ggsave</span>(<span class="fu">here</span>(<span class="st">"graphs"</span>, <span class="st">"control_earnings.pdf"</span>))
 <span class="co">#&gt; Saving 7 x 4.5 in image</span></pre></body></html></div>
 <p>What are the exact shares at “no control”?</p>
-<div class="sourceCode" id="cb48"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb54"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span>
   <span class="fu">summarize</span>(<span class="kw">share_no_control</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>( (<span class="no">understanding2n</span><span class="kw">==</span><span class="fl">1</span>), <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>),
-                                           <span class="kw">n</span> <span class="kw">=</span> <span class="fu">n</span>()) <span class="kw">%&gt;%</span> <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fl">3</span>)</pre></body></html></div>
+                                           <span class="kw">n</span> <span class="kw">=</span> <span class="fu">n</span>()) <span class="kw">%&gt;%</span> <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fl">3</span>)
+<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span></pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">treatmentgroup</th>
@@ -1583,7 +1808,8 @@
 </tbody>
 </table>
 <p>Are these differences significant?</p>
-<div class="sourceCode" id="cb49"><html><body><pre class="r"><span class="no">c1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span>  <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span> <span class="fu">summarize</span>( <span class="kw">no_control</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="no">inequality</span> <span class="kw">==</span> <span class="fl">1</span>), <span class="kw">n</span><span class="kw">=</span><span class="fu">n</span>())
+<div class="sourceCode" id="cb55"><html><body><pre class="r"><span class="no">c1</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span>  <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span> <span class="fu">summarize</span>( <span class="kw">no_control</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="no">inequality</span> <span class="kw">==</span> <span class="fl">1</span>), <span class="kw">n</span><span class="kw">=</span><span class="fu">n</span>())
+<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/prop.test.html">prop.test</a></span>(<span class="no">c1</span>$<span class="no">no_control</span>, <span class="no">c1</span>$<span class="no">n</span>)
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  3-sample test for equality of proportions without continuity</span>
@@ -1596,9 +1822,10 @@
 <span class="co">#&gt;     prop 1     prop 2     prop 3 </span>
 <span class="co">#&gt; 0.08379121 0.20006983 0.15100905</span></pre></body></html></div>
 <p>Also by treatmentgroup (excluding “strong” and “very strong”):</p>
-<div class="sourceCode" id="cb50"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb56"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">group_by</span>(<span class="no">treatmentgroup</span>) <span class="kw">%&gt;%</span>
   <span class="fu">summarize</span>(<span class="kw">share_no_control</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>( (<span class="no">understanding2n</span><span class="kw">==</span><span class="fl">1</span>), <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>),
-                                           <span class="kw">n</span> <span class="kw">=</span> <span class="fu">n</span>()) <span class="kw">%&gt;%</span> <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fl">3</span>)</pre></body></html></div>
+                                           <span class="kw">n</span> <span class="kw">=</span> <span class="fu">n</span>()) <span class="kw">%&gt;%</span> <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fl">3</span>)
+<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span></pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">treatmentgroup</th>
@@ -1627,7 +1854,7 @@
 <h3 class="hasAnchor">
 <a href="#mediation" class="anchor"></a>Mediation …</h3>
 <p>Can we explain understanding with treatmentgroup? And does understanding knock out the treatment efects?</p>
-<div class="sourceCode" id="cb51"><html><body><pre class="r"><span class="no">dfmainu2</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">understanding2n</span>))
+<div class="sourceCode" id="cb57"><html><body><pre class="r"><span class="no">dfmainu2</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">understanding2n</span>))
 <span class="no">ru2_1</span> <span class="kw">&lt;-</span> <span class="no">dfmainu2</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">understanding2n</span> ~ <span class="no">treatmentgroup</span> + <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> +
                            <span class="no">university</span> + <span class="no">high_income</span> , <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)
 <span class="no">ru2_2</span> <span class="kw">&lt;-</span> <span class="no">dfmainu2</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span> + <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> +
@@ -1729,8 +1956,9 @@
 <p>Also to latex (silent):</p>
 <p>We see that treatment does have a sizable effect on understanding, but that the effects of choice remains strong even when controlling for the level of understanding. This does not depend on how the understanding is added linearly (as seen by comparing column 3 vs 4, and 6 vs 7).</p>
 <p>We see that the total number of observations is lower than in the main regressions. This is because some respondents chose the “don’t know” option, and these don’t enter the regressions (or the graph above). The proportion that choice the “don’t know” option was not much different by treatment:</p>
-<div class="sourceCode" id="cb52"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">group_by</span>(<span class="no">treatment</span>) <span class="kw">%&gt;%</span> <span class="fu">summarize</span>(<span class="kw">share_dont_know</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">understanding2</span><span class="kw">==</span><span class="st">"Vet ikke"</span>)) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fl">3</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb58"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">group_by</span>(<span class="no">treatment</span>) <span class="kw">%&gt;%</span> <span class="fu">summarize</span>(<span class="kw">share_dont_know</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">understanding2</span><span class="kw">==</span><span class="st">"Vet ikke"</span>)) <span class="kw">%&gt;%</span>
+  <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fl">3</span>)
+<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span></pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">treatment</th>
@@ -1768,7 +1996,7 @@
 <h3 class="hasAnchor">
 <a href="#restricting-to-those-that-were-not-confused" class="anchor"></a>Restricting to those that were not confused</h3>
 <p>Can we still find the main treatmentgroup if we exclude all those who are in doubt about the workers not having control? Let’s re-estimate the main table for the representative sample on the subset of people who are absoluteley sure.</p>
-<div class="sourceCode" id="cb53"><html><body><pre class="r"><span class="no">df_c</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">understanding2n</span><span class="kw">==</span><span class="fl">1</span>)
+<div class="sourceCode" id="cb59"><html><body><pre class="r"><span class="no">df_c</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(<span class="no">understanding2n</span><span class="kw">==</span><span class="fl">1</span>)
 
 <span class="no">cineq_1</span> <span class="kw">&lt;-</span>  <span class="no">df_c</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span> , <span class="kw">data</span> <span class="kw">=</span> <span class="no">.</span> )
 <span class="no">cineq_2</span> <span class="kw">&lt;-</span>  <span class="no">df_c</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">inequality</span> ~ <span class="no">treatmentgroup</span>  +
@@ -1784,7 +2012,7 @@
                               <span class="no">leftp</span> + <span class="no">female</span> + <span class="no">age_h</span> + <span class="no">crt_h</span> +
                               <span class="no">university</span> + <span class="no">high_income</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>)</pre></body></html></div>
 <p>Now, outputting these regressions to a table.</p>
-<div class="sourceCode" id="cb54"><html><body><pre class="r"><span class="fu">stargazer</span>(<span class="no">cineq_1</span>, <span class="no">cineq_2</span>, <span class="no">cineq_3</span>, <span class="no">cnoth_1</span>, <span class="no">cnoth_2</span>, <span class="no">cnoth_3</span>,
+<div class="sourceCode" id="cb60"><html><body><pre class="r"><span class="fu">stargazer</span>(<span class="no">cineq_1</span>, <span class="no">cineq_2</span>, <span class="no">cineq_3</span>, <span class="no">cnoth_1</span>, <span class="no">cnoth_2</span>, <span class="no">cnoth_3</span>,
           <span class="kw">se</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">cineq_1</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_c</span>)))),
                     <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">cineq_2</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_c</span>)))),
                     <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="fu">cluster.vcov</span>(<span class="no">cineq_3</span>, <span class="kw">cluster</span><span class="kw">=</span><span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">df_c</span>)))),
@@ -1846,19 +2074,32 @@
 <div id="balance-table-appendix" class="section level1">
 <h1 class="hasAnchor">
 <a href="#balance-table-appendix" class="anchor"></a>Balance table (appendix)</h1>
-<div class="sourceCode" id="cb55"><html><body><pre class="r"><span class="no">dfk_summary</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">group_by</span>(<span class="no">treatment</span>) <span class="kw">%&gt;%</span> <span class="fu">summarize</span>(<span class="kw">mean_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">age</span>), <span class="kw">se_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">age</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
+<div class="sourceCode" id="cb61"><html><body><pre class="r"><span class="no">dfk_summary</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">group_by</span>(<span class="no">treatment</span>) <span class="kw">%&gt;%</span> <span class="fu">summarize</span>(<span class="kw">mean_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">age</span>), <span class="kw">se_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">age</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
                                                           <span class="kw">mean_female</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">female</span>), <span class="kw">se_female</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">female</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
                                                           <span class="kw">mean_crt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">crt</span>), <span class="kw">se_crt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">crt</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
                                                           <span class="kw">mean_left</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">leftp</span>), <span class="kw">se_leftp</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">leftp</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
                                                           <span class="kw">n</span><span class="kw">=</span> <span class="fu">n</span>())
+<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 <span class="no">dfk_totals</span> <span class="kw">&lt;-</span> <span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu">summarize</span>(<span class="kw">mean_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">age</span>), <span class="kw">se_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">age</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
                                  <span class="kw">mean_female</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">female</span>), <span class="kw">se_female</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">female</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
                                  <span class="kw">mean_crt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">crt</span>), <span class="kw">se_crt</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">crt</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
                                  <span class="kw">mean_left</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">leftp</span>), <span class="kw">se_leftp</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">leftp</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
                                  <span class="kw">n</span><span class="kw">=</span> <span class="fu">n</span>())</pre></body></html></div>
 <p>Output of balance table</p>
-<div class="sourceCode" id="cb56"><html><body><pre class="r"><span class="no">dfk_summary</span> <span class="kw">%&gt;%</span> <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">0</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb62"><html><body><pre class="r"><span class="no">dfk_summary</span> <span class="kw">%&gt;%</span> <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">0</span>))</pre></body></html></div>
 <table class="table">
+<colgroup>
+<col width="20%">
+<col width="9%">
+<col width="7%">
+<col width="12%">
+<col width="10%">
+<col width="9%">
+<col width="7%">
+<col width="10%">
+<col width="9%">
+<col width="5%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">treatment</th>
 <th align="right">mean_age</th>
@@ -1946,7 +2187,7 @@
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb57"><html><body><pre class="r"><span class="no">dfk_totals</span> <span class="kw">%&gt;%</span> <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">0</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb63"><html><body><pre class="r"><span class="no">dfk_totals</span> <span class="kw">%&gt;%</span> <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">0</span>))</pre></body></html></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">mean_age</th>
@@ -1959,8 +2200,7 @@
 <th align="right">se_leftp</th>
 <th align="right">n</th>
 </tr></thead>
-<tbody>
-<tr class="odd">
+<tbody><tr class="odd">
 <td align="right">48.5</td>
 <td align="right">0.22</td>
 <td align="right">0.48</td>
@@ -1970,24 +2210,129 @@
 <td align="right">0.69</td>
 <td align="right">0.01</td>
 <td align="right">5757</td>
-</tr>
-<tr class="even">
-<td align="right"># sessionIn</td>
-<td align="right">fo()</td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-<td align="right"></td>
-</tr>
-</tbody>
+</tr></tbody>
 </table>
-<div class="sourceCode" id="cb58"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
-<span class="co">#&gt; R version 4.0.0 (2020-04-24)</span>
+<div id="balance-tests" class="section level2">
+<h2 class="hasAnchor">
+<a href="#balance-tests" class="anchor"></a>Balance tests</h2>
+<div class="sourceCode" id="cb64"><html><body><pre class="r"><span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">age</span> ~ <span class="no">treatment_org</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = age ~ treatment_org, data = .)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;     Min      1Q  Median      3Q     Max </span>
+<span class="co">#&gt; -31.720 -15.163   0.837  14.280  40.991 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                                        Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept)                             49.7201     0.6185  80.395   &lt;2e-16 ***</span>
+<span class="co">#&gt; treatment_orgForced Choice (w)          -0.8341     0.8879  -0.939   0.3476    </span>
+<span class="co">#&gt; treatment_orgNominal Choice (w)         -1.1121     0.8844  -1.258   0.2086    </span>
+<span class="co">#&gt; treatment_orgBase (nw)                  -1.5570     0.8850  -1.759   0.0786 .  </span>
+<span class="co">#&gt; treatment_orgForced Choice (nw)         -1.6304     0.8758  -1.862   0.0627 .  </span>
+<span class="co">#&gt; treatment_orgNominal Choice (nw)        -0.5578     0.8809  -0.633   0.5266    </span>
+<span class="co">#&gt; treatment_orgForced Choice strong       -2.0614     0.8828  -2.335   0.0196 *  </span>
+<span class="co">#&gt; treatment_orgForced Choice very strong  -2.2109     0.8876  -2.491   0.0128 *  </span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 16.88 on 5749 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.001792,   Adjusted R-squared:  0.0005768 </span>
+<span class="co">#&gt; F-statistic: 1.475 on 7 and 5749 DF,  p-value: 0.1713</span>
+<span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">female</span> ~ <span class="no">treatment_org</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = female ~ treatment_org, data = .)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;     Min      1Q  Median      3Q     Max </span>
+<span class="co">#&gt; -0.5097 -0.4708 -0.4446  0.5292  0.5554 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                                        Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept)                             0.48859    0.01829  26.713   &lt;2e-16 ***</span>
+<span class="co">#&gt; treatment_orgForced Choice (w)         -0.02848    0.02626  -1.084   0.2782    </span>
+<span class="co">#&gt; treatment_orgNominal Choice (w)        -0.04399    0.02615  -1.682   0.0926 .  </span>
+<span class="co">#&gt; treatment_orgBase (nw)                  0.02055    0.02617   0.785   0.4324    </span>
+<span class="co">#&gt; treatment_orgForced Choice (nw)        -0.02840    0.02590  -1.097   0.2729    </span>
+<span class="co">#&gt; treatment_orgNominal Choice (nw)        0.02108    0.02605   0.809   0.4185    </span>
+<span class="co">#&gt; treatment_orgForced Choice strong      -0.02898    0.02611  -1.110   0.2670    </span>
+<span class="co">#&gt; treatment_orgForced Choice very strong -0.01775    0.02625  -0.676   0.4989    </span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 0.4992 on 5749 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.002086,   Adjusted R-squared:  0.0008708 </span>
+<span class="co">#&gt; F-statistic: 1.717 on 7 and 5749 DF,  p-value: 0.1003</span>
+<span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">crt</span> ~ <span class="no">treatment_org</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = crt ~ treatment_org, data = .)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;     Min      1Q  Median      3Q     Max </span>
+<span class="co">#&gt; -1.4259 -1.3454 -0.3454  0.6658  1.6658 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                                        Estimate Std. Error t value Pr(&gt;|t|)    </span>
+<span class="co">#&gt; (Intercept)                             1.33423    0.04188  31.856   &lt;2e-16 ***</span>
+<span class="co">#&gt; treatment_orgForced Choice (w)          0.09170    0.06013   1.525    0.127    </span>
+<span class="co">#&gt; treatment_orgNominal Choice (w)         0.06409    0.05989   1.070    0.285    </span>
+<span class="co">#&gt; treatment_orgBase (nw)                  0.04974    0.05994   0.830    0.407    </span>
+<span class="co">#&gt; treatment_orgForced Choice (nw)         0.06928    0.05931   1.168    0.243    </span>
+<span class="co">#&gt; treatment_orgNominal Choice (nw)        0.01522    0.05966   0.255    0.799    </span>
+<span class="co">#&gt; treatment_orgForced Choice strong       0.01118    0.05979   0.187    0.852    </span>
+<span class="co">#&gt; treatment_orgForced Choice very strong  0.01428    0.06011   0.238    0.812    </span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 1.143 on 5749 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.0007564,  Adjusted R-squared:  -0.0004603 </span>
+<span class="co">#&gt; F-statistic: 0.6217 on 7 and 5749 DF,  p-value: 0.7384</span>
+<span class="no">df_k</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">leftp</span> ~ <span class="no">treatment_org</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Call:</span>
+<span class="co">#&gt; lm(formula = leftp ~ treatment_org, data = .)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residuals:</span>
+<span class="co">#&gt;     Min      1Q  Median      3Q     Max </span>
+<span class="co">#&gt; -0.7103 -0.6823  0.2983  0.3144  0.3254 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Coefficients:</span>
+<span class="co">#&gt;                                          Estimate Std. Error t value Pr(&gt;|t|)</span>
+<span class="co">#&gt; (Intercept)                             0.6859060  0.0169281  40.519   &lt;2e-16</span>
+<span class="co">#&gt; treatment_orgForced Choice (w)         -0.0035699  0.0243037  -0.147    0.883</span>
+<span class="co">#&gt; treatment_orgNominal Choice (w)        -0.0112917  0.0242070  -0.466    0.641</span>
+<span class="co">#&gt; treatment_orgBase (nw)                  0.0004512  0.0242244   0.019    0.985</span>
+<span class="co">#&gt; treatment_orgForced Choice (nw)         0.0185474  0.0239722   0.774    0.439</span>
+<span class="co">#&gt; treatment_orgNominal Choice (nw)        0.0157514  0.0241129   0.653    0.514</span>
+<span class="co">#&gt; treatment_orgForced Choice strong       0.0244004  0.0241639   1.010    0.313</span>
+<span class="co">#&gt; treatment_orgForced Choice very strong -0.0002730  0.0242948  -0.011    0.991</span>
+<span class="co">#&gt;                                           </span>
+<span class="co">#&gt; (Intercept)                            ***</span>
+<span class="co">#&gt; treatment_orgForced Choice (w)            </span>
+<span class="co">#&gt; treatment_orgNominal Choice (w)           </span>
+<span class="co">#&gt; treatment_orgBase (nw)                    </span>
+<span class="co">#&gt; treatment_orgForced Choice (nw)           </span>
+<span class="co">#&gt; treatment_orgNominal Choice (nw)          </span>
+<span class="co">#&gt; treatment_orgForced Choice strong         </span>
+<span class="co">#&gt; treatment_orgForced Choice very strong    </span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Residual standard error: 0.462 on 5749 degrees of freedom</span>
+<span class="co">#&gt; Multiple R-squared:  0.0006364,  Adjusted R-squared:  -0.0005805 </span>
+<span class="co">#&gt; F-statistic: 0.523 on 7 and 5749 DF,  p-value: 0.8179</span></pre></body></html></div>
+</div>
+</div>
+<div id="sessioninfo" class="section level1">
+<h1 class="hasAnchor">
+<a href="#sessioninfo" class="anchor"></a>sessionInfo()</h1>
+<div class="sourceCode" id="cb65"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
+<span class="co">#&gt; R version 4.0.2 (2020-06-22)</span>
 <span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
-<span class="co">#&gt; Running under: Ubuntu 18.04.4 LTS</span>
+<span class="co">#&gt; Running under: Ubuntu 18.04.5 LTS</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Matrix products: default</span>
 <span class="co">#&gt; BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1</span>
@@ -2006,29 +2351,29 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
 <span class="co">#&gt;  [1] here_0.1           multiwayvcov_1.2.3 multcomp_1.4-13    TH.data_1.0-10    </span>
-<span class="co">#&gt;  [5] MASS_7.3-51.6      survival_3.1-12    mvtnorm_1.1-0      stargazer_5.2.2   </span>
-<span class="co">#&gt;  [9] forcats_0.5.0      stringr_1.4.0      dplyr_0.8.99.9002  purrr_0.3.4       </span>
-<span class="co">#&gt; [13] readr_1.3.1        tidyr_1.0.3        tibble_3.0.1       ggplot2_3.3.0     </span>
+<span class="co">#&gt;  [5] MASS_7.3-52        survival_3.2-3     mvtnorm_1.1-1      stargazer_5.2.2   </span>
+<span class="co">#&gt;  [9] forcats_0.5.0      stringr_1.4.0      dplyr_1.0.2        purrr_0.3.4       </span>
+<span class="co">#&gt; [13] readr_1.3.1        tidyr_1.1.2        tibble_3.0.3       ggplot2_3.3.2     </span>
 <span class="co">#&gt; [17] tidyverse_1.3.0    mmbruteluck_0.1.0 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] httr_1.4.1       jsonlite_1.6.1   splines_4.0.0    modelr_0.1.7    </span>
-<span class="co">#&gt;  [5] assertthat_0.2.1 highr_0.8        cellranger_1.1.0 yaml_2.2.1      </span>
-<span class="co">#&gt;  [9] pillar_1.4.4     backports_1.1.7  lattice_0.20-41  glue_1.4.1      </span>
-<span class="co">#&gt; [13] digest_0.6.25    rvest_0.3.5      colorspace_1.4-1 sandwich_2.5-1  </span>
-<span class="co">#&gt; [17] htmltools_0.4.0  Matrix_1.2-18    pkgconfig_2.0.3  broom_0.5.6     </span>
-<span class="co">#&gt; [21] haven_2.2.0      scales_1.1.1     generics_0.0.2   farver_2.0.3    </span>
-<span class="co">#&gt; [25] ellipsis_0.3.1   withr_2.2.0      cli_2.0.2        magrittr_1.5    </span>
-<span class="co">#&gt; [29] crayon_1.3.4     readxl_1.3.1     memoise_1.1.0    evaluate_0.14   </span>
-<span class="co">#&gt; [33] fs_1.4.1         fansi_0.4.1      nlme_3.1-147     xml2_1.3.2      </span>
-<span class="co">#&gt; [37] tools_4.0.0      hms_0.5.3        lifecycle_0.2.0  munsell_0.5.0   </span>
-<span class="co">#&gt; [41] reprex_0.3.0     compiler_4.0.0   pkgdown_1.5.1    rlang_0.4.6     </span>
-<span class="co">#&gt; [45] grid_4.0.0       rstudioapi_0.11  labeling_0.3     rmarkdown_2.1   </span>
+<span class="co">#&gt;  [1] httr_1.4.2       jsonlite_1.7.0   splines_4.0.2    modelr_0.1.8    </span>
+<span class="co">#&gt;  [5] assertthat_0.2.1 highr_0.8        blob_1.2.1       cellranger_1.1.0</span>
+<span class="co">#&gt;  [9] yaml_2.2.1       pillar_1.4.6     backports_1.1.9  lattice_0.20-41 </span>
+<span class="co">#&gt; [13] glue_1.4.2       digest_0.6.25    rvest_0.3.6      colorspace_1.4-1</span>
+<span class="co">#&gt; [17] sandwich_2.5-1   htmltools_0.5.0  Matrix_1.2-18    pkgconfig_2.0.3 </span>
+<span class="co">#&gt; [21] broom_0.7.0      haven_2.3.1      scales_1.1.1     generics_0.0.2  </span>
+<span class="co">#&gt; [25] farver_2.0.3     ellipsis_0.3.1   withr_2.2.0      cli_2.0.2       </span>
+<span class="co">#&gt; [29] magrittr_1.5     crayon_1.3.4     readxl_1.3.1     memoise_1.1.0   </span>
+<span class="co">#&gt; [33] evaluate_0.14    fs_1.5.0         fansi_0.4.1      xml2_1.3.2      </span>
+<span class="co">#&gt; [37] tools_4.0.2      hms_0.5.3        lifecycle_0.2.0  munsell_0.5.0   </span>
+<span class="co">#&gt; [41] reprex_0.3.0     compiler_4.0.2   pkgdown_1.5.1    rlang_0.4.7     </span>
+<span class="co">#&gt; [45] grid_4.0.2       rstudioapi_0.11  labeling_0.3     rmarkdown_2.3   </span>
 <span class="co">#&gt; [49] boot_1.3-25      gtable_0.3.0     codetools_0.2-16 DBI_1.1.0       </span>
-<span class="co">#&gt; [53] R6_2.4.1         zoo_1.8-8        lubridate_1.7.8  knitr_1.28      </span>
+<span class="co">#&gt; [53] R6_2.4.1         zoo_1.8-8        lubridate_1.7.9  knitr_1.29      </span>
 <span class="co">#&gt; [57] utf8_1.1.4       rprojroot_1.3-2  desc_1.2.0       stringi_1.4.6   </span>
-<span class="co">#&gt; [61] parallel_4.0.0   Rcpp_1.0.4.6     vctrs_0.3.0      dbplyr_1.4.3    </span>
-<span class="co">#&gt; [65] tidyselect_1.1.0 xfun_0.13</span></pre></body></html></div>
+<span class="co">#&gt; [61] parallel_4.0.2   Rcpp_1.0.5       vctrs_0.3.3      dbplyr_1.4.4    </span>
+<span class="co">#&gt; [65] tidyselect_1.1.0 xfun_0.16</span></pre></body></html></div>
 </div>
   </div>
 
