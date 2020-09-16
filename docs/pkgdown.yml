@@ -1,5 +1,5 @@
 pandoc: 2.7.3
-pkgdown: 1.5.1
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   A-online-experiment: A-online-experiment.html
@@ -8,5 +8,5 @@ articles:
   D-risk-aversion: D-risk-aversion.html
   E-power-analysis-online-experiment: E-power-analysis-online-experiment.html
   F-AppendixB: F-AppendixB.html
-last_built: 2020-09-15T08:54Z
+last_built: 2020-09-16T21:23Z
 
