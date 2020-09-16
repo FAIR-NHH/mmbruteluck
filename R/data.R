@@ -120,7 +120,7 @@
 #' morally relevant choice?" by Alexander W. Cappelen, Sebastian
 #' Fest, Erik Ø. Sørensen, and Bertil Tungodden.
 #'
-#' @format A data frame with 2437 observations and 17 variables:
+#' @format A data frame with 2437 observations and 18 variables:
 #' \describe{
 #' \item{id}{Non-informative identifier of individual participant}
 #' \item{female}{Indicator for mTurker being female (0/1)}
@@ -139,17 +139,16 @@
 #' }
 #' \item{political}{Political identification.Numeric, [-2, - 2],
 #' with -2 being "very liberal" and 2 "very conservative.}
-#' \item{treatment}{Treatment arm (characters)}
+#' \item{treatment}{Treatment (numeric)}
 #' \item{safe}{Did the mTurker choose the safe alternative? (0/1), 1 if they
 #' chose the safe alternative}
-#' \item{bonus_ingame}{bonus in game (0.5USD) - 0.25 USD if worker chose
-#' costly safe alternative in that treatment}
+#' \item{bonus_startup}{Bonus to everyone, used to create a budget for forced choices }
+#' \item{bonus_ingame}{bonus in game, used to create a budget for forced choices}
 #' \item{bonus_lottery}{Outcome of lottery choice prior to redistribution (numeric, in USD)}
 #' \item{bonus_final}{The sum of bonus_ingame and the post redistribution income from lottery (numeric, in USD)}
 #' \item{repeater}{Has the worker attempted to start the survey more than once?
 #' (0/1), 1 if they did so.}
-#' \item{lottery_or_green}{Indicator for whether the worker chose the lottery in Forced Choice treatments or the
-#' green ball in Nominal Choice treatments (0/1), 1 if they dis so.}
+#' \item{green}{Indicator for whether the worker chose the green ball in the nominal choice treatments (0/1), 1 if they did so.}
 #' \item{duration_survey}{Duration of HIT completion (numeric, in seconds)}
 #' \item{treatment_str}{Treatment (characters)}
 #' \item{bonus_startup}{Bonus account at startup (numeric, 0.5 USD)}

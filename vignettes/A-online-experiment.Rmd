@@ -223,6 +223,19 @@ ggplot(aes(x=treatmentgroup, y=mean_y)) + geom_bar(stat="identity", width=0.7) +
 ggsave(here("graphs", "mean_ineq_nothing_kantar_wstrong.pdf"), device=cairo_pdf)
 ```
 
+
+### Testing against Base treatment
+
+For mean inequality: 
+```{r}
+df_k %>% filter(treatmentgroup %in% c("Forced Choice", "Base")) %>%
+  t.test(inequality ~ treatmentgroup, data=.)
+df_k %>% filter(treatmentgroup %in% c("Nominal Choice", "Base")) %>%
+  t.test(inequality ~ treatmentgroup, data=.)
+
+```
+
+
 ### Testing Forced vs Nominal
 First, for mean inequality:
 ```{r}
@@ -1041,6 +1054,8 @@ u1 %>%
 Are these differences significant?
 ```{r}
 u1 %>% filter(outcome=="inequality") %>% t.test(y ~ understand, data=.)
+u1 %>% filter(outcome=="inequality") %>% wilcox.test(y ~ understand, data=.)
+
 u1z <- u1 %>% filter(outcome=="zero_to_worst_off") %>% 
   group_by(understand, y) %>% 
   summarize(n=n()) %>% 
