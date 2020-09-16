@@ -140,8 +140,8 @@
 #' \item{political}{Political identification.Numeric, [-2, - 2],
 #' with -2 being "very liberal" and 2 "very conservative.}
 #' \item{treatment}{Treatment (numeric)}
-#' \item{safe}{Did the mTurker choose the safe alternative? (0/1), 1 if they
-#' chose the safe alternative}
+#' \item{risky}{Did the mTurker choose the risky alternative in the Forced Choice treatment? (0/1), 1 if they
+#' chose the risky alternative}
 #' \item{bonus_startup}{Bonus to everyone, used to create a budget for forced choices }
 #' \item{bonus_ingame}{bonus in game, used to create a budget for forced choices}
 #' \item{bonus_lottery}{Outcome of lottery choice prior to redistribution (numeric, in USD)}
