@@ -24,7 +24,9 @@ library(tidyverse)
 
 # Reading data and creating summaries
 ```{r}
-rdf_summary <- mturk_workers %>% group_by(treatment) %>%
+mturk_workers <- mturk_workers %>% mutate(treatment=factor(treatment_str))
+rdf_summary <- mturk_workers %>% 
+  group_by(treatment) %>%
   summarize(mean_age = mean(age), se_age = sd(age)/sqrt(n()),
             mean_female = mean(female), se_female= sd(female)/sqrt(n()),
             mean_education = mean(education), se_education = sd(education)/sqrt(n()),
@@ -66,7 +68,8 @@ table(mturk_workers$safe)
 # What did the spectators do?
 ```{r}
 mturk_workers %>% group_by(treatment) %>%
-  summarize(mean_safe = mean(safe))
+  summarize(mean_safe = mean(1-risky)) %>%
+  knitr::kable(digits=3)
 ```
 
 # sessionInfo()
