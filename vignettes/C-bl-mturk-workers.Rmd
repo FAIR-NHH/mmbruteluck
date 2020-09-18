@@ -25,7 +25,7 @@ library(tidyverse)
 # Reading data and creating summaries
 
 Summary stats of background variables for the mTurk workers. For the Forced Choice treatments,
-I add the share that chose the safe alternative. This is all for Table A.1 in the online
+I add the share that chose the safe alternative. This is all for Table A.1, Panel B, in the online
 appendix.
 
 ```{r}
@@ -37,6 +37,7 @@ rdf_summary <- mturk_workers %>%
             mean_education = mean(education), se_education = sd(education)/sqrt(n()),
             mean_political = mean(political), se_political = sd(political)/sqrt(n()),
             mean_risky = mean(risky), se_risky = sd(risky)/sqrt(n()),
+            mean_green = mean(green), se_green = sd(green)/sqrt(n()),
             n = n())
 
 rdf_totals <- mturk_workers %>% 
@@ -45,16 +46,21 @@ rdf_totals <- mturk_workers %>%
             mean_education = mean(education), se_education = sd(education)/sqrt(n()),
             mean_political = mean(political), se_political = sd(political)/sqrt(n()),
             mean_risky = mean(risky, na.rm=TRUE), se_risky = sd(risky, na.rm=TRUE)/sqrt(n()),
+            mean_green = mean(green, na.rm=TRUE), se_green = sd(green, na.rm=TRUE)/sqrt(n()),
             n = n())
 ```
 
-## Output of balance table (with marginals)
+## Output of balance table
 ```{r}
-rdf_summary %>% knitr::kable(digits=c(3,1,2,2,2,2,2,2,2,2,2,0))
-rdf_totals %>% knitr::kable(digits=c(1,2,2,2,2,2,2,2,2,2,2,0))
+rdf_summary %>% knitr::kable(digits=c(3,1,2,2,2,2,2,2,2,2,2,2,2,0))
 ```
 
-Requested balance tests:
+### Margins of the balance table
+```{r}
+rdf_totals %>% knitr::kable(digits=c(1,2,2,2,2,2,2,2,2,2,2,2,2,0))
+```
+
+## Requested balance tests
 ```{r}
 mturk_workers %>% lm(age ~ treatment, data=.) %>% summary()
 mturk_workers %>% lm(female ~ treatment, data=.) %>% summary()
