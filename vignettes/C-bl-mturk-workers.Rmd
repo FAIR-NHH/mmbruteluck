@@ -23,14 +23,21 @@ library(tidyverse)
 ```
 
 # Reading data and creating summaries
+
+Summary stats of background variables for the mTurk workers. For the Forced Choice treatments,
+I add the share that chose the safe alternative. This is all for Table A.1 in the online
+appendix.
+
 ```{r}
-mturk_workers <- mturk_workers %>% mutate(treatment=factor(treatment_str))
+mturk_workers <- mturk_workers %>% mutate(treatment=factor(treatment_str), 
+                                          safe=1-risky)
 rdf_summary <- mturk_workers %>% 
   group_by(treatment) %>%
   summarize(mean_age = mean(age), se_age = sd(age)/sqrt(n()),
             mean_female = mean(female), se_female= sd(female)/sqrt(n()),
             mean_education = mean(education), se_education = sd(education)/sqrt(n()),
             mean_political = mean(political), se_political = sd(political)/sqrt(n()),
+            mean_safe = mean(safe), se_safe = sd(safe)/sqrt(n()),
             n = n())
 
 rdf_totals <- mturk_workers %>% 
@@ -38,13 +45,14 @@ rdf_totals <- mturk_workers %>%
             mean_female = mean(female), se_female= sd(female)/sqrt(n()),
             mean_education = mean(education), se_education = sd(education)/sqrt(n()),
             mean_political = mean(political), se_political = sd(political)/sqrt(n()),
+            mean_safe = mean(safe, na.rm=TRUE), se_safe = sd(safe, na.rm=TRUE)/sqrt(n()),
             n = n())
 ```
 
 ## Output of balance table (with marginals)
 ```{r}
-rdf_summary %>% knitr::kable(digits=c(3,1,2,2,2,2,2,2,2,0))
-rdf_totals %>% knitr::kable(digits=c(1,2,2,2,2,2,2,2,0))
+rdf_summary %>% knitr::kable(digits=c(3,1,2,2,2,2,2,2,2,2,2,0))
+rdf_totals %>% knitr::kable(digits=c(1,2,2,2,2,2,2,2,2,2,2,0))
 ```
 
 Requested balance tests:
@@ -58,19 +66,6 @@ mturk_workers %>% lm(political ~ treatment, data=.) %>% summary()
 
 
 
-
-How many non-safe-choice workers?
-```{r}
-table(mturk_workers$safe)
-```
-
-
-# What did the spectators do?
-```{r}
-mturk_workers %>% group_by(treatment) %>%
-  summarize(mean_safe = mean(1-risky)) %>%
-  knitr::kable(digits=3)
-```
 
 # sessionInfo()
 ```{r}
