@@ -102,15 +102,14 @@
 <h1 class="hasAnchor">
 <a href="#reading-data-and-creating-summaries" class="anchor"></a>Reading data and creating summaries</h1>
 <p>Summary stats of background variables for the mTurk workers. For the Forced Choice treatments, I add the share that chose the safe alternative. This is all for Table A.1 in the online appendix.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">mturk_workers</span> <span class="kw">&lt;-</span> <span class="no">mturk_workers</span> <span class="kw">%&gt;%</span> <span class="fu">mutate</span>(<span class="kw">treatment</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">treatment_str</span>),
-                                          <span class="kw">safe</span><span class="kw">=</span><span class="fl">1</span>-<span class="no">risky</span>)
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">mturk_workers</span> <span class="kw">&lt;-</span> <span class="no">mturk_workers</span> <span class="kw">%&gt;%</span> <span class="fu">mutate</span>(<span class="kw">treatment</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">treatment_str</span>))
 <span class="no">rdf_summary</span> <span class="kw">&lt;-</span> <span class="no">mturk_workers</span> <span class="kw">%&gt;%</span>
   <span class="fu">group_by</span>(<span class="no">treatment</span>) <span class="kw">%&gt;%</span>
   <span class="fu">summarize</span>(<span class="kw">mean_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">age</span>), <span class="kw">se_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">age</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
             <span class="kw">mean_female</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">female</span>), <span class="kw">se_female</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">female</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
             <span class="kw">mean_education</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">education</span>), <span class="kw">se_education</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">education</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
             <span class="kw">mean_political</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">political</span>), <span class="kw">se_political</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">political</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_safe</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">safe</span>), <span class="kw">se_safe</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">safe</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
+            <span class="kw">mean_risky</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">risky</span>), <span class="kw">se_risky</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">risky</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
             <span class="kw">n</span> <span class="kw">=</span> <span class="fu">n</span>())
 <span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 
@@ -119,7 +118,7 @@
             <span class="kw">mean_female</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">female</span>), <span class="kw">se_female</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">female</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
             <span class="kw">mean_education</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">education</span>), <span class="kw">se_education</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">education</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
             <span class="kw">mean_political</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">political</span>), <span class="kw">se_political</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">political</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_safe</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">safe</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>), <span class="kw">se_safe</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">safe</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
+            <span class="kw">mean_risky</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">risky</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>), <span class="kw">se_risky</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">risky</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
             <span class="kw">n</span> <span class="kw">=</span> <span class="fu">n</span>())</pre></body></html></div>
 <div id="output-of-balance-table-with-marginals" class="section level2">
 <h2 class="hasAnchor">
@@ -131,13 +130,13 @@
 <col width="6%">
 <col width="4%">
 <col width="8%">
-<col width="7%">
+<col width="6%">
 <col width="10%">
 <col width="9%">
 <col width="10%">
 <col width="9%">
 <col width="7%">
-<col width="5%">
+<col width="6%">
 <col width="2%">
 </colgroup>
 <thead><tr class="header">
@@ -150,8 +149,8 @@
 <th align="right">se_education</th>
 <th align="right">mean_political</th>
 <th align="right">se_political</th>
-<th align="right">mean_safe</th>
-<th align="right">se_safe</th>
+<th align="right">mean_risky</th>
+<th align="right">se_risky</th>
 <th align="right">n</th>
 </tr></thead>
 <tbody>
@@ -193,7 +192,7 @@
 <td align="right">0.08</td>
 <td align="right">-0.44</td>
 <td align="right">0.07</td>
-<td align="right">0.12</td>
+<td align="right">0.88</td>
 <td align="right">0.02</td>
 <td align="right">298</td>
 </tr>
@@ -207,7 +206,7 @@
 <td align="right">0.08</td>
 <td align="right">-0.49</td>
 <td align="right">0.06</td>
-<td align="right">0.16</td>
+<td align="right">0.84</td>
 <td align="right">0.02</td>
 <td align="right">333</td>
 </tr>
@@ -221,7 +220,7 @@
 <td align="right">0.08</td>
 <td align="right">-0.36</td>
 <td align="right">0.07</td>
-<td align="right">0.02</td>
+<td align="right">0.98</td>
 <td align="right">0.01</td>
 <td align="right">276</td>
 </tr>
@@ -235,7 +234,7 @@
 <td align="right">0.07</td>
 <td align="right">-0.42</td>
 <td align="right">0.06</td>
-<td align="right">0.25</td>
+<td align="right">0.75</td>
 <td align="right">0.02</td>
 <td align="right">373</td>
 </tr>
@@ -277,11 +276,11 @@
 <col width="10%">
 <col width="8%">
 <col width="12%">
-<col width="11%">
+<col width="10%">
 <col width="12%">
-<col width="11%">
-<col width="8%">
-<col width="6%">
+<col width="10%">
+<col width="9%">
+<col width="7%">
 <col width="4%">
 </colgroup>
 <thead><tr class="header">
@@ -293,8 +292,8 @@
 <th align="right">se_education</th>
 <th align="right">mean_political</th>
 <th align="right">se_political</th>
-<th align="right">mean_safe</th>
-<th align="right">se_safe</th>
+<th align="right">mean_risky</th>
+<th align="right">se_risky</th>
 <th align="right">n</th>
 </tr></thead>
 <tbody><tr class="odd">
@@ -306,7 +305,7 @@
 <td align="right">0.03</td>
 <td align="right">-0.44</td>
 <td align="right">0.02</td>
-<td align="right">0.15</td>
+<td align="right">0.85</td>
 <td align="right">0.01</td>
 <td align="right">2437</td>
 </tr></tbody>
