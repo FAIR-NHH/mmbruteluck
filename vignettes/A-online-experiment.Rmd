@@ -98,7 +98,7 @@ df_k %>%  filter(workp==TRUE) %>%
   labs(y = "Fraction",
        x="Transfer from Lucky to Unlucky",
        caption="Only treatment with work and K\u22640.")
-ggsave(here("graphs", "histograms_kantar_strong.pdf"))
+ggsave(here("graphs", "histograms_kantar_strong.pdf"), device = cairo_pdf)
 ```
 
 It is interesting to also look at how the histograms are similar also for all the different 
@@ -497,21 +497,21 @@ In the new heterogeneity table, we treat the background variables symmetrically.
 
 ### Heterogeneity in effects on inequality
 ```{r}
-h1_1 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income, 
+h1_1 <- df_k %>% lm(inequality ~ choice  + workp + leftp  + crt_h + female + age_h + university + high_income, 
                       data=. )
-h1_2 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h1_2 <- df_k %>% lm(inequality ~ choice  + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*leftp, data=. )
-h1_3 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
-                        choice*female , data=. )
-h1_4 <- df_k %>% lm(inequality ~ choice + leftp + crt_h + female + age_h + university + high_income +
+h1_3 <- df_k %>% lm(inequality ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
+                        choice*female, data=. )
+h1_4 <- df_k %>% lm(inequality ~ choice + workp + leftp + crt_h + female + age_h + university + high_income +
                         choice*age_h, data=. )
-h1_5 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h1_5 <- df_k %>% lm(inequality ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*crt_h, data=. )
-h1_6 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h1_6 <- df_k %>% lm(inequality ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*university, data=. )
-h1_7 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h1_7 <- df_k %>% lm(inequality ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*high_income, data=. )
-h1_8 <- df_k %>% lm(inequality ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h1_8 <- df_k %>% lm(inequality ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*leftp + choice*female + choice*age_h + choice*crt_h + choice*university + 
                         choice*high_income, data=. )
 ```
@@ -595,238 +595,24 @@ stargazer( h1_1, h1_2, h1_3, h1_4, h1_5, h1_6, h1_7, h1_8,
 ```
 
 
-### Restricting heterogeneity table to Nominal Choice
-For the appendix, we want to show heterogeneity with respect to each of the types of 
-choice separately. First, restricting to nominal choice.
-```{r}
-dfmain_nc <- df_k %>% filter(treatmentgroup != "Forced Choice")
-```
-
-The regression tables are the same on this more restricted sample.
-```{r}
-hnc1_1 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income, 
-                      data=. )
-hnc1_2 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*leftp, data=. )
-hnc1_3 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*female , data=. )
-hnc1_4 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*age_h, data=. )
-hnc1_5 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*crt_h, data=. )
-hnc1_6 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*university, data=. )
-hnc1_7 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*high_income, data=. )
-hnc1_8 <- dfmain_nc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*leftp + choice*female + choice*age_h + choice*crt_h + choice*university + 
-                        choice*high_income, data=. )
-```
-
-Want to include linear combinations for the columns 2-7:
-```{r}
-nch2 <- glht(hnc1_2, linfct="choiceTRUE + choiceTRUE:leftpTRUE = 0", 
-             vcov = cluster.vcov(hnc1_2, cluster=1:nrow(dfmain_nc)))
-nch3 <- glht(hnc1_3, linfct="choiceTRUE + choiceTRUE:femaleTRUE = 0", 
-             vcov = cluster.vcov(hnc1_3, cluster=1:nrow(dfmain_nc)))
-nch4 <- glht(hnc1_4, linfct="choiceTRUE + choiceTRUE:age_hTRUE = 0", 
-             vcov = cluster.vcov(hnc1_4, cluster=1:nrow(dfmain_nc)))
-nch5 <- glht(hnc1_5, linfct="choiceTRUE + choiceTRUE:crt_hTRUE = 0", 
-             vcov = cluster.vcov(hnc1_5, cluster=1:nrow(dfmain_nc)))
-nch6 <- glht(hnc1_6, linfct="choiceTRUE + choiceTRUE:universityTRUE = 0", 
-             vcov = cluster.vcov(hnc1_6, cluster=1:nrow(dfmain_nc)))
-nch7 <- glht(hnc1_7, linfct="choiceTRUE + choiceTRUE:high_incomeTRUE = 0", 
-             vcov = cluster.vcov(hnc1_7, cluster=1:nrow(dfmain_nc)))
-nsh1 <- c("Linear combination"," ", 
-        sprintf("%4.3f", summary(nch2)$test$coefficients[1]),
-        sprintf("%4.3f", summary(nch3)$test$coefficients[1]),
-        sprintf("%4.3f", summary(nch4)$test$coefficients[1]),
-        sprintf("%4.3f", summary(nch5)$test$coefficients[1]),
-        sprintf("%4.3f", summary(nch6)$test$coefficients[1]),
-        sprintf("%4.3f", summary(nch7)$test$coefficients[1]),
-        "")
-nsh2 <- c("","",
-        sprintf("(%4.3f)", summary(nch2)$test$sigma[1]),
-        sprintf("(%4.3f)", summary(nch3)$test$sigma[1]),
-        sprintf("(%4.3f)", summary(nch4)$test$sigma[1]),
-        sprintf("(%4.3f)", summary(nch5)$test$sigma[1]),
-        sprintf("(%4.3f)", summary(nch6)$test$sigma[1]),
-        sprintf("(%4.3f)", summary(nch7)$test$sigma[1]),
-        "")
-nsh3 <- c("", "",
-        sprintf("p=%4.3f", summary(nch2)$test$pvalues[1]),
-        sprintf("p=%4.3f", summary(nch3)$test$pvalues[1]),
-        sprintf("p=%4.3f", summary(nch4)$test$pvalues[1]),
-        sprintf("p=%4.3f", summary(nch5)$test$pvalues[1]),
-        sprintf("p=%4.3f", summary(nch6)$test$pvalues[1]),
-        sprintf("p=%4.3f", summary(nch7)$test$pvalues[1]),
-        "")
-```
-
-
-```{r}
-stargazer( hnc1_1, hnc1_2, hnc1_3, hnc1_4, hnc1_5, hnc1_6, hnc1_7, hnc1_8,
-           se = list( sqrt(diag(cluster.vcov(hnc1_1, cluster=1:length(hnc1_1$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_2, cluster=1:length(hnc1_2$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_3, cluster=1:length(hnc1_3$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_4, cluster=1:length(hnc1_4$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_5, cluster=1:length(hnc1_5$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_6, cluster=1:length(hnc1_6$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_7, cluster=1:length(hnc1_7$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_8, cluster=1:length(hnc1_8$residuals))))),
-        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
-                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
-        add.lines=list(nsh1,nsh2,nsh3), 
-        type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"),
-        p.auto=TRUE,
-        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp")
-```
-
-Now to latex table on file
-```{r include=FALSE}
-stargazer( hnc1_1, hnc1_2, hnc1_3, hnc1_4, hnc1_5, hnc1_6, hnc1_7, hnc1_8,
-           se = list( sqrt(diag(cluster.vcov(hnc1_1, cluster=1:length(hnc1_1$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_2, cluster=1:length(hnc1_2$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_3, cluster=1:length(hnc1_3$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_4, cluster=1:length(hnc1_4$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_5, cluster=1:length(hnc1_5$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_6, cluster=1:length(hnc1_6$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_7, cluster=1:length(hnc1_7$residuals)))),
-                      sqrt(diag(cluster.vcov(hnc1_8, cluster=1:length(hnc1_8$residuals))))),
-        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
-                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
-        add.lines=list(nsh1,nsh2), 
-        type="latex", style="aer", df=FALSE, keep.stat=c("rsq","n"),
-        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
-        out=here("tables", "heterogeneity1_representative_NC.tex"), header=FALSE )
-```
-
-### Restricting heterogeneity table to Forced Choice
-For the appendix, we want to show heterogeneity with respect to each of the types of 
-choice separately. Now, restricting to forced choice.
-
-
-```{r}
-dfmain_fc <- df_k %>% filter(treatmentgroup != "Nominal Choice")
-```
-
-The regression tables are the same on this more restricted sample.
-```{r}
-hfc1_1 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income, 
-                      data=. )
-hfc1_2 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*leftp, data=. )
-hfc1_3 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*female , data=. )
-hfc1_4 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*age_h, data=. )
-hfc1_5 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*crt_h, data=. )
-hfc1_6 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*university, data=. )
-hfc1_7 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*high_income, data=. )
-hfc1_8 <- dfmain_fc %>% lm(inequality ~ choice + leftp + workp + crt_h + female + age_h + university + high_income +
-                        choice*leftp + choice*female + choice*age_h + choice*crt_h + choice*university + 
-                        choice*high_income, data=. )
-```
-
-Want to include linear combinations for the columns 2-7:
-```{r}
-fch2 <- glht(hfc1_2, linfct="choiceTRUE + choiceTRUE:leftpTRUE = 0", 
-             vcov = cluster.vcov(hfc1_2, cluster=1:nrow(dfmain_fc)))
-fch3 <- glht(hfc1_3, linfct="choiceTRUE + choiceTRUE:femaleTRUE = 0", 
-             vcov = cluster.vcov(hfc1_3, cluster=1:nrow(dfmain_fc)))
-fch4 <- glht(hfc1_4, linfct="choiceTRUE + choiceTRUE:age_hTRUE = 0", 
-             vcov = cluster.vcov(hfc1_4, cluster=1:nrow(dfmain_fc)))
-fch5 <- glht(hfc1_5, linfct="choiceTRUE + choiceTRUE:crt_hTRUE = 0", 
-             vcov = cluster.vcov(hfc1_5, cluster=1:nrow(dfmain_fc)))
-fch6 <- glht(hfc1_6, linfct="choiceTRUE + choiceTRUE:universityTRUE = 0", 
-             vcov = cluster.vcov(hfc1_6, cluster=1:nrow(dfmain_fc)))
-fch7 <- glht(hfc1_7, linfct="choiceTRUE + choiceTRUE:high_incomeTRUE = 0", 
-             vcov = cluster.vcov(hfc1_7, cluster=1:nrow(dfmain_fc)))
-fsh1 <- c("Linear combination"," ", 
-        sprintf("%4.3f", summary(fch2)$test$coefficients[1]),
-        sprintf("%4.3f", summary(fch3)$test$coefficients[1]),
-        sprintf("%4.3f", summary(fch4)$test$coefficients[1]),
-        sprintf("%4.3f", summary(fch5)$test$coefficients[1]),
-        sprintf("%4.3f", summary(fch6)$test$coefficients[1]),
-        sprintf("%4.3f", summary(fch7)$test$coefficients[1]),
-        "")
-fsh2 <- c("","",
-        sprintf("(%4.3f)", summary(fch2)$test$sigma[1]),
-        sprintf("(%4.3f)", summary(fch3)$test$sigma[1]),
-        sprintf("(%4.3f)", summary(fch4)$test$sigma[1]),
-        sprintf("(%4.3f)", summary(fch5)$test$sigma[1]),
-        sprintf("(%4.3f)", summary(fch6)$test$sigma[1]),
-        sprintf("(%4.3f)", summary(fch7)$test$sigma[1]),
-        "")
-fsh3 <- c("", "",
-        sprintf("p=%4.3f", summary(fch2)$test$pvalues[1]),
-        sprintf("p=%4.3f", summary(fch3)$test$pvalues[1]),
-        sprintf("p=%4.3f", summary(fch4)$test$pvalues[1]),
-        sprintf("p=%4.3f", summary(fch5)$test$pvalues[1]),
-        sprintf("p=%4.3f", summary(fch6)$test$pvalues[1]),
-        sprintf("p=%4.3f", summary(fch7)$test$pvalues[1]),
-        "")
-```
-
-
-```{r}
-stargazer( hfc1_1, hfc1_2, hfc1_3, hfc1_4, hfc1_5, hfc1_6, hfc1_7, hfc1_8,
-           se = list( sqrt(diag(cluster.vcov(hfc1_1, cluster=1:length(hfc1_1$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_2, cluster=1:length(hfc1_2$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_3, cluster=1:length(hfc1_3$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_4, cluster=1:length(hfc1_4$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_5, cluster=1:length(hfc1_5$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_6, cluster=1:length(hfc1_6$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_7, cluster=1:length(hfc1_7$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_8, cluster=1:length(hfc1_8$residuals))))),
-        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
-                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
-        add.lines=list(fsh1,fsh2,fsh3), 
-        type="text", style="aer", df=FALSE, keep.stat=c("rsq","n"),
-        p.auto=TRUE,
-        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcsp")
-```
-
-Now to latex table on file
-```{r include=FALSE}
-stargazer( hfc1_1, hfc1_2, hfc1_3, hfc1_4, hfc1_5, hfc1_6, hfc1_7, hfc1_8,
-           se = list( sqrt(diag(cluster.vcov(hfc1_1, cluster=1:length(hfc1_1$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_2, cluster=1:length(hfc1_2$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_3, cluster=1:length(hfc1_3$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_4, cluster=1:length(hfc1_4$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_5, cluster=1:length(hfc1_5$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_6, cluster=1:length(hfc1_6$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_7, cluster=1:length(hfc1_7$residuals)))),
-                      sqrt(diag(cluster.vcov(hfc1_8, cluster=1:length(hfc1_8$residuals))))),
-        order=c("choice","choiceTRUE:leftp","choiceTRUE:female", "choiceTRUE:age_h",
-                "choiceTRUE:crt_h", "choiceTRUE:universityTRUE", "choiceTRUE:high_incomeTRUE"),
-        add.lines=list(fsh1,fsh2), 
-        type="latex", style="aer", df=FALSE, keep.stat=c("rsq","n"),
-        star.char=c("", "",""), notes="", notes.append=FALSE, report="vcs",
-        out=here("tables", "heterogeneity1_representative_FC.tex"), header=FALSE )
-```
-
 
 ### Heterogeneity in effects on zero to worst off
 ```{r}
-h2_1 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income, 
+h2_1 <- df_k %>% lm(zero_to_worst_off ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income, 
                       data=. )
-h2_2 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h2_2 <- df_k %>% lm(zero_to_worst_off ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*leftp, data=. )
-h2_3 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h2_3 <- df_k %>% lm(zero_to_worst_off ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*female , data=. )
-h2_4 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h2_4 <- df_k %>% lm(zero_to_worst_off ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*age_h, data=. )
-h2_5 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h2_5 <- df_k %>% lm(zero_to_worst_off ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*crt_h, data=. )
-h2_6 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h2_6 <- df_k %>% lm(zero_to_worst_off ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*university, data=. )
-h2_7 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h2_7 <- df_k %>% lm(zero_to_worst_off ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*high_income, data=. )
-h2_8 <- df_k %>% lm(zero_to_worst_off ~ choice + leftp  + crt_h + female + age_h + university + high_income +
+h2_8 <- df_k %>% lm(zero_to_worst_off ~ choice + workp + leftp  + crt_h + female + age_h + university + high_income +
                         choice*leftp + choice*female + choice*age_h + choice*crt_h + choice*university + 
                         choice*high_income, data=. )
 ```

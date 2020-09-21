@@ -1,7 +1,7 @@
 Package: mmbruteluck
 Type: Package
 Title: Replication Package for "mmbruteluck" Paper
-Version: 0.1.9
+Version: 0.1.10
 Authors@R: person("Erik Ø.", "Sørensen", email="erik.sorensen@nhh.no",
   role=c("aut","cre"))
 Description: Replication package for the paper "Choice and personal 
