@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mmbruteluck</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11</span>
       </span>
     </div>
 
@@ -102,30 +102,32 @@
 <h1 class="hasAnchor">
 <a href="#reading-data-and-creating-summaries" class="anchor"></a>Reading data and creating summaries</h1>
 <p>Summary stats of background variables for the mTurk workers. For the Forced Choice treatments, I add the share that chose the safe alternative. This is all for Table A.1, Panel B, in the online appendix.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">mturk_workers</span> <span class="kw">&lt;-</span> <span class="no">mturk_workers</span> <span class="kw">%&gt;%</span> <span class="fu">mutate</span>(<span class="kw">treatment</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">treatment_str</span>))
-<span class="no">rdf_summary</span> <span class="kw">&lt;-</span> <span class="no">mturk_workers</span> <span class="kw">%&gt;%</span>
-  <span class="fu">group_by</span>(<span class="no">treatment</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">summarize</span>(<span class="kw">mean_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">age</span>), <span class="kw">se_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">age</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_female</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">female</span>), <span class="kw">se_female</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">female</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_education</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">education</span>), <span class="kw">se_education</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">education</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_political</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">political</span>), <span class="kw">se_political</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">political</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_risky</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">risky</span>), <span class="kw">se_risky</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">risky</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_green</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">green</span>), <span class="kw">se_green</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">green</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">n</span> <span class="kw">=</span> <span class="fu">n</span>())
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="va">mturk_workers</span> <span class="op">&lt;-</span> <span class="va">mturk_workers</span> <span class="op">%&gt;%</span> <span class="fu">mutate</span><span class="op">(</span>treatment<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">treatment_str</span><span class="op">)</span><span class="op">)</span>
+<span class="va">rdf_summary</span> <span class="op">&lt;-</span> <span class="va">mturk_workers</span> <span class="op">%&gt;%</span> 
+  <span class="fu">group_by</span><span class="op">(</span><span class="va">treatment</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">summarize</span><span class="op">(</span>mean_age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span>, se_age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            mean_female <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">female</span><span class="op">)</span>, se_female<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">female</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            mean_education <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">education</span><span class="op">)</span>, se_education <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">education</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            mean_political <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">political</span><span class="op">)</span>, se_political <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">political</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            mean_risky <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">risky</span><span class="op">)</span>, se_risky <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">risky</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            mean_green <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">green</span><span class="op">)</span>, se_green <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">green</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            n <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 
-<span class="no">rdf_totals</span> <span class="kw">&lt;-</span> <span class="no">mturk_workers</span> <span class="kw">%&gt;%</span>
-    <span class="fu">summarize</span>(<span class="kw">mean_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">age</span>), <span class="kw">se_age</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">age</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_female</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">female</span>), <span class="kw">se_female</span><span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">female</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_education</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">education</span>), <span class="kw">se_education</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">education</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_political</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">political</span>), <span class="kw">se_political</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">political</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_risky</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">risky</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>), <span class="kw">se_risky</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">risky</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">mean_green</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">green</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>), <span class="kw">se_green</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span>(<span class="no">green</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>)/<span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="fu">n</span>()),
-            <span class="kw">n</span> <span class="kw">=</span> <span class="fu">n</span>())</pre></body></html></div>
+<span class="va">rdf_totals</span> <span class="op">&lt;-</span> <span class="va">mturk_workers</span> <span class="op">%&gt;%</span> 
+    <span class="fu">summarize</span><span class="op">(</span>mean_age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span>, se_age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            mean_female <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">female</span><span class="op">)</span>, se_female<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">female</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            mean_education <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">education</span><span class="op">)</span>, se_education <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">education</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            mean_political <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">political</span><span class="op">)</span>, se_political <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">political</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            mean_risky <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">risky</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>, se_risky <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">risky</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            mean_green <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">green</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>, se_green <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">green</span>, na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+            n <span class="op">=</span> <span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></pre></div>
 <div id="output-of-balance-table" class="section level2">
 <h2 class="hasAnchor">
 <a href="#output-of-balance-table" class="anchor"></a>Output of balance table</h2>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">rdf_summary</span> <span class="kw">%&gt;%</span> <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">0</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="va">rdf_summary</span> <span class="op">%&gt;%</span> <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="15%">
@@ -293,7 +295,8 @@
 <div id="margins-of-the-balance-table" class="section level3">
 <h3 class="hasAnchor">
 <a href="#margins-of-the-balance-table" class="anchor"></a>Margins of the balance table</h3>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">rdf_totals</span> <span class="kw">%&gt;%</span> <span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">digits</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">0</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="va">rdf_totals</span> <span class="op">%&gt;%</span> <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></pre></div>
 <table class="table">
 <colgroup>
 <col width="6%">
@@ -346,7 +349,8 @@
 <div id="requested-balance-tests" class="section level2">
 <h2 class="hasAnchor">
 <a href="#requested-balance-tests" class="anchor"></a>Requested balance tests</h2>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">mturk_workers</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">age</span> ~ <span class="no">treatment</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="va">mturk_workers</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">treatment</span>, data<span class="op">=</span><span class="va">.</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt; lm(formula = age ~ treatment, data = .)</span>
@@ -371,7 +375,7 @@
 <span class="co">#&gt; Residual standard error: 11.35 on 2429 degrees of freedom</span>
 <span class="co">#&gt; Multiple R-squared:  0.001307,   Adjusted R-squared:  -0.001571 </span>
 <span class="co">#&gt; F-statistic: 0.4543 on 7 and 2429 DF,  p-value: 0.8678</span>
-<span class="no">mturk_workers</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">female</span> ~ <span class="no">treatment</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<span class="va">mturk_workers</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">female</span> <span class="op">~</span> <span class="va">treatment</span>, data<span class="op">=</span><span class="va">.</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt; lm(formula = female ~ treatment, data = .)</span>
@@ -396,7 +400,7 @@
 <span class="co">#&gt; Residual standard error: 0.4997 on 2429 degrees of freedom</span>
 <span class="co">#&gt; Multiple R-squared:  0.004284,   Adjusted R-squared:  0.001414 </span>
 <span class="co">#&gt; F-statistic: 1.493 on 7 and 2429 DF,  p-value: 0.1651</span>
-<span class="no">mturk_workers</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">education</span> ~ <span class="no">treatment</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<span class="va">mturk_workers</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">education</span> <span class="op">~</span> <span class="va">treatment</span>, data<span class="op">=</span><span class="va">.</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt; lm(formula = education ~ treatment, data = .)</span>
@@ -421,7 +425,7 @@
 <span class="co">#&gt; Residual standard error: 1.353 on 2429 degrees of freedom</span>
 <span class="co">#&gt; Multiple R-squared:  0.002148,   Adjusted R-squared:  -0.0007275 </span>
 <span class="co">#&gt; F-statistic: 0.747 on 7 and 2429 DF,  p-value: 0.6321</span>
-<span class="no">mturk_workers</span> <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">political</span> ~ <span class="no">treatment</span>, <span class="kw">data</span><span class="kw">=</span><span class="no">.</span>) <span class="kw">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>()
+<span class="va">mturk_workers</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">political</span> <span class="op">~</span> <span class="va">treatment</span>, data<span class="op">=</span><span class="va">.</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt; lm(formula = political ~ treatment, data = .)</span>
@@ -445,14 +449,15 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Residual standard error: 1.165 on 2429 degrees of freedom</span>
 <span class="co">#&gt; Multiple R-squared:  0.001165,   Adjusted R-squared:  -0.001714 </span>
-<span class="co">#&gt; F-statistic: 0.4047 on 7 and 2429 DF,  p-value: 0.8999</span></pre></body></html></div>
+<span class="co">#&gt; F-statistic: 0.4047 on 7 and 2429 DF,  p-value: 0.8999</span></pre></div>
 </div>
 </div>
 <div id="sessioninfo" class="section level1">
 <h1 class="hasAnchor">
 <a href="#sessioninfo" class="anchor"></a>sessionInfo()</h1>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
-<span class="co">#&gt; R version 4.0.2 (2020-06-22)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; R version 4.0.3 (2020-10-10)</span>
 <span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
 <span class="co">#&gt; Running under: Ubuntu 18.04.5 LTS</span>
 <span class="co">#&gt; </span>
@@ -473,24 +478,25 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
 <span class="co">#&gt;  [1] forcats_0.5.0      stringr_1.4.0      dplyr_1.0.2        purrr_0.3.4       </span>
-<span class="co">#&gt;  [5] readr_1.3.1        tidyr_1.1.2        tibble_3.0.3       ggplot2_3.3.2     </span>
-<span class="co">#&gt;  [9] tidyverse_1.3.0    mmbruteluck_0.1.10</span>
+<span class="co">#&gt;  [5] readr_1.4.0        tidyr_1.1.2        tibble_3.0.4       ggplot2_3.3.2     </span>
+<span class="co">#&gt;  [9] tidyverse_1.3.0    mmbruteluck_0.1.11</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] tidyselect_1.1.0 xfun_0.16        haven_2.3.1      colorspace_1.4-1</span>
-<span class="co">#&gt;  [5] vctrs_0.3.3      generics_0.0.2   htmltools_0.5.0  yaml_2.2.1      </span>
-<span class="co">#&gt;  [9] blob_1.2.1       rlang_0.4.7      pkgdown_1.5.1    pillar_1.4.6    </span>
-<span class="co">#&gt; [13] glue_1.4.2       withr_2.2.0      DBI_1.1.0        dbplyr_1.4.4    </span>
-<span class="co">#&gt; [17] modelr_0.1.8     readxl_1.3.1     lifecycle_0.2.0  munsell_0.5.0   </span>
-<span class="co">#&gt; [21] gtable_0.3.0     cellranger_1.1.0 rvest_0.3.6      memoise_1.1.0   </span>
-<span class="co">#&gt; [25] evaluate_0.14    knitr_1.29       fansi_0.4.1      highr_0.8       </span>
-<span class="co">#&gt; [29] broom_0.7.0      Rcpp_1.0.5       backports_1.1.9  scales_1.1.1    </span>
-<span class="co">#&gt; [33] desc_1.2.0       jsonlite_1.7.0   fs_1.5.0         hms_0.5.3       </span>
-<span class="co">#&gt; [37] digest_0.6.25    stringi_1.4.6    grid_4.0.2       rprojroot_1.3-2 </span>
-<span class="co">#&gt; [41] cli_2.0.2        tools_4.0.2      magrittr_1.5     crayon_1.3.4    </span>
-<span class="co">#&gt; [45] pkgconfig_2.0.3  MASS_7.3-52      ellipsis_0.3.1   xml2_1.3.2      </span>
-<span class="co">#&gt; [49] reprex_0.3.0     lubridate_1.7.9  assertthat_0.2.1 rmarkdown_2.3   </span>
-<span class="co">#&gt; [53] httr_1.4.2       rstudioapi_0.11  R6_2.4.1         compiler_4.0.2</span></pre></body></html></div>
+<span class="co">#&gt;  [1] tidyselect_1.1.0  xfun_0.18         haven_2.3.1       colorspace_1.4-1 </span>
+<span class="co">#&gt;  [5] vctrs_0.3.4       generics_0.0.2    htmltools_0.5.0   yaml_2.2.1       </span>
+<span class="co">#&gt;  [9] blob_1.2.1        rlang_0.4.8       pkgdown_1.6.1     pillar_1.4.6     </span>
+<span class="co">#&gt; [13] withr_2.3.0       glue_1.4.2        DBI_1.1.0         dbplyr_1.4.4     </span>
+<span class="co">#&gt; [17] modelr_0.1.8      readxl_1.3.1      lifecycle_0.2.0   munsell_0.5.0    </span>
+<span class="co">#&gt; [21] gtable_0.3.0      cellranger_1.1.0  ragg_0.4.0        rvest_0.3.6      </span>
+<span class="co">#&gt; [25] memoise_1.1.0     evaluate_0.14     knitr_1.30        fansi_0.4.1      </span>
+<span class="co">#&gt; [29] highr_0.8         broom_0.7.1       Rcpp_1.0.5        backports_1.1.10 </span>
+<span class="co">#&gt; [33] scales_1.1.1      desc_1.2.0        jsonlite_1.7.1    systemfonts_0.3.2</span>
+<span class="co">#&gt; [37] fs_1.5.0          textshaping_0.1.2 hms_0.5.3         digest_0.6.25    </span>
+<span class="co">#&gt; [41] stringi_1.5.3     rprojroot_1.3-2   grid_4.0.3        cli_2.1.0        </span>
+<span class="co">#&gt; [45] tools_4.0.3       magrittr_1.5      crayon_1.3.4      pkgconfig_2.0.3  </span>
+<span class="co">#&gt; [49] ellipsis_0.3.1    xml2_1.3.2        reprex_0.3.0      lubridate_1.7.9  </span>
+<span class="co">#&gt; [53] assertthat_0.2.1  rmarkdown_2.4     httr_1.4.2        rstudioapi_0.11  </span>
+<span class="co">#&gt; [57] R6_2.4.1          compiler_4.0.3</span></pre></div>
 </div>
   </div>
 
@@ -509,7 +515,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

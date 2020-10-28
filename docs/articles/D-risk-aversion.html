@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mmbruteluck</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11</span>
       </span>
     </div>
 
@@ -98,14 +98,16 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">mmbruteluck</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">rootSolve</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">mmbruteluck</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rootSolve</span><span class="op">)</span></pre></div>
 <p>Since we implemented the forced choice with a small safe amount as alternative, participants with sufficient risk aversion might have opted out for this reason. To quantify the risk aversion needed, consider a CARA utility function, <span class="math display">\[ u(c) = 1 - e^{-\gamma c},\]</span> where <span class="math inline">\(\gamma\)</span> is the coefficient of absoloute risk aversion. This function has the advantage that choices between a set of lotteries is independent of current wealth, and since wealth is unobserved in the experiment, this is an advantage. However, the risk aversion is dependent on the scale of outcomes, so a translation to a common monetary scale is necessary.</p>
 <p>In the online experiment, the main Forced Choice was between 0.25 USD (safe) and a <span class="math inline">\(\{0,8\}\)</span> uniform lottery in 2017 USD and at US prices (for the AMT prticipants). The indifference condition between the safe alternati ve and the lottery is <span class="math display">\[ 1 - e^{-\gamma 0.25\ } = \frac{1}{2}\left(1 - e^{-\gamma 8.00} \right).\]</span></p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">fun1</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">gamma</span>) {
-  <span class="fl">1</span> - <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(-<span class="no">gamma</span> * <span class="fl">0.25</span> ) - (<span class="fl">0.5</span>*(<span class="fl">1</span>-<span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(-<span class="no">gamma</span>* <span class="fl">8.0</span>)))
-}
-(<span class="no">root1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/uniroot.html">uniroot</a></span>(<span class="no">fun1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">3</span>)))
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="va">fun1</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">gamma</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">gamma</span> <span class="op">*</span> <span class="fl">0.25</span> <span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="fl">0.5</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">gamma</span><span class="op">*</span> <span class="fl">8.0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="op">(</span><span class="va">root1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/uniroot.html">uniroot</a></span><span class="op">(</span><span class="va">fun1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; $root</span>
 <span class="co">#&gt; [1] 2.772591</span>
 <span class="co">#&gt; </span>
@@ -119,16 +121,17 @@
 <span class="co">#&gt; [1] NA</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $estim.prec</span>
-<span class="co">#&gt; [1] 6.103516e-05</span></pre></body></html></div>
+<span class="co">#&gt; [1] 6.103516e-05</span></pre></div>
 <p>So this equation has a solution at <span class="math inline">\(\gamma=\)</span> 2.7725908.</p>
 <p>In the lab experiment, the Forced Choice was between 25 NOK (safe) and a <span class="math inline">\(\{0,800\}\)</span> NOK lottery, in 2012 NOK and Norwegian prices. To convert into the same reference scale as the online lottery, we take into account that the 2012 NOK/USD exchange rate was 5.281,<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> the WDI purchasing power adjustment for Norwegian vs US price level puts the Norwegian price level at 1.553 that of the US,<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> and the 2012 to 2017 US inflation rate was 1.0714.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> Taking this into account, the indifference equation is <span class="math display">\[ 1 - e^{-\gamma \frac{25\cdot 1.0714}{5.281\cdot 1.553}} =
 \frac{1}{2}\left(1 - e^{-\gamma \frac{800\cdot 1.0714}{5.281\cdot
       1.553}} \right).
 \]</span></p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">fun2</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">gamma</span>) {
-  <span class="fl">1</span> - <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(-<span class="no">gamma</span> * <span class="fl">25</span>*<span class="fl">1.0714</span>/(<span class="fl">5.281</span>*<span class="fl">1.553</span>) ) - (<span class="fl">0.5</span>*(<span class="fl">1</span>-<span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span>(-<span class="no">gamma</span> * <span class="fl">800</span>*<span class="fl">1.0714</span>/(<span class="fl">5.281</span>*<span class="fl">1.553</span>))))
-}
-(<span class="no">root2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/uniroot.html">uniroot</a></span>(<span class="no">fun2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>,<span class="fl">0.3</span>)))
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="va">fun2</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">gamma</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">gamma</span> <span class="op">*</span> <span class="fl">25</span><span class="op">*</span><span class="fl">1.0714</span><span class="op">/</span><span class="op">(</span><span class="fl">5.281</span><span class="op">*</span><span class="fl">1.553</span><span class="op">)</span> <span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="fl">0.5</span><span class="op">*</span><span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">-</span><span class="va">gamma</span> <span class="op">*</span> <span class="fl">800</span><span class="op">*</span><span class="fl">1.0714</span><span class="op">/</span><span class="op">(</span><span class="fl">5.281</span><span class="op">*</span><span class="fl">1.553</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+<span class="op">(</span><span class="va">root2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/uniroot.html">uniroot</a></span><span class="op">(</span><span class="va">fun2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; $root</span>
 <span class="co">#&gt; [1] 0.2122512</span>
 <span class="co">#&gt; </span>
@@ -142,7 +145,7 @@
 <span class="co">#&gt; [1] NA</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $estim.prec</span>
-<span class="co">#&gt; [1] 6.103516e-05</span></pre></body></html></div>
+<span class="co">#&gt; [1] 6.103516e-05</span></pre></div>
 <p>So this equation has a solution at <span class="math inline">\(\gamma=\)</span> 0.2122512.</p>
 <p>In order to evaluate if these are large or small risk aversions, we consider the paper of Choi et al (2007).<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> They estimate a distribution of CARA parameters for a lab population. They report the 95th percentile for the ARA coefficient to be 0.159.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> Considering US inflation factor from 2007 to 2017 of 1.1997,<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> we find a 2017 referenced 95th percentile at <span class="math inline">\(\gamma=0.159/1.1997=0.13\)</span>. We conclude that both the critical values we find for the Forced Choice in our experiments are well above the 95th percentile of estimated absolute risk aversion in Choi et al (2007).</p>
 <div class="footnotes">
@@ -171,7 +174,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

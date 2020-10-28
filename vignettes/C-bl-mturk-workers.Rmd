@@ -3,7 +3,7 @@ title: "mTurk workers"
 author: "Alexander W. Cappelen, Sebastian Fest, Erik Ø. Sørensen, and Bertil Tungodden"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{bl-mturk-workers}
+  %\VignetteIndexEntry{mTurk workers}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

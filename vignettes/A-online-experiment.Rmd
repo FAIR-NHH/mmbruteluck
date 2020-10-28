@@ -3,7 +3,7 @@ title: "Online Experiment"
 author: "Alexander W. Cappelen, Sebastian Fest, Erik Ø. Sørensen, and Bertil Tungodden"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{online-experiment}
+  %\VignetteIndexEntry{Online Experiment}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

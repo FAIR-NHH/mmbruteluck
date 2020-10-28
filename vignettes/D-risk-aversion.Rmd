@@ -3,7 +3,7 @@ title: "Implied risk aversion of safe alternative"
 author: "Alexander W. Cappelen, Sebastian Fest, Erik Ø. Sørensen, and Bertil Tungodden"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{risk-aversion}
+  %\VignetteIndexEntry{Implied risk aversion of safe alternative}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
