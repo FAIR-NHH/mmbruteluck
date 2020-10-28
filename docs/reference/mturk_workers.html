@@ -150,7 +150,7 @@ Fest, Erik Ø. Sørensen, and Bertil Tungodden.</p>
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 2437 observations and 17 variables:</p><dl>
+    <p>A data frame with 2437 observations and 16 variables:</p><dl>
 <dt>id</dt><dd><p>Non-informative identifier of individual participant</p></dd>
 <dt>female</dt><dd><p>Indicator for mTurker being female (0/1)</p></dd>
 <dt>age</dt><dd><p>Age of mTurker in years (numeric)</p></dd>
@@ -166,22 +166,19 @@ Fest, Erik Ø. Sørensen, and Bertil Tungodden.</p>
  <dt>8.</dt><dd><p>Professional Degree (JD, MD)</p></dd></dl></p></dd>
 <dt>political</dt><dd><p>Political identification.Numeric, [-2, - 2],
 with -2 being "very liberal" and 2 "very conservative.</p></dd>
-<dt>treatment</dt><dd><p>Treatment arm (characters)</p></dd>
-<dt>safe</dt><dd><p>Did the mTurker choose the safe alternative? (0/1), 1 if they
-chose the safe alternative</p></dd>
-<dt>bonus_ingame</dt><dd><p>bonus in game (0.5USD) - 0.25 USD if worker chose
-costly safe alternative in that treatment</p></dd>
+<dt>treatment_str</dt><dd><p>Treatment (characters)</p></dd>
+<dt>risky</dt><dd><p>Did the mTurker choose the risky alternative in the Forced Choice treatment? (0/1), 1 if they
+chose the risky alternative</p></dd>
+<dt>green</dt><dd><p>Indicator for whether the worker chose the green ball in the nominal choice treatments (0/1), 1 if they did so.</p></dd>
+<dt>duration_survey</dt><dd><p>Duration of HIT completion (numeric, in seconds)</p></dd>
+<dt>winner</dt><dd><p>Indicator for whether the worker is a lottery winner (0/1).</p></dd>
+<dt>loser</dt><dd><p>Indicator for whether the worker is a lottery loser (0/1).</p></dd>
+<dt>bonus_startup</dt><dd><p>Bonus to everyone, used to create a budget for forced choices</p></dd>
+<dt>bonus_ingame</dt><dd><p>bonus in game, used to create a budget for forced choices</p></dd>
 <dt>bonus_lottery</dt><dd><p>Outcome of lottery choice prior to redistribution (numeric, in USD)</p></dd>
 <dt>bonus_final</dt><dd><p>The sum of bonus_ingame and the post redistribution income from lottery (numeric, in USD)</p></dd>
 <dt>repeater</dt><dd><p>Has the worker attempted to start the survey more than once?
 (0/1), 1 if they did so.</p></dd>
-<dt>lottery_or_green</dt><dd><p>Indicator for whether the worker chose the lottery in Forced Choice treatments or the
-green ball in Nominal Choice treatments (0/1), 1 if they dis so.</p></dd>
-<dt>duration_survey</dt><dd><p>Duration of HIT completion (numeric, in seconds)</p></dd>
-<dt>treatment_str</dt><dd><p>Treatment (characters)</p></dd>
-<dt>bonus_startup</dt><dd><p>Bonus account at startup (numeric, 0.5 USD)</p></dd>
-<dt>winner</dt><dd><p>Indicator for whether the worker is a lottery winner (0/1).</p></dd>
-<dt>loser</dt><dd><p>Indicator for whether the worker is a lottery loser (0/1).</p></dd>
 
 </dl>
 
